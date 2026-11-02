@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cesare V. Parise – Perception Scientist</title>
+<style>
+  :root { --ink:#1d2330; --muted:#5b6474; --accent:#0b5cad; --bg:#fbfbfd; --card:#ffffff; --line:#e4e7ee; }
+  * { box-sizing: border-box; }
+  body { margin:0; font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; color:var(--ink); background:var(--bg); line-height:1.6; }
+  header.top { background:#fff; border-bottom:1px solid var(--line); position:sticky; top:0; z-index:10; }
+  nav { max-width:1000px; margin:0 auto; padding:14px 20px; display:flex; flex-wrap:wrap; gap:18px; align-items:center; justify-content:space-between; }
+  nav .brand { font-weight:700; color:var(--ink); text-decoration:none; }
+  nav ul { list-style:none; display:flex; gap:16px; margin:0; padding:0; flex-wrap:wrap; }
+  nav a { color:var(--muted); text-decoration:none; font-size:0.95rem; }
+  nav a:hover, nav a.active { color:var(--accent); }
+  main { max-width:1000px; margin:0 auto; padding:40px 20px 60px; min-height:70vh; }
+  .page { display:none; }
+  .page.active { display:block; }
+  .hero { display:grid; grid-template-columns: 220px 1fr; gap:36px; align-items:center; }
+  .hero img { width:220px; height:220px; object-fit:cover; border-radius:50%; border:4px solid #fff; box-shadow:0 6px 24px rgba(0,0,0,.12); }
+  h1 { font-size:2.2rem; margin:0 0 6px; }
+  h2 { font-size:1.45rem; margin:36px 0 14px; border-bottom:2px solid var(--line); padding-bottom:6px; }
+  h3 { font-size:1.1rem; margin:0 0 8px; }
+  .role { color:var(--accent); font-weight:600; margin:0 0 14px; }
+  .lead { font-size:1.08rem; }
+  .badge { display:inline-block; background:#e8f1fb; color:var(--accent); padding:4px 10px; border-radius:999px; font-size:0.85rem; margin:4px 6px 0 0; }
+  .grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(260px,1fr)); gap:18px; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:20px; }
+  .card p { margin:0 0 8px; color:var(--muted); font-size:0.95rem; }
+  .card.paper { border-left:4px solid var(--accent); }
+  .meta { color:var(--muted); font-size:0.9rem; margin:6px 0 12px; }
+  .placeholder { border:2px dashed #c5cdd9; border-radius:12px; padding:20px; color:var(--muted); background:#fff; }
+  .industry { background:linear-gradient(135deg,#0b5cad 0%,#0a4a8a 100%); color:#fff; border-radius:16px; padding:32px; margin-top:36px; }
+  .industry h2 { color:#fff; border-color:rgba(255,255,255,.3); margin-top:0; }
+  .industry ul { padding-left:20px; margin:0 0 18px; }
+  .industry li { margin-bottom:8px; }
+  .btn { display:inline-block; background:#fff; color:var(--accent); padding:11px 20px; border-radius:8px; font-weight:700; text-decoration:none; margin-right:10px; margin-top:6px; }
+  .btn.ghost { background:transparent; color:#fff; border:2px solid #fff; }
+  .link { color:var(--accent); font-weight:600; text-decoration:none; }
+  .pubs li { margin-bottom:12px; }
+  .pubs .t { display:inline-block; font-size:0.75rem; background:#e8f1fb; color:var(--accent); border-radius:4px; padding:1px 6px; margin-right:6px; font-weight:600; }
+  .yr { margin:28px 0 10px; color:var(--accent); font-size:1.1rem; }
+  footer { border-top:1px solid var(--line); color:var(--muted); font-size:0.9rem; text-align:center; padding:24px 20px; }
+  @media (max-width:720px) { .hero { grid-template-columns:1fr; text-align:center; } .hero img { margin:0 auto; } nav { justify-content:center; } }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <nav>
+    <a class="brand" href="#home">Cesare V. Parise</a>
+    <ul>
+      <li><a href="#home" data-page="home">Home</a></li>
+      <li><a href="#research" data-page="research">Research</a></li>
+      <li><a href="#model" data-page="model">Multisensory Model</a></li>
+      <li><a href="#publications" data-page="publications">Publications</a></li>
+      <li><a href="#patents" data-page="patents">Patents</a></li>
+      <li><a href="#contact" data-page="contact">Contact</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main>
+
+  <!-- HOME -->
+  <section class="page" id="page-home">
+    <div class="hero">
+      <!-- Place the profile photo next to this file as photo.jpg -->
+      <img src="photo.jpg" alt="Portrait of Cesare V. Parise" onerror="this.onerror=null;this.style.background='#0b5cad';this.style.display='flex';this.style.alignItems='center';this.style.justifyContent='center';this.style.color='#fff';this.style.fontSize='3rem';this.style.fontWeight='700';this.alt='CVP';">
+      <div>
+        <h1>Cesare V. Parise</h1>
+        <p class="role">Senior Lecturer, Department of Psychology, University of Liverpool</p>
+        <p class="lead">I am a perception scientist with a dual nature. As a blue-sky researcher, I investigate how the senses interact to generate a coherent representation of our body and environment, through the development of stimulus-computable theoretical models.</p>
+        <p class="lead">Beyond fundamental research, a quantitative understanding of multisensory perception and action paves the way for next-generation interfaces for immersive technologies and sensory augmentation.</p>
+        <span class="badge">Perception Scientist</span>
+        <span class="badge">Applied Perception Scientist</span>
+        <span class="badge">Multisensory Integration</span>
+        <span class="badge">Haptics &amp; Spatial Hearing</span>
+      </div>
+    </div>
+
+    <div class="industry">
+      <h2>Industry &amp; Collaboration</h2>
+      <p>As an <strong>applied perception scientist</strong>, I work with companies developing multimodal interfaces and immersive products. I can help you:</p>
+      <ul>
+        <li><strong>Characterize</strong> the response of multimodal interfaces, measuring how users perceive and react to visual, auditory, and haptic output.</li>
+        <li><strong>Analyse</strong> these response profiles against human perceptual skills, identifying where a design matches or exceeds perceptual capacity.</li>
+        <li><strong>Optimize</strong> interface design and control, so that cues are perceived as intended with less effort and fewer errors.</li>
+      </ul>
+      <p>For consulting, applied research, perceptual evaluation, or licensing enquiries, please get in touch.</p>
+      <a class="btn" href="#contact">Contact me for industry work</a>
+      <a class="btn ghost" href="#patents">View my patents</a>
+    </div>
+  </section>
+
+  <!-- RESEARCH -->
+  <section class="page" id="page-research">
+    <h1>Research</h1>
+    <p class="lead">My work asks how the senses combine information, and how that combination shapes perception and action.</p>
+    <h2>Research themes</h2>
+    <div class="grid">
+      <div class="card"><h3>Audiovisual correlation and causal inference</h3><p>How the brain detects when signals from different senses belong together.</p></div>
+      <div class="card"><h3>Multisensory integration</h3><p>Optimal cue combination and the illusions that reveal its rules.</p></div>
+      <div class="card"><h3>Haptics</h3><p>Touch and force feedback as channels for interaction and perception.</p></div>
+      <div class="card"><h3>Spatial hearing</h3><p>How listeners localise sounds and integrate them with vision and touch.</p></div>
+    </div>
+    <h2>Figures and videos</h2>
+    <div class="placeholder">Figures, images, and videos will be linked to their papers here.</div>
+  </section>
+
+  <!-- MODEL -->
+  <section class="page" id="page-model">
+    <h1>Multisensory Integration Model</h1>
+    <p class="lead">A general, stimulus-computable model of how the senses decide which signals belong together and how to combine them.</p>
+    <h2>Core idea</h2>
+    <div class="placeholder">Motivation, formulation, assumptions, and predictions will be added here. A short summary and key equations are needed from the author.</div>
+    <h2>Key paper</h2>
+    <div class="card paper">
+      <h3>Correlation detection as a stimulus computable account for audiovisual perception, causal inference, and saliency maps in mammals</h3>
+      <p class="meta">eLife (2026) · Parise &amp; Ernst</p>
+      <p>An image- and sound-computable population model of audiovisual perception. Optimal cue integration, Bayesian causal inference, spatial orienting, and several multisensory illusions emerge from a population of multisensory correlation detectors.</p>
+      <p><a class="link" href="https://elifesciences.org/articles/106122" target="_blank" rel="noopener">Read the article on eLife →</a></p>
+    </div>
+    <h2>Applications</h2>
+    <div class="placeholder">Applications to interface design and immersive technologies will be described here.</div>
+  </section>
+
+  <!-- PUBLICATIONS -->
+  <section class="page" id="page-publications">
+    <h1>Publications</h1>
+    <p class="lead">Peer-reviewed articles, book chapters, and dissertations, sortable by year and type.</p>
+    <h2>Featured</h2>
+    <div class="card paper">
+      <h3>Correlation detection as a stimulus computable account for audiovisual perception, causal inference, and saliency maps in mammals</h3>
+      <p class="meta">eLife (2026) · Parise &amp; Ernst</p>
+      <p><a class="link" href="https://elifesciences.org/articles/106122" target="_blank" rel="noopener">Article →</a></p>
+    </div>
+    <h2>Full list</h2>
+    <ul class="pubs">
+<h3 class="yr">2026</h3>
+<li><span class="t">Article</span>Parise, C. (2026). A new look at audiovisual perception: From correlation detection to a general theory of multisensory integration. <em>The Cognitive Psychology Bulletin</em>, (11).</li>
+<li><span class="t">Article</span>Diederich, A., Otto, T., &amp; Parise, C. (2026). Viewpoint on multisensory decision-making. <em>Multisensory Research</em>, 1 (aop), 1–11.</li>
+<h3 class="yr">2025</h3>
+<li><span class="t">Article</span>Parise, C., Parise, E., &amp; Parise, A. (2025). Perceiving audiovisual synchrony: A quantitative synthesis of simultaneity and temporal order judgments from 185 studies. <em>Neuroscience &amp; Biobehavioral Reviews</em>, 106449.</li>
+<li><span class="t">Article</span>Parise, C. V. (2025). Correlation detection as a stimulus computable account for audiovisual perception, causal inference, and saliency maps in mammals. <em>eLife</em>, 14, RP106122.</li>
+<li><span class="t">Article</span>Parise, C. V., &amp; Ernst, M. O. (2025). Multisensory integration operates on correlated input from unimodal transient channels. <em>eLife</em>, 12, RP90841.</li>
+<li><span class="t">Abstract</span>Yehiah, M., Owen, R., Omolabi, S., Parise, C., &amp; Senna, I. (2025). From perception to action: How modulation frequency shapes walking behaviour. <em>i-Perception</em>, 16(5), 9–10.</li>
+<h3 class="yr">2024</h3>
+<li><span class="t">Article</span>Parise, C., Gori, M., Finocchietti, S., Ernst, M., Esposito, D., &amp; Tonelli, A. (2024). Happy new ears: Rapid adaptation to novel spectral cues in vertical sound localization. <em>iScience</em>, 27(12).</li>
+<li><span class="t">Preprint</span>Parise, C. V. (2024). A stimulus-computable model for audiovisual perception and spatial orienting in mammals. <em>bioRxiv</em>.</li>
+<li><span class="t">Preprint</span>Parise, C. V. (2024). Spatiotemporal models for multisensory integration. <em>bioRxiv</em>.</li>
+<h3 class="yr">2022</h3>
+<li><span class="t">Article</span>Pesnot Lerousseau, J., Parise, C. V., Ernst, M. O., &amp; van Wassenhove, V. (2022). Multisensory correlation computations in the human brain identified by a time-resolved encoding model. <em>Nature Communications</em>, 13, 2489.</li>
+<h3 class="yr">2021</h3>
+<li><span class="t">Article</span>Ryan, C. P., Bettelani, G. C., Ciotti, S., Parise, C., Moscatelli, A., &amp; Bianchi, M. (2021). The interaction between motion and texture in the sense of touch. <em>Journal of Neurophysiology</em>, 126(4), 1375–1390.</li>
+<h3 class="yr">2019</h3>
+<li><span class="t">Article</span>Moscatelli, A., Bianchi, M., Ciotti, S., Bettelani, G. C., Parise, C. V., Lacquaniti, F., &amp; Bicchi, A. (2019). Touch as an auxiliary proprioceptive cue for movement control. <em>Science Advances</em>, 5(6), eaaw3121.</li>
+<li><span class="t">Conference paper</span>Samad, M., Gatti, E., Hermes, A., Benko, H., &amp; Parise, C. (2019). Pseudo-haptic weight: Changing the perceived weight of virtual objects by manipulating control-display ratio. <em>CHI 2019</em>, 1–13.</li>
+<li><span class="t">Conference paper</span>de Grosbois, J., Di Luca, M., King, R., Parise, C., &amp; Ziat, M. (2019). Exogenous cueing of visual attention using small, directional, tactile cues applied to the fingertip. <em>IEEE World Haptics Conference</em>, 455–460.</li>
+<li><span class="t">Conference paper</span>de Grosbois, J., King, R., Di Luca, M., Parise, C., Bazen, R., &amp; Ziat, M. (2019). The frequency of tactile adaptation systematically biases subsequent frequency identification. <em>IEEE World Haptics Conference</em>, 295–300.</li>
+<li><span class="t">Abstract</span>Samad, M. J., &amp; Parise, C. V. (2019). Spatiotemporal mechanisms of multisensory integration. <em>Journal of Vision</em>, 19(10), 300.</li>
+<li><span class="t">Abstract</span>Parise, C., Samad, M., Keller, S., &amp; Di Luca, M. (2019). A common cause for the phenomenological and sensorimotor correlates of limb ownership. <em>Perception</em>, 48, 173.</li>
+<h3 class="yr">2018</h3>
+<li><span class="t">Abstract</span>Parise, C., &amp; Ernst, M. (2018). Noise, multisensory integration, and previous response in perceptual disambiguation. <em>Journal of Vision</em>, 18(10), 1062.</li>
+<li><span class="t">Abstract</span>Samad, M., Parise, C., Keller, S., &amp; Di Luca, M. (2018). A common cause in the phenomenological and sensorimotor correlates of body ownership. <em>Journal of Vision</em>, 18(10), 1230.</li>
+<h3 class="yr">2017</h3>
+<li><span class="t">Article</span>Senna, I., Parise, C. V., &amp; Ernst, M. O. (2017). Modulation frequency as a cue for auditory speed perception. <em>Proceedings of the Royal Society B</em>, 284(1858), 20170673.</li>
+<li><span class="t">Article</span>Parise, C. V., &amp; Ernst, M. O. (2017). Noise, multisensory integration, and previous response in perceptual disambiguation. <em>PLoS Computational Biology</em>, 13(7), e1005546.</li>
+<h3 class="yr">2016</h3>
+<li><span class="t">Article</span>Parise, C. V., &amp; Ernst, M. O. (2016). Correlation detection as a general mechanism for multisensory integration. <em>Nature Communications</em>, 7, 11543.</li>
+<li><span class="t">Article</span>Parise, C. V. (2016). Crossmodal correspondences: Standing issues and experimental guidelines. <em>Multisensory Research</em>, 29(1–3), 7–28.</li>
+<li><span class="t">Article</span>Parise, C. V., Spence, C., &amp; Deroy, O. (2016). Understanding the correspondences: Introduction to the special issue on crossmodal correspondences. <em>Multisensory Research</em>, 29(1–3), 1–6.</li>
+<li><span class="t">Abstract</span>Parise, C., Banks, M., &amp; Ernst, M. (2016). ON and OFF channels in auditory-visual integration. <em>Journal of Vision</em>, 16(12), 861.</li>
+<h3 class="yr">2015</h3>
+<li><span class="t">Article</span>Senna, I., Russo, C., Parise, C. V., Ferrario, I., &amp; Bolognini, N. (2015). Altered visual feedback modulates cortical excitability in a mirror-box-like paradigm. <em>Experimental Brain Research</em>, 233(6), 1921–1929.</li>
+<li><span class="t">Article</span>Senna, I., Parise, C. V., &amp; Ernst, M. O. (2015). Hearing in slow-motion: Humans underestimate the speed of moving sounds. <em>Scientific Reports</em>, 5, 14054.</li>
+<li><span class="t">Abstract</span>Senna, I., Parise, C., &amp; Ernst, M. O. (2015). Temporal frequency modulates auditory speed perception.</li>
+<li><span class="t">Article</span>Everett, J. A. C., Schellhaas, F. M. H., Earp, B. D., Ando, V., Memarzia, J., Parise, C. V., Fell, B., &amp; Hewstone, M. (2015). Covered in stigma? The impact of differing levels of Islamic head-covering on explicit and implicit biases toward Muslim women. <em>Journal of Applied Social Psychology</em>, 45(2), 90–104.</li>
+<h3 class="yr">2014</h3>
+<li><span class="t">Article</span>Parise, C. V., Knorre, K., &amp; Ernst, M. O. (2014). Natural auditory scene statistics shapes human spatial hearing. <em>PNAS</em>, 111(16), 6104–6108.</li>
+<li><span class="t">Article</span>Senna, I., Maravita, A., Bolognini, N., &amp; Parise, C. V. (2014). The marble-hand illusion. <em>PLoS ONE</em>.</li>
+<li><span class="t">Abstract</span>Parise, C. V., &amp; Ernst, M. (2014). Multisensory classification images reveal the role of cross-correlation in audiovisual temporal processing. <em>Journal of Vision</em>, 14(10), 433.</li>
+<li><span class="t">Abstract</span>Senna, I., Parise, C., &amp; Ernst, M. O. (2014). Analogous motion illusion in vision and audition. <em>IMRF 2014</em>, 201.</li>
+<li><span class="t">Chapter</span>Van Dam, L. C. J., Parise, C. V., &amp; Ernst, M. O. (2014). Modeling multisensory integration. In <em>Sensory Integration and the Unity of Consciousness</em>.</li>
+<li><span class="t">Other</span>Parise, C. V., &amp; Ernst, M. O. (2014). What is the origin of cross-modal correspondences?</li>
+<h3 class="yr">2013</h3>
+<li><span class="t">Article</span>Parise, C. V., Harrar, V., Ernst, M. O., &amp; Spence, C. (2013). Cross-correlation between auditory and visual signals promotes multisensory integration. <em>Multisensory Research</em>.</li>
+<li><span class="t">Chapter</span>Parise, C. V., &amp; Spence, C. (2013). Audiovisual crossmodal correspondences in the general population. In <em>The Oxford Handbook of Synesthesia</em>. Oxford University Press.</li>
+<li><span class="t">Other</span>Parise, C., &amp; Ernst, M. O. (2013). Multisensory mechanisms for perceptual disambiguation: A classification image study on the stream-bounce illusion.</li>
+<li><span class="t">Other</span>Parise, C. (2013). Metaphors in the ear and in the world.</li>
+<li><span class="t">Abstract</span>Knorre, K., Ernst, M. O., &amp; Parise, C. V. (2013). On pitch-elevation mapping. Nature, nurture and behaviour. <em>Multisensory Research</em>, 26(1–2), 190.</li>
+<li><span class="t">Abstract</span>Bolognini, N., Maravita, A., Senna, I., &amp; Parise, C. V. (2013). The marble-hand illusion. <em>Multisensory Research</em>, 26(1–2), 203.</li>
+<h3 class="yr">2012</h3>
+<li><span class="t">Article</span>Parise, C. V., &amp; Spence, C. (2012). Assessing the associations between brand packaging and brand attributes using an indirect performance measure. <em>Food Quality and Preference</em>, 24(1), 17–23.</li>
+<li><span class="t">Article</span>Parise, C. V., &amp; Spence, C. (2012). Audiovisual crossmodal correspondences and sound symbolism: A study using the implicit association test. <em>Experimental Brain Research</em>, 220(3), 319–333.</li>
+<li><span class="t">Article</span>Parise, C. V., Spence, C., &amp; Ernst, M. O. (2012). When correlation implies causation in multisensory integration. <em>Current Biology</em>, 22(1), 46–49.</li>
+<li><span class="t">Article</span>Spence, C., &amp; Parise, C. V. (2012). The cognitive neuroscience of crossmodal correspondences. <em>i-Perception</em>, 3(7), 410–412.</li>
+<li><span class="t">Abstract</span>Parise, C. V. (2012). Crossmodal correspondences. <em>Seeing and Perceiving</em>, 25, 68.</li>
+<li><span class="t">Thesis</span>Parise, C. (2012). Signal compatibility as a modulatory factor for audiovisual multisensory integration. PhD thesis, University of Oxford.</li>
+<li><span class="t">Other</span>Dwarakanath, A., Parise, C., Hartcher-O'Brien, J., &amp; Ernst, M. (2012). Motion parallax serves as an independent cue in sound source disambiguation.</li>
+<li><span class="t">Other</span>Spence, C., Parise, C. V., &amp; Chen, Y.-C. (2012). The Colavita visual dominance effect.</li>
+<h3 class="yr">2011</h3>
+<li><span class="t">Article</span>Parise, C. V., &amp; Pavani, F. (2011). Evidence of sound symbolism in simple vocalizations. <em>Experimental Brain Research</em>, 214(3), 373–380.</li>
+<li><span class="t">Abstract</span>Parise, C. V., Harrar, V., Spence, C., &amp; Ernst, M. (2011). Multisensory integration: When correlation implies causation. <em>i-Perception</em>, 2(8), 901.</li>
+<li><span class="t">Abstract</span>Spence, C., Parise, C. V., &amp; Deroy, O. (2011). Crossmodal correspondences. <em>i-Perception</em>, 2(8), 887.</li>
+<li><span class="t">Other</span>Spence, C., Deroy, O., &amp; Parise, C. V. (2011). Crossmodal correspondences and synaesthesia: Similarities and differences.</li>
+<h3 class="yr">2010</h3>
+<li><span class="t">Article</span>Spence, C., &amp; Parise, C. (2010). Prior-entry: A review. <em>Consciousness and Cognition</em>, 19(1), 364–379.</li>
+<li><span class="t">Other</span>Parise, C., Stewart, N., Föcker, J., Ngo, M., Browning, M., Roeder, B., Spence, C., &amp; Rogers, R. D. (2010). Emotional information enhances audiovisual speech integration.</li>
+<li><span class="t">Other</span>Parise, C., Di Luca, M., &amp; Ernst, M. O. (2010). Multiple criteria for multisensory signals.</li>
+<h3 class="yr">2009</h3>
+<li><span class="t">Article</span>Parise, C. V., &amp; Spence, C. (2009). 'When birds of a feather flock together': Synesthetic correspondences modulate audiovisual integration in non-synesthetes. <em>PLoS ONE</em>, 4(5), e5664.</li>
+<li><span class="t">Abstract</span>Spence, C., Navarra, J., Vatakis, A., Hartcher-O'Brien, J., &amp; Parise, C. (2009). The multisensory perception of synchrony. <em>Perception</em>, 38.</li>
+<li><span class="t">Abstract</span>Spence, C., &amp; Parise, C. (2009). Prior entry.</li>
+<li><span class="t">Other</span>Parise, C., &amp; Spence, C. (2009). Synesthetic constraints on multisensory integration.</li>
+<li><span class="t">Other</span>Parise, C., &amp; Spence, C. (2009). 'Quando chi si somiglia si piglia': corrispondenze sinestetiche modulano l'integrazione audiovisiva in soggetti non-sinesteti.</li>
+<h3 class="yr">2008</h3>
+<li><span class="t">Article</span>Parise, C., &amp; Spence, C. (2008). Synesthetic congruency modulates the temporal ventriloquism effect. <em>Neuroscience Letters</em>, 442(3), 257–261.</li>
+<li><span class="t">Other</span>Parise, C., &amp; Spence, C. (2008). Synaesthetic links in audiovisual temporal integration.</li>
+<h3 class="yr">2007</h3>
+<li><span class="t">Other</span>Petroni, L., &amp; Parise, C. (2007). Migliorare l'uso dei canali on-line verso gli utenti.</li>
+<h3 class="yr">2006</h3>
+<li><span class="t">Other</span>Parise, C., Bricolo, E., Vezzani, S., &amp; Zavagno, D. (2006). Somiglianze cross-modali fra stimoli visivi e stimoli uditivi.</li>
+<li><span class="t">Thesis</span>Parise, C. (2006). Somiglianze crossmodali: Interazioni fra stimoli visivi ed uditivi. PhD thesis.</li>
+</ul>
+  </section>
+
+  <!-- PATENTS -->
+  <section class="page" id="page-patents">
+    <h1>Patents</h1>
+    <p class="lead">Five US patents (2020–2022) on perceptual and multisensory technologies.</p>
+    <div class="card paper">
+      <h3>Impedance shaping for haptic interfaces on wearable devices</h3>
+      <p class="meta">US Patent No. 11,385,716 · 2022</p>
+      <p>Mukherjee, G., Shimasaki, K., King, R., Israr, A., Parise, C. V., Piazza, D., Samad, M. J., Gatti, E., &amp; Corson, N. R.</p>
+      <p><a class="link" href="https://patents.google.com/patent/US11385716B2" target="_blank" rel="noopener">View on Google Patents →</a></p>
+    </div>
+    <div class="card paper">
+      <h3>Using audio visual correspondence for sound source identification</h3>
+      <p class="meta">US Patent No. 11,234,090 · 2022</p>
+      <p>Donley, J., Robinson, P., &amp; Parise, C. V.</p>
+      <p><a class="link" href="https://patents.google.com/patent/US11234090B2" target="_blank" rel="noopener">View on Google Patents →</a></p>
+    </div>
+    <div class="card paper">
+      <h3>Audiovisual correspondence based signal augmentation</h3>
+      <p class="meta">US Patent No. 11,087,777 · 2021</p>
+      <p>Parise, C. V., Brimijoin, O., &amp; Robinson, P.</p>
+      <p><a class="link" href="https://patents.google.com/patent/US11087777B2" target="_blank" rel="noopener">View on Google Patents →</a></p>
+    </div>
+    <div class="card paper">
+      <h3>Methods and systems to control tactile content</h3>
+      <p class="meta">US Patent No. 10,970,036 · 2021</p>
+      <p>Parise, C. V., Khaleghimeybodi, M., Robinson, P., &amp; Gottlieb, P.</p>
+      <p><a class="link" href="https://patents.google.com/patent/US10970036B2" target="_blank" rel="noopener">View on Google Patents →</a></p>
+    </div>
+    <div class="card paper">
+      <h3>Perception Science Implementation of Audio and Tactile Frequency Congruency</h3>
+      <p class="meta">US Patent No. 10,754,428 · 2020</p>
+      <p>Parise, C. V., Rahman, S., Gatti, E., &amp; Samad, M.</p>
+      <p><a class="link" href="https://patents.google.com/patent/US10754428B2" target="_blank" rel="noopener">View on Google Patents →</a></p>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="page" id="page-contact">
+    <h1>Contact</h1>
+    <p class="lead">For industry, consulting, and collaboration enquiries, email is the best route.</p>
+    <div class="card">
+      <p>Email: <a class="link" href="mailto:cesare.parise@liverpool.ac.uk">cesare.parise@liverpool.ac.uk</a></p>
+      <p>Department of Psychology, University of Liverpool</p>
+    </div>
+  </section>
+
+</main>
+
+<footer>© Cesare V. Parise · University of Liverpool</footer>
+
+<script>
+  (function () {
+    var pages = ['home', 'research', 'model', 'publications', 'patents', 'contact'];
+    function show() {
+      var name = (location.hash || '#home').replace('#', '');
+      if (pages.indexOf(name) === -1) name = 'home';
+      pages.forEach(function (p) {
+        document.getElementById('page-' + p).classList.toggle('active', p === name);
+      });
+      document.querySelectorAll('nav a[data-page]').forEach(function (a) {
+        a.classList.toggle('active', a.getAttribute('data-page') === name);
+      });
+      window.scrollTo(0, 0);
+    }
+    window.addEventListener('hashchange', show);
+    show();
+  })();
+</script>
+
+</body>
+</html>
