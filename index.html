@@ -43,6 +43,544 @@
   .yr { margin:28px 0 10px; color:var(--accent); font-size:1.1rem; }
   footer { border-top:1px solid var(--line); color:var(--muted); font-size:0.9rem; text-align:center; padding:24px 20px; }
   @media (max-width:720px) { .hero { grid-template-columns:1fr; text-align:center; } .hero img { margin:0 auto; } nav { justify-content:center; } }
+
+
+/* ===== HOME PAGE LAYOUT ===== */
+
+#page-home .hero {
+  display: grid;
+  grid-template-columns: 180px minmax(0, 1fr);
+  grid-template-areas:
+    "profile introduction"
+    ".       credentials"
+    ".       badges";
+  column-gap: 2rem;
+  row-gap: 1.5rem;
+  align-items: start;
+}
+
+/* LEFT: photograph and profile links */
+
+#page-home .home-profile {
+  grid-area: profile;
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.2rem;
+  min-width: 0;
+}
+
+#page-home .home-profile .home-portrait {
+  display: block;
+  width: 175px;
+  height: 175px;
+  aspect-ratio: 1;
+  max-width: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center;
+  border: 4px solid white;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.15);
+}
+
+/* Links beneath photograph */
+
+#page-home .profile-links {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.55rem;
+  text-align: center;
+}
+
+#page-home .profile-links a {
+  color: #0b5cad;
+  text-decoration: none;
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+
+#page-home .profile-links a:hover {
+  text-decoration: underline;
+}
+
+/* RIGHT: introduction */
+
+#page-home .home-introduction {
+  grid-area: introduction;
+  min-width: 0;
+}
+
+#page-home .home-introduction p:first-child {
+  margin-top: 0;
+}
+
+#page-home .home-introduction p:last-child {
+  margin-bottom: 0;
+}
+
+/* RIGHT: credentials, two equally wide columns */
+
+#page-home .home-credentials {
+  grid-area: credentials;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 2rem;
+  width: 100%;
+  margin: 0;
+  align-items: stretch;
+}
+
+#page-home .home-education,
+#page-home .home-editorial {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+#page-home .home-credentials h2 {
+  font-size: 1.05rem;
+  margin: 0 0 0.85rem;
+  padding-bottom: 0.45rem;
+  border-bottom: 1px solid #dce2eb;
+}
+
+/* Education: first qualification at top,
+   second qualification at bottom */
+
+#page-home .home-education .degree {
+  margin: 0;
+}
+
+#page-home .home-education .degree:last-child {
+  margin-top: auto;
+}
+
+/* Editorial entries: compact natural spacing */
+
+#page-home .home-editorial p {
+  margin: 0 0 0.65rem;
+}
+
+#page-home .editorial-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  padding: 0;
+  margin: 0;
+}
+
+#page-home .editorial-list li {
+  margin: 0;
+}
+
+/* RIGHT: badges below both columns */
+
+#page-home .home-badges {
+  grid-area: badges;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+#page-home .home-badges .badge {
+  margin: 0;
+}
+
+/* MOBILE */
+
+@media (max-width: 720px) {
+  #page-home .hero {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      "profile"
+      "introduction"
+      "credentials"
+      "badges";
+  }
+
+  #page-home .home-profile {
+    justify-self: center;
+  }
+}
+
+@media (max-width: 520px) {
+  #page-home .home-credentials {
+    grid-template-columns: 1fr;
+    gap: 1.75rem;
+  }
+
+  #page-home .home-education .degree:last-child {
+    margin-top: 1rem;
+  }
+}
+
+
+
+
+
+/* ===== RESEARCH PAGE ===== */
+
+#page-research .research-area {
+  margin-top: 2.5rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid #dce2eb;
+}
+
+#page-research .research-area:last-child {
+  border-bottom: none;
+}
+
+/* Figure and description */
+
+#page-research .research-main {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  gap: 2rem;
+  align-items: start;
+}
+
+#page-research .research-figure {
+  margin: 0;
+  min-width: 0;
+}
+
+#page-research .research-figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  border-radius: 3px;
+}
+
+#page-research .research-figure figcaption {
+  margin-top: 0.65rem;
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: #667085;
+}
+
+#page-research .research-description {
+  min-width: 0;
+}
+
+#page-research .research-description h2 {
+  margin-top: 0;
+}
+
+#page-research .research-description p {
+  margin-bottom: 1rem;
+}
+
+/* Publications */
+
+#page-research .research-area > h3 {
+  font-size: 1rem;
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+
+#page-research .research-publications {
+  padding-left: 1.25rem;
+  margin: 0;
+}
+
+#page-research .research-publications li {
+  margin-bottom: 0.6rem;
+  line-height: 1.55;
+  font-size: 0.92rem;
+}
+
+#page-research .research-publications a {
+  color: #0b5cad;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+#page-research .research-publications a:hover {
+  text-decoration: underline;
+}
+
+/* Responsive layout */
+
+@media (max-width: 760px) {
+  #page-research .research-main {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+}
+
+
+
+
+
+/* ===== CONTACT PAGE ===== */
+
+#page-contact .contact-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.25rem;
+  margin: 1.5rem 0;
+  align-items: stretch;
+}
+
+/* Matching cards */
+
+#page-contact .contact-card {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: 1.3rem;
+  border: 1px solid #dce2eb;
+  border-radius: 10px;
+  background: #fff;
+}
+
+#page-contact .contact-card h2 {
+  font-size: 1.1rem;
+  margin: 0 0 1.1rem;
+}
+
+#page-contact .contact-card > p {
+  margin: 0 0 0.9rem;
+  line-height: 1.65;
+}
+
+/* Bottom-aligned content */
+
+#page-contact .contact-card-footer {
+  margin-top: auto;
+  padding-top: 1.5rem;
+  width: 100%;
+}
+
+#page-contact .contact-keywords {
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: #667085;
+  margin: 0 0 1rem;
+}
+
+/* Outlined action buttons */
+
+#page-contact .contact-card a.contact-action,
+#page-contact .contact-card a.contact-action:link,
+#page-contact .contact-card a.contact-action:visited {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  min-height: 44px;
+  padding: 0.65rem 1rem;
+
+  border: 1px solid #0b5cad;
+  border-radius: 24px;
+  background: transparent;
+  color: #0b5cad;
+
+  font-size: 0.92rem;
+  font-weight: 600;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+#page-contact .contact-card a.contact-action:hover {
+  background: #0b5cad;
+  color: white;
+  text-decoration: none;
+}
+
+#page-contact .contact-card a.contact-action:focus-visible {
+  outline: 3px solid #80b4f5;
+  outline-offset: 3px;
+}
+
+/* Direct contact */
+
+#page-contact .contact-details {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #dce2eb;
+}
+
+#page-contact .contact-details h2 {
+  font-size: 1.1rem;
+  margin: 0 0 1rem;
+}
+
+#page-contact .contact-details p {
+  margin: 0.65rem 0;
+}
+
+/* Copy email button */
+
+#page-contact .copy-email {
+  display: inline-block;
+  margin-left: 0.75rem;
+  padding: 0.25rem 0.6rem;
+  border: 1px solid #dce2eb;
+  border-radius: 6px;
+  background: transparent;
+  color: #0b5cad;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+#page-contact .copy-email:hover {
+  background: #eaf2ff;
+}
+
+/* Mobile */
+
+@media (max-width: 700px) {
+  #page-contact .contact-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+
+
+/* ===== MULTISENSORY CORRELATION DETECTOR PAGE =====
+   Scoped styles: these rules do not change Home, Research or Contact. */
+#page-model { --mcd-soft: #eef4fb; --mcd-radius: 12px; }
+#page-model a { color: var(--accent); text-underline-offset: 0.18em; }
+#page-model a:focus-visible, #page-model summary:focus-visible,
+#page-model video:focus-visible { outline: 3px solid #72a8e0; outline-offset: 4px; }
+#page-model h1 { font-size: clamp(1.8rem, 4vw, 2.45rem); line-height: 1.2; max-width: 26ch; margin: 0; }
+#page-model h2 { font-size: clamp(1.3rem, 3vw, 1.65rem); line-height: 1.3; border: 0; padding: 0; margin: 0 0 1.1rem; }
+#page-model h3 { font-size: 1.08rem; line-height: 1.4; margin: 0 0 0.65rem; }
+#page-model p { margin: 0 0 1rem; }
+#page-model .mcd-eyebrow { color: var(--accent); font-size: 0.76rem; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; margin: 0 0 0.65rem; }
+#page-model .mcd-lead { max-width: 66ch; font-size: 1.18rem; line-height: 1.55; color: var(--muted); margin: 1rem 0 0; }
+#page-model .mcd-page-heading { margin-bottom: 2.5rem; }
+#page-model .mcd-hero { display: grid; grid-template-columns: minmax(0, 0.94fr) minmax(0, 1.06fr); gap: 2rem; align-items: center; }
+#page-model .mcd-hero-copy { min-width: 0; }
+#page-model .mcd-hero-copy h2 { font-size: 1.3rem; }
+#page-model .mcd-actions { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1.3rem; }
+#page-model a.mcd-button { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 0.65rem 1rem; border: 1px solid var(--accent); border-radius: 999px; background: transparent; color: var(--accent); font: inherit; font-size: 0.88rem; font-weight: 650; line-height: 1.35; text-align: center; text-decoration: none; }
+#page-model a.mcd-button:hover { background: var(--mcd-soft); }
+#page-model a.mcd-button-primary { color: #fff; background: var(--accent); }
+#page-model a.mcd-button-primary:hover { background: #084781; }
+#page-model .mcd-media, #page-model .mcd-figure { min-width: 0; margin: 0; }
+#page-model .mcd-media { background: #fff; border: 1px solid var(--line); border-radius: var(--mcd-radius); overflow: hidden; }
+#page-model .mcd-media-label { padding: 0.8rem 1rem; font-size: 0.8rem; font-weight: 700; border-bottom: 1px solid var(--line); }
+#page-model video { display: block; width: 100%; height: auto; background: #fff; }
+#page-model figcaption { color: var(--muted); font-size: 0.82rem; line-height: 1.55; }
+#page-model .mcd-media figcaption { padding: 1rem; }
+#page-model figcaption strong { color: var(--ink); }
+#page-model .mcd-evidence-strip { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); margin-top: 2.25rem; padding: 1.3rem 0; background: var(--mcd-soft); border-radius: var(--mcd-radius); }
+#page-model .mcd-evidence-strip > div { display: flex; flex-direction: column; padding: 0 1.25rem; }
+#page-model .mcd-evidence-strip > div + div { border-left: 1px solid #d0ddeb; }
+#page-model .mcd-evidence-strip strong { font-size: clamp(1.4rem, 3vw, 1.9rem); line-height: 1.2; color: var(--accent); }
+#page-model .mcd-evidence-strip span { font-size: 0.85rem; color: var(--muted); margin-top: 0.35rem; }
+#page-model .mcd-small { font-size: 0.82rem; line-height: 1.55; color: var(--muted); }
+#page-model .mcd-stat-note { margin: 0.7rem 0 0; }
+#page-model .mcd-cite { white-space: nowrap; font-size: 0.78em; font-weight: 650; text-decoration: none; }
+#page-model .mcd-cite:hover { text-decoration: underline; }
+#page-model .mcd-jumps { display: flex; flex-wrap: wrap; gap: 0.5rem 1rem; margin-top: 2rem; padding: 1rem 0; border-block: 1px solid var(--line); }
+#page-model .mcd-jumps a { font-size: 0.86rem; text-decoration: none; padding: 0.3rem 0; }
+#page-model .mcd-jumps a:hover { text-decoration: underline; }
+#page-model .mcd-section { margin-top: 3.75rem; scroll-margin-top: 100px; }
+#page-model .mcd-prose { max-width: none; }
+#page-model .mcd-pipeline { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 0.75rem; list-style: none; padding: 0; margin: 1.75rem 0 0; }
+#page-model .mcd-pipeline li { min-width: 0; padding: 1.1rem; border: 1px solid var(--line); border-radius: 9px; background: #fff; }
+#page-model .mcd-pipeline span { display: block; font-size: 0.75rem; color: var(--accent); margin-bottom: 0.4rem; }
+#page-model .mcd-pipeline strong { display: block; font-size: 0.91rem; line-height: 1.4; }
+#page-model .mcd-pipeline small { display: block; font-size: 0.78rem; color: var(--muted); line-height: 1.4; margin-top: 0.3rem; }
+#page-model .mcd-figure { margin: 1.5rem 0; }
+#page-model .mcd-figure > a { display: block; border: 1px solid var(--line); padding: 1rem; background: #fff; border-radius: 10px; }
+#page-model .mcd-figure img { display: block; max-width: 100%; width: 100%; height: auto; border: 0; border-radius: 0; box-shadow: none; object-fit: contain; }
+#page-model .mcd-figure figcaption { margin-top: 0.75rem; }
+#page-model .mcd-architecture { max-width: 760px; margin: 1.75rem 0; }
+#page-model .mcd-details { margin: 1.5rem 0 0; background: #fff; border: 1px solid var(--line); border-radius: 10px; scroll-margin-top: 100px; }
+#page-model .mcd-details summary { cursor: pointer; padding: 1rem 1.2rem; color: var(--accent); font-size: 0.94rem; font-weight: 650; }
+#page-model .mcd-details[open] summary { border-bottom: 1px solid var(--line); }
+#page-model .mcd-details-body { padding: 1.25rem; }
+#page-model .mcd-details-body > :last-child { margin-bottom: 0; }
+#page-model .mcd-contained-video { max-width: 640px; margin-inline: auto; }
+#page-model .mcd-timeline { margin-top: 1.75rem; }
+#page-model .mcd-milestone { display: grid; grid-template-columns: 105px minmax(0,1fr); gap: 1.35rem; padding: 0 0 2rem; }
+#page-model .mcd-milestone:last-child { padding-bottom: 0; }
+#page-model .mcd-milestone > div { padding-left: 1.35rem; border-left: 2px solid #d5e3f3; }
+#page-model .mcd-year { color: var(--accent); font-size: 0.9rem; font-weight: 700; }
+#page-model .mcd-milestone p:last-child { margin-bottom: 0; }
+#page-model .mcd-transient-figure { max-width: 590px; }
+#page-model .mcd-milestone-figure { max-width: 680px; margin-top: 1rem; }
+#page-model .mcd-milestone-figure img { background: #fff; }
+#page-model .mcd-signal-comparison { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 1rem; margin: 1.5rem 0; }
+#page-model .mcd-compare-card { padding: 1.2rem; border: 1px solid var(--line); border-radius: 10px; background: #fff; }
+#page-model .mcd-compare-card h3 { color: var(--accent); margin-bottom: 0.55rem; }
+#page-model .mcd-compare-card ul { margin: 0.75rem 0 0; padding-left: 1.15rem; }
+#page-model .mcd-compare-card li { margin-bottom: 0.45rem; font-size: 0.93rem; }
+#page-model .mcd-video-pair { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 1rem; margin-top: 1rem; }
+#page-model .mcd-video-pair .mcd-media { height: 100%; }
+#page-model .mcd-video-pair figcaption { font-size: 0.8rem; }
+#page-model .mcd-distance-figure-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 1rem; margin: 1.35rem 0 1.5rem; }
+#page-model .mcd-distance-panel { padding: 1rem; background: #fff; border: 1px solid #d4e2f2; border-radius: 10px; }
+#page-model .mcd-distance-panel h3 { color: var(--accent); font-size: 0.95rem; margin-bottom: 0.45rem; }
+#page-model .mcd-distance-panel ul { margin: 0; padding-left: 1.1rem; }
+#page-model .mcd-distance-panel li { margin-bottom: 0.4rem; font-size: 0.92rem; }
+#page-model .mcd-three-up { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 1rem; margin: 1.5rem 0; }
+#page-model .mcd-topic { padding: 1.25rem; border: 1px solid var(--line); border-radius: 10px; background: #fff; }
+#page-model .mcd-topic h3 { color: var(--accent); }
+#page-model .mcd-topic p { font-size: 0.93rem; margin-bottom: 0; }
+#page-model .mcd-demo-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 1.25rem; margin-top: 1.5rem; }
+#page-model .mcd-demo h3 { padding: 1rem; margin: 0; font-size: 1rem; border-bottom: 1px solid var(--line); }
+#page-model .mcd-video-stage { aspect-ratio: 1 / 1; background: #f5f7fa; display: grid; place-items: center; }
+#page-model .mcd-video-stage video { width: 100%; height: 100%; max-height: 100%; object-fit: contain; background: #fff; }
+#page-model .mcd-case-study { background: var(--mcd-soft); border: 1px solid #d4e2f2; border-radius: var(--mcd-radius); padding: 2rem; }
+#page-model .mcd-case-study > p:last-child { margin-bottom: 0; }
+#page-model .mcd-distance-steps { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 1rem; margin: 1.5rem 0; }
+#page-model .mcd-distance-steps > div { padding: 1rem; background: #fff; border-radius: 9px; }
+#page-model .mcd-distance-steps span { display: block; font-size: 0.78rem; color: var(--muted); margin-bottom: 0.4rem; }
+#page-model .mcd-distance-steps strong { display: block; font-size: 0.93rem; line-height: 1.5; }
+#page-model .mcd-takeaway { font-size: 1.15rem; font-weight: 600; line-height: 1.5; border-left: 3px solid var(--accent); padding-left: 1.1rem; margin-block: 1.5rem; }
+#page-model .mcd-application-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 1rem; margin: 1.5rem 0; }
+#page-model .mcd-application { border-top: 3px solid #a7bfdc; padding: 1.1rem 0.6rem 0 0; }
+#page-model .mcd-application p { font-size: 0.94rem; }
+#page-model .mcd-collaborate { display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; border: 1px solid #d4e2f2; border-radius: var(--mcd-radius); background: var(--mcd-soft); padding: 1.6rem; margin-top: 1.75rem; }
+#page-model .mcd-collaborate > div { max-width: 60ch; }
+#page-model .mcd-collaborate p { margin-bottom: 0; font-size: 0.95rem; }
+#page-model .mcd-collaborate .mcd-button { flex-shrink: 0; max-width: 100%; }
+#page-model .mcd-key-paper { background: #fff; border: 1px solid var(--line); border-left: 4px solid var(--accent); border-radius: 9px; padding: 1.5rem; scroll-margin-top: 100px; }
+#page-model .mcd-paper-meta { color: var(--muted); font-size: 0.85rem; }
+#page-model .mcd-key-paper h3 { max-width: 75ch; }
+#page-model .mcd-key-paper > p:not(.mcd-paper-meta) { color: var(--muted); font-size: 0.95rem; }
+#page-model .mcd-references { margin: 0; padding-left: 1.4rem; }
+#page-model .mcd-references li { font-size: 0.91rem; margin-bottom: 1.2rem; padding-left: 0.25rem; scroll-margin-top: 110px; }
+#page-model .mcd-references li:last-child { margin-bottom: 0; }
+#page-model .mcd-references span { display: block; color: var(--muted); margin-top: 0.3rem; }
+@media (max-width: 800px) {
+  #page-model .mcd-hero { grid-template-columns: minmax(0,1fr); }
+  #page-model .mcd-hero-media { max-width: 660px; }
+  #page-model .mcd-pipeline { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  #page-model .mcd-collaborate { flex-direction: column; align-items: flex-start; }
+}
+@media (max-width: 620px) {
+  #page-model .mcd-page-heading { margin-bottom: 1.8rem; }
+  #page-model .mcd-evidence-strip { grid-template-columns: minmax(0,1fr); padding: 0.25rem 1.2rem; }
+  #page-model .mcd-evidence-strip > div { padding: 0.9rem 0; }
+  #page-model .mcd-evidence-strip > div + div { border-left: 0; border-top: 1px solid #d0ddeb; }
+  #page-model .mcd-demo-grid, #page-model .mcd-three-up, #page-model .mcd-application-grid, #page-model .mcd-distance-steps, #page-model .mcd-signal-comparison, #page-model .mcd-distance-figure-grid, #page-model .mcd-video-pair { grid-template-columns: minmax(0,1fr); }
+  #page-model .mcd-milestone { grid-template-columns: minmax(0,1fr); gap: 0.35rem; }
+  #page-model .mcd-milestone > div { padding-left: 1rem; }
+  #page-model .mcd-section { margin-top: 2.75rem; scroll-margin-top: 155px; }
+  #page-model .mcd-case-study { padding: 1.25rem; }
+  #page-model .mcd-figure > a { padding: 0.4rem; }
+  #page-model .mcd-key-paper, #page-model .mcd-references li, #page-model .mcd-details { scroll-margin-top: 155px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  #page-model * { scroll-behavior: auto; }
+}
+
 </style>
 </head>
 <body>
@@ -53,7 +591,7 @@
     <ul>
       <li><a href="#home" data-page="home">Home</a></li>
       <li><a href="#research" data-page="research">Research</a></li>
-      <li><a href="#model" data-page="model">Multisensory Model</a></li>
+      <li><a href="#model" data-page="model">MCD model</a></li>
       <li><a href="#publications" data-page="publications">Publications</a></li>
       <li><a href="#patents" data-page="patents">Patents</a></li>
       <li><a href="#contact" data-page="contact">Contact</a></li>
@@ -63,232 +601,1130 @@
 
 <main>
 
-  <!-- HOME -->
-  <section class="page" id="page-home">
-    <div class="hero">
-      <!-- Place the profile photo next to this file as photo.jpg -->
-      <img src="photo.jpg" alt="Portrait of Cesare V. Parise" onerror="this.onerror=null;this.style.background='#0b5cad';this.style.display='flex';this.style.alignItems='center';this.style.justifyContent='center';this.style.color='#fff';this.style.fontSize='3rem';this.style.fontWeight='700';this.alt='CVP';">
-      <div>
-        <h1>Cesare V. Parise</h1>
-        <p class="role">Senior Lecturer, Department of Psychology, University of Liverpool</p>
-        <p class="lead">I am a perception scientist with a dual nature. As a blue-sky researcher, I investigate how the senses interact to generate a coherent representation of our body and environment, through the development of stimulus-computable theoretical models.</p>
-        <p class="lead">Beyond fundamental research, a quantitative understanding of multisensory perception and action paves the way for next-generation interfaces for immersive technologies and sensory augmentation.</p>
-        <span class="badge">Perception Scientist</span>
-        <span class="badge">Applied Perception Scientist</span>
-        <span class="badge">Multisensory Integration</span>
-        <span class="badge">Haptics &amp; Spatial Hearing</span>
+  
+<!-- HOME -->
+<section class="page" id="page-home">
+
+  <div class="hero">
+
+    <!-- LEFT: PROFILE -->
+    <div class="home-profile">
+
+      <img
+        class="home-portrait"
+        src="photo.jpg"
+        alt="Portrait of Cesare V. Parise"
+      >
+
+      <nav class="profile-links" aria-label="Academic and professional profiles">
+
+        <a href="https://www.liverpool.ac.uk/people/cesare-parise"
+           target="_blank" rel="noopener noreferrer">
+          University of Liverpool
+        </a>
+
+        <a href="https://scholar.google.com/citations?user=IR3CvcoAAAAJ&amp;hl=en"
+           target="_blank" rel="noopener noreferrer">
+          Google Scholar
+        </a>
+
+        <a href="https://www.researchgate.net/profile/Cesare-Parise"
+           target="_blank" rel="noopener noreferrer">
+          ResearchGate
+        </a>
+
+        <a href="https://uk.linkedin.com/in/cesare-parise-68345a6"
+           target="_blank" rel="noopener noreferrer">
+          LinkedIn
+        </a>
+
+      </nav>
+    </div>
+
+
+    <!-- RIGHT: INTRODUCTION -->
+    <div class="home-introduction">
+
+      <p>
+        I am a <strong>multisensory perception scientist</strong>
+        working across fundamental and applied research.
+        I investigate how the senses interact to generate a
+        coherent representation of our bodies and the environment,
+        and how this information guides action.
+        My research combines psychophysics with
+        <em>ideal observer and stimulus-computable models of
+        multisensory perception and action</em>.
+      </p>
+
+      <p>
+        A central strand of this work is the
+        <strong>Multisensory Correlation Detector</strong>,
+        a biologically inspired model that predicts audiovisual
+        perception directly from sensory input.
+        This research aims to explain the computations linking
+        sensory signals to perceptual experience, behaviour
+        and neural responses.
+      </p>
+
+      <p>
+        I apply this understanding to the development of
+        immersive technologies and sensory augmentation.
+        Previously, I worked as a research scientist and
+        principal investigator at
+        <strong>Meta Reality Labs</strong>,
+        investigating haptics, multisensory integration and
+        spatial audio for virtual and augmented reality.
+        I work with hardware and software engineers on interface
+        design, algorithm development and quantitative
+        perceptual evaluation.
+      </p>
+
+      <p>
+        My applied projects include algorithms that localise
+        sound sources in video and generate spatial audio
+        for films with non-spatial soundtracks.
+        I have also developed <strong>SonicWhiskers</strong>,
+        a sensory substitution system that converts optical
+        input into auditory and haptic feedback.
+        The aim is to help blind and partially sighted people
+        access information about their surroundings and to
+        extend perception when vision is unavailable.
+      </p>
+
+      <p>
+        I welcome enquiries about
+        <strong>research collaborations and applied projects</strong>,
+        including perceptual evaluation, computational
+        modelling and interface development.
+      </p>
+
+    </div>
+
+
+    <!-- RIGHT: EDUCATION AND EDITORIAL ROLES -->
+    <div class="home-credentials">
+
+      <!-- LEFT COLUMN: EDUCATION -->
+      <div class="home-education">
+
+        <h2>Education</h2>
+
+        <p class="degree">
+          <strong>DPhil in Experimental Psychology</strong><br>
+          University of Oxford
+        </p>
+
+        <p class="degree">
+          <strong>Laurea in Psychology</strong><br>
+          University of Milano-Bicocca
+        </p>
+
       </div>
+
+      <!-- RIGHT COLUMN: EDITORIAL ROLES -->
+      <div class="home-editorial">
+
+        <h2>Editorial roles</h2>
+
+        <p><strong>Associate Editor for</strong></p>
+
+        <ul class="editorial-list">
+          <li>
+            <em>ACM Transactions on Applied Perception</em>
+          </li>
+          <li>
+            <em>Multisensory Research</em>
+          </li>
+          <li>
+            <em>Frontiers in Human Neuroscience</em>
+          </li>
+        </ul>
+
+      </div>
+
     </div>
 
-    <div class="industry">
-      <h2>Industry &amp; Collaboration</h2>
-      <p>As an <strong>applied perception scientist</strong>, I work with companies developing multimodal interfaces and immersive products. I can help you:</p>
-      <ul>
-        <li><strong>Characterize</strong> the response of multimodal interfaces, measuring how users perceive and react to visual, auditory, and haptic output.</li>
-        <li><strong>Analyse</strong> these response profiles against human perceptual skills, identifying where a design matches or exceeds perceptual capacity.</li>
-        <li><strong>Optimize</strong> interface design and control, so that cues are perceived as intended with less effort and fewer errors.</li>
-      </ul>
-      <p>For consulting, applied research, perceptual evaluation, or licensing enquiries, please get in touch.</p>
-      <a class="btn" href="#contact">Contact me for industry work</a>
-      <a class="btn ghost" href="#patents">View my patents</a>
-    </div>
-  </section>
 
-  <!-- RESEARCH -->
-  <section class="page" id="page-research">
-    <h1>Research</h1>
-    <p class="lead">My work asks how the senses combine information, and how that combination shapes perception and action.</p>
-    <h2>Research themes</h2>
-    <div class="grid">
-      <div class="card"><h3>Audiovisual correlation and causal inference</h3><p>How the brain detects when signals from different senses belong together.</p></div>
-      <div class="card"><h3>Multisensory integration</h3><p>Optimal cue combination and the illusions that reveal its rules.</p></div>
-      <div class="card"><h3>Haptics</h3><p>Touch and force feedback as channels for interaction and perception.</p></div>
-      <div class="card"><h3>Spatial hearing</h3><p>How listeners localise sounds and integrate them with vision and touch.</p></div>
+    <!-- RIGHT: RESEARCH BADGES -->
+    <div class="home-badges">
+
+      <span class="badge">Perception Scientist</span>
+      <span class="badge">Applied Perception</span>
+      <span class="badge">Multisensory Integration</span>
+      <span class="badge">Vision, Audition &amp; Haptics</span>
+
     </div>
-    <h2>Figures and videos</h2>
-    <div class="placeholder">Figures, images, and videos will be linked to their papers here.</div>
-  </section>
+
+  </div>
+
+</section>
+
+
+<!-- RESEARCH -->
+<section class="page" id="page-research">
+
+  <h1>Research</h1>
+
+  <p class="lead">
+    My research investigates how the brain processes and combines
+    information from vision, hearing and touch to perceive our bodies
+    and surroundings and guide action. I combine psychophysics,
+    computational modelling and neuroscience to understand the
+    principles of sensory perception, with applications in immersive
+    technologies and sensory augmentation.
+  </p>
+
+
+  <!-- 1. MULTISENSORY INTEGRATION -->
+  <article class="research-area">
+
+    <div class="research-main">
+
+      <figure class="research-figure">
+        <a href="MCD_capture.png" target="_blank">
+          <img src="MCD_capture.png"
+               alt="Multisensory Correlation Detector model"
+               loading="lazy">
+        </a>
+        <figcaption>
+          Multisensory Correlation Detector (MCD), a biologically
+          inspired model for multisensory integration.
+          Parise &amp; Ernst (2016), Nature Communications.
+        </figcaption>
+      </figure>
+
+      <div class="research-description">
+        <h2>Multisensory integration</h2>
+
+        <p>
+          All animals, even the simplest ones, rely on multiple sensory
+          systems to perceive their bodies and surroundings.
+          My research investigates the computational principles
+          governing multisensory integration, with particular emphasis
+          on vision and audition.
+        </p>
+
+        <p>
+          A central question is how the brain determines which sensory
+          signals originate from a common source and should therefore
+          be integrated. I address this question through psychophysics
+          and stimulus-computable models, with applications ranging
+          from sensory substitution to artificial perception and
+          augmented reality.
+        </p>
+      </div>
+
+    </div>
+
+    <h3>Selected publications</h3>
+
+    <ul class="research-publications">
+
+      <li>
+        <a href="https://doi.org/10.1016/j.neubiorev.2025.106449"
+           target="_blank" rel="noopener noreferrer">
+          Parise, Parise &amp; Parise (2026).
+        </a>
+        Perceiving audiovisual synchrony: A quantitative synthesis
+        of simultaneity and temporal order judgments from 185 studies.
+        <em>Neuroscience &amp; Biobehavioral Reviews.</em>
+      </li>
+
+      <li>
+        <a href="https://doi.org/10.7554/eLife.106122"
+           target="_blank" rel="noopener noreferrer">
+          Parise (2025).
+        </a>
+        Correlation detection as a stimulus computable account
+        for audiovisual perception, causal inference, and saliency
+        maps in mammals.
+        <em>eLife.</em>
+      </li>
+
+      <li>
+        <a href="https://doi.org/10.7554/eLife.90841"
+           target="_blank" rel="noopener noreferrer">
+          Parise &amp; Ernst (2025).
+        </a>
+        Multisensory integration operates on correlated input
+        from unimodal transient channels.
+        <em>eLife.</em>
+      </li>
+
+      <li>
+        <a href="https://doi.org/10.1038/s41467-022-29687-6"
+           target="_blank" rel="noopener noreferrer">
+          Pesnot Lerousseau et al. (2022).
+        </a>
+        Multisensory correlation computations in the human brain
+        identified by a time-resolved encoding model.
+        <em>Nature Communications.</em>
+      </li>
+
+      <li>
+        <a href="https://doi.org/10.1371/journal.pcbi.1005546"
+           target="_blank" rel="noopener noreferrer">
+          Parise &amp; Ernst (2017).
+        </a>
+        Noise, multisensory integration, and previous response
+        in perceptual disambiguation.
+        <em>PLOS Computational Biology.</em>
+      </li>
+
+      <li>
+        <a href="https://doi.org/10.1038/ncomms11543"
+           target="_blank" rel="noopener noreferrer">
+          Parise &amp; Ernst (2016).
+        </a>
+        Correlation detection as a general mechanism for
+        multisensory integration.
+        <em>Nature Communications.</em>
+      </li>
+
+      <li>
+        <a href="https://doi.org/10.1016/j.cub.2011.11.039"
+           target="_blank" rel="noopener noreferrer">
+          Parise, Spence &amp; Ernst (2012).
+        </a>
+        When correlation implies causation in multisensory integration.
+        <em>Current Biology.</em>
+      </li>
+
+    </ul>
+
+  </article>
+
+
+  <!-- 2. SPATIAL HEARING -->
+  <article class="research-area">
+
+    <div class="research-main">
+
+      <figure class="research-figure">
+        <a href="PNAS_capture_small.png" target="_blank">
+          <img src="PNAS_capture_small.png"
+               alt="Frequency-dependent sound localisation responses"
+               loading="lazy">
+        </a>
+        <figcaption>
+          Frequency-induced biases in sound-source localisation,
+          illustrated by localisation responses across different
+          frequency bands.
+          Parise, Knorre &amp; Ernst (2014), PNAS.
+        </figcaption>
+      </figure>
+
+      <div class="research-description">
+        <h2>Spatial hearing</h2>
+
+        <p>
+          Unlike vision and touch, which rely on spatially organised
+          sensory receptors, the cochlea is organised primarily
+          according to sound frequency. Nevertheless, humans can
+          accurately localise sounds in their surroundings.
+        </p>
+
+        <p>
+          My research investigates the computational principles
+          of spatial hearing, including how acoustic cues and
+          natural scene statistics shape sound localisation,
+          how we perceive auditory motion, and how perceptual
+          learning allows us to adapt to unfamiliar acoustic
+          environments.
+        </p>
+      </div>
+
+    </div>
+
+    <h3>Selected publications</h3>
+
+    <ul class="research-publications">
+
+      <li>
+        <a href="https://doi.org/10.1016/j.isci.2024.111308"
+           target="_blank" rel="noopener noreferrer">
+          Parise et al. (2024).
+        </a>
+        Happy new ears: Rapid adaptation to novel spectral cues
+        in vertical sound localization.
+        <em>iScience.</em>
+      </li>
+
+      <li>
+        <a href="https://doi.org/10.1098/rspb.2017.0673"
+           target="_blank" rel="noopener noreferrer">
+          Senna, Parise &amp; Ernst (2017).
+        </a>
+        Modulation frequency as a cue for auditory speed perception.
+        <em>Proceedings of the Royal Society B.</em>
+      </li>
+
+      <li>
+        <a href="https://doi.org/10.1038/srep14054"
+           target="_blank" rel="noopener noreferrer">
+          Senna, Parise &amp; Ernst (2015).
+        </a>
+        Hearing in slow-motion: Humans underestimate the speed
+        of moving sounds.
+        <em>Scientific Reports.</em>
+      </li>
+
+      <li>
+        <a href="https://doi.org/10.1073/pnas.1322705111"
+           target="_blank" rel="noopener noreferrer">
+          Parise, Knorre &amp; Ernst (2014).
+        </a>
+        Natural auditory scene statistics shapes human spatial hearing.
+        <em>Proceedings of the National Academy of Sciences.</em>
+      </li>
+
+    </ul>
+
+  </article>
+
+
+  <!-- 3. TOUCH AND MOTOR CONTROL -->
+  <article class="research-area">
+
+    <div class="research-main">
+
+      <figure class="research-figure">
+        <a href="CHI_capture.png" target="_blank">
+          <img src="CHI_capture.png"
+               alt="Pseudo-haptic weight perception in virtual reality"
+               loading="lazy">
+        </a>
+        <figcaption>
+          Pseudo-haptic weight: manipulating the control-display
+          ratio changes the perceived weight of virtual objects
+          without physical force feedback.
+          Samad et al. (2019), ACM CHI.
+        </figcaption>
+      </figure>
+
+      <div class="research-description">
+        <h2>Touch and motor control</h2>
+
+        <p>
+          Our hands are our primary means of interacting with
+          the environment. Touch and proprioception provide
+          information about objects and our own movements,
+          contributing to both perception and action.
+        </p>
+
+        <p>
+          My research investigates how tactile information
+          contributes to manual interactions and how multisensory
+          integration can compensate for impoverished haptic
+          feedback. A particular focus is the development and
+          evaluation of perceptually informed interfaces for
+          virtual and augmented reality.
+        </p>
+      </div>
+
+    </div>
+
+    <h3>Selected publications</h3>
+
+    <ul class="research-publications">
+
+      <li>
+        <a href="https://doi.org/10.1152/jn.00583.2020"
+           target="_blank" rel="noopener noreferrer">
+          Ryan et al. (2021).
+        </a>
+        The interaction between motion and texture in the sense of touch.
+        <em>Journal of Neurophysiology.</em>
+      </li>
+
+      <li>
+        <a href="https://doi.org/10.1126/sciadv.aaw3121"
+           target="_blank" rel="noopener noreferrer">
+          Moscatelli et al. (2019).
+        </a>
+        Touch as an auxiliary proprioceptive cue for movement control.
+        <em>Science Advances.</em>
+      </li>
+
+      <li>
+        <a href="https://doi.org/10.1145/3290605.3300550"
+           target="_blank" rel="noopener noreferrer">
+          Samad, Gatti, Hermes, Benko &amp; Parise (2019).
+        </a>
+        Pseudo-haptic weight: Changing the perceived weight
+        of virtual objects by manipulating control-display ratio.
+        <em>ACM CHI.</em>
+      </li>
+
+    </ul>
+
+  </article>
+
+</section>
+
 
   <!-- MODEL -->
-  <section class="page" id="page-model">
-    <h1>Multisensory Integration Model</h1>
-    <p class="lead">A general, stimulus-computable model of how the senses decide which signals belong together and how to combine them.</p>
-    <h2>Core idea</h2>
-    <div class="placeholder">Motivation, formulation, assumptions, and predictions will be added here. A short summary and key equations are needed from the author.</div>
-    <h2>Key paper</h2>
-    <div class="card paper">
-      <h3>Correlation detection as a stimulus computable account for audiovisual perception, causal inference, and saliency maps in mammals</h3>
-      <p class="meta">eLife (2026) · Parise &amp; Ernst</p>
-      <p>An image- and sound-computable population model of audiovisual perception. Optimal cue integration, Bayesian causal inference, spatial orienting, and several multisensory illusions emerge from a population of multisensory correlation detectors.</p>
-      <p><a class="link" href="https://elifesciences.org/articles/106122" target="_blank" rel="noopener">Read the article on eLife →</a></p>
+  <section class="page" id="page-model" aria-labelledby="mcd-title">
+
+    <header class="mcd-page-heading">
+      <p class="mcd-eyebrow">From sensory signals to perception</p>
+      <h1 id="mcd-title">Multisensory Correlation Detector model</h1>
+      <p class="mcd-lead">A biologically inspired model that turns images and sounds into predictions of what we perceive&mdash;and where we look.</p>
+    </header>
+
+    <div class="mcd-hero">
+      <div class="mcd-hero-copy">
+        <h2>One mechanism. Many perceptual effects.</h2>
+        <p>When someone speaks, their movements and voice change together. The <strong>Multisensory Correlation Detector (MCD)</strong> uses this shared structure to connect information across the senses.</p>
+        <p>Rather than starting with a description of a stimulus, the model processes the stimulus itself. From pixels and audio samples, it generates predictions about audiovisual timing, cue integration, perceptual illusions and attention. <a class="mcd-cite" href="#mcd-ref-population" aria-label="Reference 1: Parise, 2025">[1]</a></p>
+        <div class="mcd-actions">
+          <a class="mcd-button mcd-button-primary" href="#mcd-applications">Explore the applications</a>
+          <a class="mcd-button" href="https://elifesciences.org/articles/106122" target="_blank" rel="noopener noreferrer">Read the key paper</a>
+        </div>
+      </div>
+      <figure class="mcd-media mcd-hero-media">
+        <div class="mcd-media-label">Watch: predicting where people look</div>
+        <video controls playsinline preload="none" width="616" height="332" poster="assets/mcd/gaze-poster.jpg" aria-describedby="mcd-gaze-caption">
+          <source src="assets/mcd/gaze.mp4" type="video/mp4">
+          Your browser does not support embedded video. <a href="assets/mcd/gaze.mp4">Open the gaze demonstration.</a>
+        </video>
+        <figcaption id="mcd-gaze-caption">The recorded conversation is shown above the model&rsquo;s correlation map; coloured markers show measured gaze. The model highlights the active speaker without face recognition or speech recognition. Demonstration accompanying <a href="https://elifesciences.org/articles/106122" target="_blank" rel="noopener noreferrer">Parise (2025)</a>, using footage and eye-tracking data from Coutrot &amp; Guyader (2015).</figcaption>
+      </figure>
     </div>
-    <h2>Applications</h2>
-    <div class="placeholder">Applications to interface design and immersive technologies will be described here.</div>
+
+    <div class="mcd-evidence-strip" aria-label="Scope of the 2025 population-model study">
+      <div><strong>69</strong><span>experiments simulated</span></div>
+      <div><strong>3 species</strong><span>humans, rats and monkeys</span></div>
+      <div><strong>&gt;0.97</strong><span>reported mean model&ndash;data correlation</span></div>
+    </div>
+    <p class="mcd-small mcd-stat-note">Results reported in the 2025 population-model paper. Correlation measures agreement with the data, not percentage accuracy. The model shares its sensory architecture across tests; task-specific parameters and species-specific temporal tuning are described <a href="#mcd-scope">below</a>. <a class="mcd-cite" href="#mcd-ref-population" aria-label="Reference 1">[1]</a></p>
+
+    <div class="mcd-jumps" role="navigation" aria-label="On this model page">
+      <a href="#mcd-concept">The approach</a>
+      <a href="#mcd-optimality">MLE &amp; causal inference</a>
+      <a href="#mcd-mechanism">The mechanism</a>
+      <a href="#mcd-evidence">The evidence</a>
+      <a href="#mcd-demonstrations">Demonstrations</a>
+      <a href="#mcd-distance">Synchrony with distance</a>
+      <a href="#mcd-applications">Applied projects</a>
+      <a href="#mcd-papers">Papers</a>
+    </div>
+
+    <section class="mcd-section" id="mcd-concept" aria-labelledby="mcd-concept-heading">
+      <p class="mcd-eyebrow">The gap</p>
+      <h2 id="mcd-concept-heading">What perception achieves is not yet how it works</h2>
+      <div class="mcd-prose">
+        <p>Multisensory research has been strongly shaped by ideal-observer models, particularly maximum-likelihood estimation and Bayesian causal inference. In David Marr&rsquo;s terms, these are primarily <strong>computational-level accounts</strong>: they explain the goals of perception, such as obtaining reliable estimates and deciding which signals belong together.</p>
+        <p>Their success leaves an important question open. <strong>How are these computations performed on the sensory stream?</strong> The influential cue-integration models typically begin with quantities such as location, reliability or audiovisual delay. Biological systems must first extract useful information from changing light and sound.</p>
+        <p>The MCD addresses this <strong>algorithmic gap</strong> by making the intermediate representations and transformations explicit. It does not reject the achievements of Bayesian models: it asks how behaviour consistent with those accounts can emerge from elementary operations on sensory signals. <a class="mcd-cite" href="#mcd-ref-population" aria-label="Reference 1">[1]</a></p>
+      </div>
+      <ol class="mcd-pipeline" aria-label="The model's processing stages">
+        <li><span>01</span><strong>Images &amp; sounds</strong><small>The sensory input</small></li>
+        <li><span>02</span><strong>Detect changes</strong><small>Transient sensory responses</small></li>
+        <li><span>03</span><strong>Compare the senses</strong><small>Correlation and relative lag</small></li>
+        <li><span>04</span><strong>Read out the response</strong><small>Perceptual decisions or saliency</small></li>
+      </ol>
+    </section>
+
+    <section class="mcd-section" id="mcd-optimality" aria-labelledby="mcd-optimality-heading">
+      <p class="mcd-eyebrow">Statistical optimality</p>
+      <h2 id="mcd-optimality-heading">MLE and Bayesian causal inference explain a lot &mdash; but they start later in the computation</h2>
+      <div class="mcd-prose">
+        <p><strong>Maximum-likelihood estimation (MLE)</strong> explains why two sensory cues are often combined in proportion to their reliability. <strong>Bayesian causal inference (BCI)</strong> explains why that integration weakens or breaks down when the cues are too discrepant, by weighting fusion against the probability that the signals arise from a common cause.</p>
+        <p>These frameworks are central to modern multisensory research and the MCD is meant to complement them, not replace them. Their main limitation is that they typically operate on <strong>experimenter-defined variables</strong> &mdash; such as cue location, audiovisual delay, cue reliability and their probability distributions. Real perceptual systems do not receive those abstractions. They receive patterns of light and sound, and must infer those quantities from the sensory stream.</p>
+        <p>The MCD works one step earlier. It operates on <strong>signals and their processing</strong>: images, sounds, and the changing structure they share over time and space. From a scientific perspective, this means that the problem it solves is closer to the one biological perceptual systems actually face. A further consequence is breadth: the same model that reproduces MLE-like cue combination and BCI-like segregation can also be run on realistic audiovisual scenes, such as a real ventriloquist performance, where classical parametric models do not directly operate. <a class="mcd-cite" href="#mcd-ref-population" aria-label="Reference 1">[1]</a></p>
+      </div>
+      <div class="mcd-signal-comparison" aria-label="Comparison between statistical-level models and the signal-computable MCD approach">
+        <article class="mcd-compare-card">
+          <h3>What statistically optimal models usually take as input</h3>
+          <ul>
+            <li>Estimated cue locations, lags, or intensities</li>
+            <li>Reliability terms and probability distributions</li>
+            <li>A decision about whether to integrate or segregate cues</li>
+          </ul>
+        </article>
+        <article class="mcd-compare-card">
+          <h3>What the MCD takes as input</h3>
+          <ul>
+            <li>The actual audiovisual signals: frames, pixels, waveforms and transients</li>
+            <li>Local computations of correlation and relative lag over space and time</li>
+            <li>Read-outs from which MLE-like integration, BCI-like behaviour and saliency can emerge</li>
+          </ul>
+        </article>
+      </div>
+      <p class="mcd-small">In the 2025 population-model paper, the spatial population of MCD units reproduces the classic signatures associated with MLE and BCI, while also extending naturally to realistic, dynamic material. This is the bridge between ideal-observer theory and stimulus-computable modelling. <a class="mcd-cite" href="#mcd-ref-population" aria-label="Reference 1">[1]</a></p>
+    </section>
+
+    <section class="mcd-section" id="mcd-mechanism" aria-labelledby="mcd-mechanism-heading">
+      <p class="mcd-eyebrow">The mechanism</p>
+      <h2 id="mcd-mechanism-heading">A familiar circuit, a different question</h2>
+      <div class="mcd-prose">
+        <p>The starting point is the <strong>Hassenstein&ndash;Reichardt detector</strong>, a classic model of motion vision. It compares signals from neighbouring visual locations after delaying one relative to the other. Its component operations have been studied extensively in insect neuroscience, providing a physiologically grounded starting point rather than an arbitrary mathematical construction.</p>
+        <p>We adapted this principle to compare inputs <strong>across senses rather than across neighbouring points in an image</strong>. Two complementary outputs indicate how strongly the signals are correlated and which modality leads. Temporal filtering and simple interactions between signals make both outputs evolve continuously over time. <a class="mcd-cite" href="#mcd-ref-original" aria-label="Reference 4: Parise and Ernst, 2016">[4]</a></p>
+        <p>The research programme is a test of sufficiency: <strong>how much of multisensory perception can this minimal, biologically plausible mechanism explain?</strong> The aim is not a separate model for every illusion, but a shared processing architecture tested against different stimuli, tasks and measures.</p>
+      </div>
+      <figure class="mcd-figure mcd-architecture">
+        <a href="assets/mcd/population-model.png" target="_blank" rel="noopener noreferrer" aria-label="Open the population-model diagram at full size">
+          <img src="assets/mcd/population-model.png" alt="A single detector compares auditory and visual transients and produces correlation and lag signals. A spatial population repeats this operation, with normalisation supporting a combined location estimate." width="984" height="629" loading="lazy">
+        </a>
+        <figcaption><strong>From a local computation to a population.</strong> Left: a detector provides correlation and lag read-outs. Right: spatially arranged detectors combine input from auditory and visual transient channels; normalisation supports a population estimate of location. Original artwork from Parise (2026), Figure 1. <a class="mcd-cite" href="#mcd-ref-perspective" aria-label="Reference 7: Parise, 2026 perspective">[7]</a></figcaption>
+      </figure>
+      <details class="mcd-details">
+        <summary>Watch the original detector in action</summary>
+        <div class="mcd-details-body">
+          <figure class="mcd-media mcd-contained-video">
+            <video controls playsinline preload="none" width="640" height="480" poster="assets/mcd/detector-animation-poster.jpg" aria-describedby="mcd-animation-caption">
+              <source src="assets/mcd/detector-animation.mp4" type="video/mp4">
+              <a href="assets/mcd/detector-animation.mp4">Open the detector animation.</a>
+            </video>
+            <figcaption id="mcd-animation-caption">The original MCD&rsquo;s two outputs change as the relative timing of the inputs changes. Correlation is strongest near alignment; the lag signal distinguishes which sense leads. This silent animation accompanies Parise &amp; Ernst (2016); later work refined the input stage to detect unsigned transients. <a class="mcd-cite" href="#mcd-ref-original" aria-label="Reference 4">[4]</a></figcaption>
+          </figure>
+        </div>
+      </details>
+    </section>
+
+    <section class="mcd-section" id="mcd-evidence" aria-labelledby="mcd-evidence-heading">
+      <p class="mcd-eyebrow">The research programme</p>
+      <h2 id="mcd-evidence-heading">Evidence, not just a plausible circuit</h2>
+      <div class="mcd-timeline">
+        <article class="mcd-milestone">
+          <p class="mcd-year">2012&ndash;2013</p>
+          <div>
+            <h3>Correlation matters beyond coincidence</h3>
+            <p>Before developing the model, we tested whether the fine temporal structure of audiovisual signals affects integration. In a localisation task, the gain in precision matched the prediction for optimal integration only when the signals were temporally correlated&mdash;even though they occupied the same physical location in both conditions. A subsequent study showed the complementary cost: correlated signals made spatial discrepancies harder to detect. Correlation therefore promotes binding, not simply better performance on every task. <a class="mcd-cite" href="#mcd-ref-correlation" aria-label="Reference 2: Parise and colleagues, 2012">[2]</a> <a class="mcd-cite" href="#mcd-ref-crosscorrelation" aria-label="Reference 3: Parise and colleagues, 2013">[3]</a></p>
+            <figure class="mcd-figure mcd-milestone-figure">
+              <a href="assets/mcd/current-biology-2012-fig1.png" target="_blank" rel="noopener noreferrer" aria-label="Open Current Biology figure 1 at full size">
+                <img src="assets/mcd/current-biology-2012-fig1.png" alt="Figure from the 2012 Current Biology paper showing correlated and uncorrelated audiovisual stimuli and the localisation set-up used to test whether correlation promotes multisensory integration." width="490" height="740" loading="lazy">
+              </a>
+              <figcaption><strong>From the 2012 study.</strong> Correlated and uncorrelated audiovisual sequences were compared using the same localisation task. This was the empirical starting point for the correlation-based framework. Figure 1 from Parise, Spence &amp; Ernst (2012). <a class="mcd-cite" href="#mcd-ref-correlation" aria-label="Reference 2">[2]</a></figcaption>
+            </figure>
+          </div>
+        </article>
+        <article class="mcd-milestone">
+          <p class="mcd-year">2016</p>
+          <div>
+            <h3>Predicting a percept, not recovering a label</h3>
+            <p>The first MCD was tested with independently generated, random sequences of clicks and flashes. Observers judged whether the streams seemed to share a cause and which seemed to lead. These sequences did not supply a uniquely defined correct classification for the two streams as a whole. Success therefore required matching the stimulus features that shaped human judgements&mdash;not merely recovering an experimenter-assigned answer. Given the same sequences, the MCD reproduced the observed classification patterns. <a class="mcd-cite" href="#mcd-ref-original" aria-label="Reference 4">[4]</a></p>
+          </div>
+        </article>
+        <article class="mcd-milestone">
+          <p class="mcd-year">2022</p>
+          <div>
+            <h3>Testing the computations against brain activity</h3>
+            <p>In a magnetoencephalography (MEG) study, participants judged audiovisual sequences while their brain activity was recorded. A time-resolved encoding analysis linked the MCD&rsquo;s dynamics to temporo-parietal responses. Correlation-related signals were evident across tasks; lag-related evidence was more task-dependent. This connects a model of behavioural judgements to the unfolding neural computations, rather than only to a final response. <a class="mcd-cite" href="#mcd-ref-meg" aria-label="Reference 6: Pesnot Lerousseau and colleagues, 2022">[6]</a></p>
+            <figure class="mcd-figure mcd-milestone-figure">
+              <a href="assets/mcd/meg-2022-figure.png" target="_blank" rel="noopener noreferrer" aria-label="Open the MEG figure at full size">
+                <img src="assets/mcd/meg-2022-figure.png" alt="Figure from the 2022 MEG study showing spatio-temporal cluster analysis, cluster activity as a function of MCD correlation output, single-trial behavioural prediction, and estimated cortical sources." width="920" height="750" loading="lazy">
+              </a>
+              <figcaption><strong>The link to brain activity.</strong> A simple summary figure from the MEG paper: MCD-related dynamics predict task-relevant neural activity and help localise its cortical sources. Figure 3 from Pesnot Lerousseau et al. (2022). <a class="mcd-cite" href="#mcd-ref-meg" aria-label="Reference 6">[6]</a></figcaption>
+            </figure>
+          </div>
+        </article>
+        <article class="mcd-milestone">
+          <p class="mcd-year">2025</p>
+          <div>
+            <h3>What enters the detector? Changes, not sustained intensity</h3>
+            <p>Two psychophysical experiments identified the importance of <strong>unsigned transients</strong>: changes in a signal, regardless of whether its intensity rises or falls. This matters because a shared event need not make light and sound intensities change in the same direction. The relevant evidence can be that something changes in both senses at the same time.</p>
+            <p>A striking prediction follows. For periodically modulated stimuli, both onsets and offsets provide matching events. Perceived synchrony can therefore peak <strong>twice within one stimulus cycle</strong>&mdash;when the signals are in phase and when they are half a cycle apart. Observers showed this frequency-doubling effect, and the transient-based MCD reproduced it. <a class="mcd-cite" href="#mcd-ref-transients" aria-label="Reference 5: Parise and Ernst, 2025">[5]</a></p>
+            <figure class="mcd-figure mcd-transient-figure">
+              <a href="assets/mcd/two-peaked-synchrony.png" target="_blank" rel="noopener noreferrer" aria-label="Open the synchrony data and model plot at full size">
+                <img src="assets/mcd/two-peaked-synchrony.png" alt="Reported synchrony peaks twice per period of audiovisual phase shift. Human data points closely follow the MCD curve; the two ends of the horizontal axis represent the same phase." width="1060" height="540" loading="lazy">
+              </a>
+              <figcaption><strong>Two synchrony peaks, one mechanism.</strong> Dots: human judgements. Curve: MCD responses. The endpoints repeat the same phase; the second distinct maximum occurs halfway through the cycle. Cropped from Parise &amp; Ernst (2025), Figure 5d. <a class="mcd-cite" href="#mcd-ref-transients" aria-label="Reference 5">[5]</a></figcaption>
+            </figure>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="mcd-section" id="mcd-population" aria-labelledby="mcd-population-heading">
+      <p class="mcd-eyebrow">The population model</p>
+      <h2 id="mcd-population-heading">From clicks and flashes to natural audiovisual scenes</h2>
+      <div class="mcd-prose">
+        <p>A single detector compares two signals over time. A <strong>lattice of detectors</strong> extends the same operation across space: each unit compares local visual changes with auditory input. With spatialised sound, the sensory inputs have aligned receptive fields; with a mono soundtrack, the auditory envelope is shared across image locations. The architecture does not require lateral message-passing between detector units; a population normalisation is used for spatial estimation.</p>
+        <p>This makes the model <strong>image- and sound-computable</strong>. It can process the footage used in an experiment, rather than being supplied only with its nominal audiovisual delay or spatial discrepancy. The 2025 study tested this architecture across 69 experiments, spanning seven behavioural tasks and data from 534 humans, 110 rats and two monkeys. <a class="mcd-cite" href="#mcd-ref-population" aria-label="Reference 1">[1]</a></p>
+      </div>
+      <div class="mcd-three-up">
+        <article class="mcd-topic"><h3>Time</h3><p>Synchrony and temporal-order judgements, temporal adaptation, and the dependence of audiovisual speech illusions on timing.</p></article>
+        <article class="mcd-topic"><h3>Space</h3><p>Reliability-weighted cue combination, the ventriloquist effect, and the integration or segregation of signals described by Bayesian causal inference.</p></article>
+        <article class="mcd-topic"><h3>Attention</h3><p>Audiovisual saliency maps that identify correlated regions of a scene and predict the distribution of gaze during natural viewing.</p></article>
+      </div>
+      <p class="mcd-prose">The important result is not just the number of successful fits. <strong>The same low-level computations connect effects usually studied in separate paradigms.</strong> MLE-like cue integration and BCI-like segregation emerge from a shared sensory mechanism, rather than from independent explanations for each phenomenon. Because the model runs on audiovisual stimuli themselves, the scientific model and a practical device are working on the same kind of representation: real signals in time and space. <a class="mcd-cite" href="#mcd-ref-population" aria-label="Reference 1">[1]</a></p>
+      <details class="mcd-details" id="mcd-scope">
+        <summary>What was fitted, and what does the model not claim?</summary>
+        <div class="mcd-details-body mcd-prose">
+          <p>The population study estimated a common set of temporal-filter constants jointly across human timing experiments, with a separate, faster tuning for rats. These constants were then held fixed across additional tests. Depending on the simulation, 0&ndash;4 further parameters described task read-out or spatial uncertainty; the gaze analysis required no additional fitted parameters. The model is therefore <em>not</em> wholly parameter-free, and the reported mean correlation is not a held-out accuracy score for every experiment.</p>
+          <p>The speech simulations explain how audiovisual timing affects integration and the incidence of an illusion, not how a phoneme or word is recognised. The model does not currently include linguistic knowledge or top-down expectations. Its breadth is demonstrated over the tested studies, not over every possible audiovisual phenomenon. <a class="mcd-cite" href="#mcd-ref-population" aria-label="Reference 1">[1]</a></p>
+        </div>
+      </details>
+    </section>
+
+    <section class="mcd-section" id="mcd-demonstrations" aria-labelledby="mcd-demonstrations-heading">
+      <p class="mcd-eyebrow">See the computations</p>
+      <h2 id="mcd-demonstrations-heading">Illusions without a specialised illusion mechanism</h2>
+      <p class="mcd-prose">These demonstrations show the model&rsquo;s responses to the audiovisual material itself. No face detector, lip tracker or speech recogniser is needed to compute the maps. Play with sound to experience the stimuli; browser playback is illustrative, not a calibrated psychophysical test. <a class="mcd-cite" href="#mcd-ref-population" aria-label="Reference 1">[1]</a></p>
+      <div class="mcd-demo-grid">
+        <figure class="mcd-media mcd-demo">
+          <h3>When seeing changes hearing</h3>
+          <div class="mcd-video-stage">
+            <video controls playsinline preload="none" width="904" height="780" poster="assets/mcd/mcgurk-poster.jpg" aria-describedby="mcd-mcgurk-caption">
+              <source src="assets/mcd/mcgurk.mp4" type="video/mp4">
+              <a href="assets/mcd/mcgurk.mp4">Open the McGurk demonstration.</a>
+            </video>
+          </div>
+          <figcaption id="mcd-mcgurk-caption"><strong>The McGurk illusion.</strong> Mismatched lip movements and speech can change the syllable a listener reports. As audiovisual delay varies, the model&rsquo;s correlation response changes with the likelihood of integration. The response concentrates around the mouth without recognising it as a mouth. The model predicts the timing dependence of the effect, not phoneme identity. Demonstration accompanying <a href="https://elifesciences.org/articles/106122" target="_blank" rel="noopener noreferrer">Parise (2025)</a>.</figcaption>
+        </figure>
+        <figure class="mcd-media mcd-demo">
+          <h3>When sound follows a visual source</h3>
+          <div class="mcd-video-stage">
+            <video controls playsinline preload="none" width="450" height="606" poster="assets/mcd/ventriloquist-poster.jpg" aria-describedby="mcd-ventriloquist-caption">
+              <source src="assets/mcd/ventriloquist.mp4" type="video/mp4">
+              <a href="assets/mcd/ventriloquist.mp4">Open the ventriloquist demonstration.</a>
+            </video>
+          </div>
+          <figcaption id="mcd-ventriloquist-caption"><strong>The ventriloquist effect.</strong> The upper panel shows the scene; the panels below show the spatial and temporal distribution of correlation. The response follows the visual source whose movements match the soundtrack, including the dummy. It does not need to understand the performance. The dummy&rsquo;s voice was pitch-shifted in post-production. Demonstration accompanying <a href="https://elifesciences.org/articles/106122" target="_blank" rel="noopener noreferrer">Parise (2025)</a>.</figcaption>
+        </figure>
+      </div>
+      <details class="mcd-details">
+        <summary>A closer look: the response to natural speech</summary>
+        <div class="mcd-details-body">
+          <figure class="mcd-media mcd-contained-video">
+            <video controls playsinline preload="none" width="904" height="780" poster="assets/mcd/speech-poster.jpg" aria-describedby="mcd-speech-caption">
+              <source src="assets/mcd/speech.mp4" type="video/mp4">
+              <a href="assets/mcd/speech.mp4">Open the speech-processing demonstration.</a>
+            </video>
+            <figcaption id="mcd-speech-caption">The video, correlation map and lag map are shown side by side. Traces below show the stimuli, transient responses and detector outputs as the audiovisual delay changes. This makes the intermediate processing visible, not just the final prediction. Demonstration accompanying <a href="https://elifesciences.org/articles/106122" target="_blank" rel="noopener noreferrer">Parise (2025)</a>.</figcaption>
+          </figure>
+        </div>
+      </details>
+    </section>
+
+    <section class="mcd-section mcd-case-study" id="mcd-distance" aria-labelledby="mcd-distance-heading">
+      <p class="mcd-eyebrow">An unexpected test</p>
+      <h2 id="mcd-distance-heading">Synchrony with distance without explicitly calculating distance</h2>
+      <p>Sound takes longer than light to reach an observer. In a classic experiment, Alais &amp; Carlile (2005) found that subjective audiovisual alignment shifted with perceived source distance, approximately as expected from sound propagation. The result was interpreted in terms of estimating distance and compensating for the associated acoustic travel time. <a class="mcd-cite" href="#mcd-ref-distance" aria-label="Reference 8: Alais and Carlile, 2005">[8]</a></p>
+      <p>The MCD reproduces this shift <strong>without an explicit distance estimate or a stored speed of sound</strong>. The explanation lies in the auditory envelope: in the tested reverberant stimuli, increasing distance weakens the direct onset relative to the reverberant tail. The sound becomes less front-loaded, changing the evidence received by the lag detector.</p>
+      <figure class="mcd-figure mcd-milestone-figure">
+        <a href="assets/mcd/scaling-synchrony-distance-summary.png" target="_blank" rel="noopener noreferrer" aria-label="Open the synchrony-with-distance summary figure at full size">
+          <img src="assets/mcd/scaling-synchrony-distance-summary.png" alt="Summary figure showing scaling of audiovisual synchrony with distance: stimulus log envelopes for different distances, temporal-order judgement curves, and the resulting shift in subjective synchrony as distance increases." width="640" height="228" loading="lazy">
+        </a>
+        <figcaption><strong>Scaling audiovisual synchrony with distance.</strong> The 2025 paper shows, side by side, the distance-dependent stimulus envelopes, the psychometric curves, and the resulting shift in subjective synchrony. The key point is that the scaling emerges from changes in the auditory signal itself. <a class="mcd-cite" href="#mcd-ref-population" aria-label="Reference 1">[1]</a></figcaption>
+      </figure>
+      <div class="mcd-distance-figure-grid" aria-label="What Figure 2B shows in the 2025 paper">
+        <article class="mcd-distance-panel">
+          <h3>Stimuli</h3>
+          <ul>
+            <li>Click envelopes recorded at different apparent distances</li>
+            <li>The reverberant tail stays the same</li>
+            <li>The direct onset weakens with distance</li>
+          </ul>
+        </article>
+        <article class="mcd-distance-panel">
+          <h3>Psychometric curves</h3>
+          <ul>
+            <li>Empirical and predicted synchrony curves are shown for each distance</li>
+            <li>All four curves share the same decision parameters</li>
+            <li>The separation across curves comes from the signal waveform</li>
+          </ul>
+        </article>
+        <article class="mcd-distance-panel">
+          <h3>Scaling result</h3>
+          <ul>
+            <li>The point of subjective synchrony shifts systematically with distance</li>
+            <li>The shift scales approximately with the speed of sound</li>
+            <li>The MCD reproduces this trend from the stimulus structure alone</li>
+          </ul>
+        </article>
+      </div>
+      <div class="mcd-distance-steps" aria-label="How the tested distance effect arises in the model">
+        <div><span>In the stimulus</span><strong>Direct onset weakens relative to the reverberant tail</strong></div>
+        <div><span>In the detector</span><strong>The temporal balance of sensory evidence shifts</strong></div>
+        <div><span>In the prediction</span><strong>The point of subjective alignment shifts</strong></div>
+      </div>
+      <p>All four distance conditions were fitted with <strong>one shared set of decision parameters</strong>, while the temporal filters were held fixed. The separation between the curves therefore arose from the stimulus waveforms, not a different delay correction fitted to each distance. <a class="mcd-cite" href="#mcd-ref-population" aria-label="Reference 1">[1]</a></p>
+      <p class="mcd-takeaway">The broader lesson: structure already present in a sensory signal can support behaviour that appears to require an explicit physical calculation.</p>
+      <p class="mcd-small">The 2025 paper shows these three components together: the distance-dependent click envelopes, the corresponding psychometric curves, and the final scaling of subjective synchrony with distance. This demonstrates a sufficient signal-based explanation of the tested effect; it does not imply that the brain never represents distance. <a href="https://elifesciences.org/articles/106122/figures#fig2" target="_blank" rel="noopener noreferrer">See Figure 2B for the full stimuli and plots.</a></p>
+    </section>
+
+    <section class="mcd-section" id="mcd-applications" aria-labelledby="mcd-applications-heading">
+      <p class="mcd-eyebrow">From a scientific model to applied research</p>
+      <h2 id="mcd-applications-heading">Applied perception projects</h2>
+      <p class="mcd-prose">This section is an invitation to collaborate on applied perception projects. Because the model operates directly on audiovisual signals, it can be used to analyse the same kinds of inputs that devices produce and users experience. Instead of specifying an abstract audiovisual mismatch, we can present the model with the actual content, inspect its intermediate responses, and ask how particular design choices might affect perception.</p>
+      <div class="mcd-application-grid">
+        <article class="mcd-application">
+          <h3>Perceptual evaluation &amp; immersive interfaces</h3>
+          <p>Use stimulus-specific predictions to investigate audiovisual timing, binding and salience in recordings or prototypes. The model can guide experimental comparisons and help identify which signal features drive a perceptual effect.</p>
+        </article>
+        <article class="mcd-application">
+          <h3>Audiovisual localisation &amp; spatial audio</h3>
+          <p>Explore correspondence maps for associating sounds with visible sources. This offers a foundation for bespoke algorithms in audiovisual media, spatial audio and systems that must orient towards relevant events.</p>
+        </article>
+        <article class="mcd-application">
+          <h3>Interpretable multimodal AI &amp; robotics</h3>
+          <p>A high response has a concrete explanation: local auditory and visual changes are correlated. Such a module could provide correspondence-based supervision for learning from unlabelled video, or an inspectable sensory front end for a larger system.</p>
+        </article>
+      </div>
+      <p class="mcd-prose">These directions follow from the model&rsquo;s demonstrated ability to process audiovisual signals and generate interpretable correspondence maps. This matters for industry because the model and a practical application operate on the same kind of representation: the images and sounds delivered by devices and encountered by users. Its simple, local operations also motivate investigation of efficient implementations. Improved learning efficiency, real-time device performance and benefits in a particular product remain questions to test, not results established by the existing experiments. <a class="mcd-cite" href="#mcd-ref-population" aria-label="Reference 1">[1]</a></p>
+      <div class="mcd-collaborate">
+        <div>
+          <h3>Interested in an applied perception collaboration?</h3>
+          <p>I welcome collaborative R&amp;D, bespoke algorithm development and model-based perceptual evaluation for immersive technologies, audiovisual systems, assistive technologies and multimodal machine perception.</p>
+        </div>
+        <a class="mcd-button mcd-button-primary" href="#contact">Discuss an applied project</a>
+      </div>
+    </section>
+
+    <section class="mcd-section" id="mcd-papers" aria-labelledby="mcd-papers-heading">
+      <p class="mcd-eyebrow">Read further</p>
+      <h2 id="mcd-papers-heading">The research behind the model</h2>
+      <article class="mcd-key-paper" id="mcd-ref-population">
+        <p class="mcd-paper-meta">[1] Key paper &middot; Cesare V. Parise &middot; eLife, 2025</p>
+        <h3>Correlation detection as a stimulus computable account for audiovisual perception, causal inference, and saliency maps in mammals</h3>
+        <p>The population architecture, the 69-experiment evaluation, natural-scene demonstrations, assumptions and limitations. Full methods and MATLAB source code accompany the article.</p>
+        <a class="mcd-button" href="https://elifesciences.org/articles/106122" target="_blank" rel="noopener noreferrer">Read the paper and access the code</a>
+      </article>
+      <details class="mcd-details">
+        <summary>Foundations, experimental tests and perspective</summary>
+        <div class="mcd-details-body">
+          <ol class="mcd-references" start="2">
+            <li id="mcd-ref-correlation"><strong>Parise, Spence &amp; Ernst (2012).</strong> <a href="https://doi.org/10.1016/j.cub.2011.11.039" target="_blank" rel="noopener noreferrer">When correlation implies causation in multisensory integration.</a> <em>Current Biology.</em><span>The precision benefit of integrating temporally correlated signals.</span></li>
+            <li id="mcd-ref-crosscorrelation"><strong>Parise, Harrar, Ernst &amp; Spence (2013).</strong> <a href="https://doi.org/10.1163/22134808-00002417" target="_blank" rel="noopener noreferrer">Cross-correlation between auditory and visual signals promotes multisensory integration.</a> <em>Multisensory Research.</em><span>The corresponding cost: reduced sensitivity to spatial discrepancies.</span></li>
+            <li id="mcd-ref-original"><strong>Parise &amp; Ernst (2016).</strong> <a href="https://doi.org/10.1038/ncomms11543" target="_blank" rel="noopener noreferrer">Correlation detection as a general mechanism for multisensory integration.</a> <em>Nature Communications.</em><span>The original detector and behavioural tests with stochastic sequences.</span></li>
+            <li id="mcd-ref-transients"><strong>Parise &amp; Ernst (2025).</strong> <a href="https://elifesciences.org/articles/90841" target="_blank" rel="noopener noreferrer">Multisensory integration operates on correlated input from unimodal transient channels.</a> <em>eLife.</em><span>The transient input stage and the frequency-doubling prediction.</span></li>
+            <li id="mcd-ref-meg"><strong>Pesnot Lerousseau, Parise, Ernst &amp; van Wassenhove (2022).</strong> <a href="https://doi.org/10.1038/s41467-022-29687-6" target="_blank" rel="noopener noreferrer">Multisensory correlation computations in the human brain identified by a time-resolved encoding model.</a> <em>Nature Communications.</em><span>The bridge from model dynamics to MEG responses.</span></li>
+            <li id="mcd-ref-perspective"><strong>Parise (2026).</strong> <a href="https://www.researchgate.net/publication/400155988_A_new_look_at_audiovisual_perception_From_correlation_detection_to_a_general_theory_of_multisensory_integration" target="_blank" rel="noopener noreferrer">A new look at audiovisual perception: From correlation detection to a general theory of multisensory integration.</a> <em>The Cognitive Psychology Bulletin</em>, issue 11.<span>A narrative overview of the development of the framework.</span></li>
+            <li id="mcd-ref-distance"><strong>Alais &amp; Carlile (2005).</strong> <a href="https://pubmed.ncbi.nlm.nih.gov/15668388/" target="_blank" rel="noopener noreferrer">Synchronizing to real events: Subjective audiovisual alignment scales with perceived auditory depth and speed of sound.</a> <em>Proceedings of the National Academy of Sciences.</em><span>The distance-and-synchrony experiment reproduced by the MCD.</span></li>
+          </ol>
+        </div>
+      </details>
+    </section>
+
   </section>
 
   <!-- PUBLICATIONS -->
   <section class="page" id="page-publications">
     <h1>Publications</h1>
-    <p class="lead">Peer-reviewed articles, book chapters, and dissertations, sortable by year and type.</p>
-    <h2>Featured</h2>
-    <div class="card paper">
+    <p class="lead">
+      Peer-reviewed articles, book chapters, and dissertations.
+   </p>
+   <p class="lead">
+      Full-text copies of my publications are freely available on
+      <a href="https://www.researchgate.net/profile/Cesare-Parise"
+        target="_blank"
+        rel="noopener noreferrer">ResearchGate</a>.
+    </p>
+    <!-- <h2>Featured</h2> -->
+    <!-- <div class="card paper">
       <h3>Correlation detection as a stimulus computable account for audiovisual perception, causal inference, and saliency maps in mammals</h3>
       <p class="meta">eLife (2026) · Parise &amp; Ernst</p>
       <p><a class="link" href="https://elifesciences.org/articles/106122" target="_blank" rel="noopener">Article →</a></p>
-    </div>
-    <h2>Full list</h2>
+    </div> -->
+<!-- <li><strong>Parise, C.</strong>, Parise, E., &amp; Parise, A. (2025). Perceiving audiovisual synchrony: A quantitative synthesis of simultaneity and temporal order judgments from 185 studies. <em>Neuroscience &amp; Biobehavioral Reviews</em>, 106449.</li> -->
+<!-- <li><strong>Parise, C.</strong> (2025). Correlation detection as a stimulus computable account for audiovisual perception, causal inference, and saliency maps in mammals. <em>eLife</em>, 14, RP106122.</li> -->
+<!-- <li><strong>Parise, C.</strong>, &amp; Ernst, M. O. (2025). Multisensory integration operates on correlated input from unimodal transient channels. <em>eLife</em>, 12, RP90841.</li> -->
+<!-- <li>Pesnot Lerousseau, J., <strong>Parise, C.</strong>, Ernst, M. O., &amp; van Wassenhove, V. (2022). Multisensory correlation computations in the human brain identified by a time-resolved encoding model. <em>Nature Communications</em>, 13, 2489.</li> -->
+<!-- <li>Moscatelli, A., Bianchi, M., Ciotti, S., Bettelani, G. C., <strong>Parise, C.</strong>, Lacquaniti, F., &amp; Bicchi, A. (2019). Touch as an auxiliary proprioceptive cue for movement control. <em>Science Advances</em>, 5(6), eaaw3121.</li> -->
+<!-- <li>Samad, M., Gatti, E., Hermes, A., Benko, H., &amp; <strong>Parise, C.</strong> (2019). Pseudo-haptic weight: Changing the perceived weight of virtual objects by manipulating control-display ratio. <em>CHI 2019</em>, 1–13.</li> -->
+<!-- <li><strong>Parise, C.</strong>, &amp; Ernst, M. O. (2017). Noise, multisensory integration, and previous response in perceptual disambiguation. <em>PLoS Computational Biology</em>, 13(7), e1005546.</li> -->
+<!-- <li><strong>Parise, C.</strong>, &amp; Ernst, M. O. (2016). Correlation detection as a general mechanism for multisensory integration. <em>Nature Communications</em>, 7, 11543.</li> -->
+<!-- <li><strong>Parise, C.</strong>, Knorre, K., &amp; Ernst, M. O. (2014). Natural auditory scene statistics shapes human spatial hearing. <em>PNAS</em>, 111(16), 6104–6108.</li> -->
+
+
+
+    <!-- <h2>Full list</h2> -->
     <ul class="pubs">
 <h3 class="yr">2026</h3>
-<li><span class="t">Article</span>Parise, C. (2026). A new look at audiovisual perception: From correlation detection to a general theory of multisensory integration. <em>The Cognitive Psychology Bulletin</em>, (11).</li>
-<li><span class="t">Article</span>Diederich, A., Otto, T., &amp; Parise, C. (2026). Viewpoint on multisensory decision-making. <em>Multisensory Research</em>, 1 (aop), 1–11.</li>
+<li><span class="t">Article</span><strong>Parise, C.</strong> (2026). A new look at audiovisual perception: From correlation detection to a general theory of multisensory integration. <em>The Cognitive Psychology Bulletin</em>, (11).</li>
+<li><span class="t">Article</span>Diederich, A., Otto, T., &amp; <strong>Parise, C.</strong> (2026). Viewpoint on multisensory decision-making. <em>Multisensory Research</em>, 1 (aop), 1–11.</li>
 <h3 class="yr">2025</h3>
-<li><span class="t">Article</span>Parise, C., Parise, E., &amp; Parise, A. (2025). Perceiving audiovisual synchrony: A quantitative synthesis of simultaneity and temporal order judgments from 185 studies. <em>Neuroscience &amp; Biobehavioral Reviews</em>, 106449.</li>
-<li><span class="t">Article</span>Parise, C. V. (2025). Correlation detection as a stimulus computable account for audiovisual perception, causal inference, and saliency maps in mammals. <em>eLife</em>, 14, RP106122.</li>
-<li><span class="t">Article</span>Parise, C. V., &amp; Ernst, M. O. (2025). Multisensory integration operates on correlated input from unimodal transient channels. <em>eLife</em>, 12, RP90841.</li>
-<li><span class="t">Abstract</span>Yehiah, M., Owen, R., Omolabi, S., Parise, C., &amp; Senna, I. (2025). From perception to action: How modulation frequency shapes walking behaviour. <em>i-Perception</em>, 16(5), 9–10.</li>
+<li><span class="t">Article</span><strong>Parise, C.</strong>, Parise, E., &amp; Parise, A. (2025). Perceiving audiovisual synchrony: A quantitative synthesis of simultaneity and temporal order judgments from 185 studies. <em>Neuroscience &amp; Biobehavioral Reviews</em>, 106449.</li>
+<li><span class="t">Article</span><strong>Parise, C.</strong> (2025). Correlation detection as a stimulus computable account for audiovisual perception, causal inference, and saliency maps in mammals. <em>eLife</em>, 14, RP106122.</li>
+<li><span class="t">Article</span><strong>Parise, C.</strong>, &amp; Ernst, M. O. (2025). Multisensory integration operates on correlated input from unimodal transient channels. <em>eLife</em>, 12, RP90841.</li>
 <h3 class="yr">2024</h3>
-<li><span class="t">Article</span>Parise, C., Gori, M., Finocchietti, S., Ernst, M., Esposito, D., &amp; Tonelli, A. (2024). Happy new ears: Rapid adaptation to novel spectral cues in vertical sound localization. <em>iScience</em>, 27(12).</li>
-<li><span class="t">Preprint</span>Parise, C. V. (2024). A stimulus-computable model for audiovisual perception and spatial orienting in mammals. <em>bioRxiv</em>.</li>
-<li><span class="t">Preprint</span>Parise, C. V. (2024). Spatiotemporal models for multisensory integration. <em>bioRxiv</em>.</li>
+<li><span class="t">Article</span><strong>Parise, C.</strong>, Gori, M., Finocchietti, S., Ernst, M., Esposito, D., &amp; Tonelli, A. (2024). Happy new ears: Rapid adaptation to novel spectral cues in vertical sound localization. <em>iScience</em>, 27(12).</li>
+<li><span class="t">Preprint</span><strong>Parise, C.</strong> (2024). A stimulus-computable model for audiovisual perception and spatial orienting in mammals. <em>bioRxiv</em>.</li>
+<li><span class="t">Preprint</span><strong>Parise, C.</strong> (2024). Spatiotemporal models for multisensory integration. <em>bioRxiv</em>.</li>
 <h3 class="yr">2022</h3>
-<li><span class="t">Article</span>Pesnot Lerousseau, J., Parise, C. V., Ernst, M. O., &amp; van Wassenhove, V. (2022). Multisensory correlation computations in the human brain identified by a time-resolved encoding model. <em>Nature Communications</em>, 13, 2489.</li>
+<li><span class="t">Article</span>Pesnot Lerousseau, J., <strong>Parise, C.</strong>, Ernst, M. O., &amp; van Wassenhove, V. (2022). Multisensory correlation computations in the human brain identified by a time-resolved encoding model. <em>Nature Communications</em>, 13, 2489.</li>
 <h3 class="yr">2021</h3>
-<li><span class="t">Article</span>Ryan, C. P., Bettelani, G. C., Ciotti, S., Parise, C., Moscatelli, A., &amp; Bianchi, M. (2021). The interaction between motion and texture in the sense of touch. <em>Journal of Neurophysiology</em>, 126(4), 1375–1390.</li>
+<li><span class="t">Article</span>Ryan, C. P., Bettelani, G. C., Ciotti, S., <strong>Parise, C.</strong>, Moscatelli, A., &amp; Bianchi, M. (2021). The interaction between motion and texture in the sense of touch. <em>Journal of Neurophysiology</em>, 126(4), 1375–1390.</li>
 <h3 class="yr">2019</h3>
-<li><span class="t">Article</span>Moscatelli, A., Bianchi, M., Ciotti, S., Bettelani, G. C., Parise, C. V., Lacquaniti, F., &amp; Bicchi, A. (2019). Touch as an auxiliary proprioceptive cue for movement control. <em>Science Advances</em>, 5(6), eaaw3121.</li>
-<li><span class="t">Conference paper</span>Samad, M., Gatti, E., Hermes, A., Benko, H., &amp; Parise, C. (2019). Pseudo-haptic weight: Changing the perceived weight of virtual objects by manipulating control-display ratio. <em>CHI 2019</em>, 1–13.</li>
-<li><span class="t">Conference paper</span>de Grosbois, J., Di Luca, M., King, R., Parise, C., &amp; Ziat, M. (2019). Exogenous cueing of visual attention using small, directional, tactile cues applied to the fingertip. <em>IEEE World Haptics Conference</em>, 455–460.</li>
-<li><span class="t">Conference paper</span>de Grosbois, J., King, R., Di Luca, M., Parise, C., Bazen, R., &amp; Ziat, M. (2019). The frequency of tactile adaptation systematically biases subsequent frequency identification. <em>IEEE World Haptics Conference</em>, 295–300.</li>
-<li><span class="t">Abstract</span>Samad, M. J., &amp; Parise, C. V. (2019). Spatiotemporal mechanisms of multisensory integration. <em>Journal of Vision</em>, 19(10), 300.</li>
-<li><span class="t">Abstract</span>Parise, C., Samad, M., Keller, S., &amp; Di Luca, M. (2019). A common cause for the phenomenological and sensorimotor correlates of limb ownership. <em>Perception</em>, 48, 173.</li>
-<h3 class="yr">2018</h3>
-<li><span class="t">Abstract</span>Parise, C., &amp; Ernst, M. (2018). Noise, multisensory integration, and previous response in perceptual disambiguation. <em>Journal of Vision</em>, 18(10), 1062.</li>
-<li><span class="t">Abstract</span>Samad, M., Parise, C., Keller, S., &amp; Di Luca, M. (2018). A common cause in the phenomenological and sensorimotor correlates of body ownership. <em>Journal of Vision</em>, 18(10), 1230.</li>
+<li><span class="t">Article</span>Moscatelli, A., Bianchi, M., Ciotti, S., Bettelani, G. C., <strong>Parise, C.</strong>, Lacquaniti, F., &amp; Bicchi, A. (2019). Touch as an auxiliary proprioceptive cue for movement control. <em>Science Advances</em>, 5(6), eaaw3121.</li>
+<li><span class="t">Conference paper</span>Samad, M., Gatti, E., Hermes, A., Benko, H., &amp; <strong>Parise, C.</strong> (2019). Pseudo-haptic weight: Changing the perceived weight of virtual objects by manipulating control-display ratio. <em>CHI 2019</em>, 1–13.</li>
+<li><span class="t">Conference paper</span>de Grosbois, J., Di Luca, M., King, R., <strong>Parise, C.</strong>, &amp; Ziat, M. (2019). Exogenous cueing of visual attention using small, directional, tactile cues applied to the fingertip. <em>IEEE World Haptics Conference</em>, 455–460.</li>
+<li><span class="t">Conference paper</span>de Grosbois, J., King, R., Di Luca, M., <strong>Parise, C.</strong>, Bazen, R., &amp; Ziat, M. (2019). The frequency of tactile adaptation systematically biases subsequent frequency identification. <em>IEEE World Haptics Conference</em>, 295–300.</li>
 <h3 class="yr">2017</h3>
-<li><span class="t">Article</span>Senna, I., Parise, C. V., &amp; Ernst, M. O. (2017). Modulation frequency as a cue for auditory speed perception. <em>Proceedings of the Royal Society B</em>, 284(1858), 20170673.</li>
-<li><span class="t">Article</span>Parise, C. V., &amp; Ernst, M. O. (2017). Noise, multisensory integration, and previous response in perceptual disambiguation. <em>PLoS Computational Biology</em>, 13(7), e1005546.</li>
+<li><span class="t">Article</span>Senna, I., <strong>Parise, C.</strong>, &amp; Ernst, M. O. (2017). Modulation frequency as a cue for auditory speed perception. <em>Proceedings of the Royal Society B</em>, 284(1858), 20170673.</li>
+<li><span class="t">Article</span><strong>Parise, C.</strong>, &amp; Ernst, M. O. (2017). Noise, multisensory integration, and previous response in perceptual disambiguation. <em>PLoS Computational Biology</em>, 13(7), e1005546.</li>
 <h3 class="yr">2016</h3>
-<li><span class="t">Article</span>Parise, C. V., &amp; Ernst, M. O. (2016). Correlation detection as a general mechanism for multisensory integration. <em>Nature Communications</em>, 7, 11543.</li>
-<li><span class="t">Article</span>Parise, C. V. (2016). Crossmodal correspondences: Standing issues and experimental guidelines. <em>Multisensory Research</em>, 29(1–3), 7–28.</li>
-<li><span class="t">Article</span>Parise, C. V., Spence, C., &amp; Deroy, O. (2016). Understanding the correspondences: Introduction to the special issue on crossmodal correspondences. <em>Multisensory Research</em>, 29(1–3), 1–6.</li>
-<li><span class="t">Abstract</span>Parise, C., Banks, M., &amp; Ernst, M. (2016). ON and OFF channels in auditory-visual integration. <em>Journal of Vision</em>, 16(12), 861.</li>
+<li><span class="t">Article</span><strong>Parise, C.</strong>, &amp; Ernst, M. O. (2016). Correlation detection as a general mechanism for multisensory integration. <em>Nature Communications</em>, 7, 11543.</li>
+<li><span class="t">Article</span><strong>Parise, C.</strong> (2016). Crossmodal correspondences: Standing issues and experimental guidelines. <em>Multisensory Research</em>, 29(1–3), 7–28.</li>
+<li><span class="t">Article</span><strong>Parise, C.</strong>, Spence, C., &amp; Deroy, O. (2016). Understanding the correspondences: Introduction to the special issue on crossmodal correspondences. <em>Multisensory Research</em>, 29(1–3), 1–6.</li>
 <h3 class="yr">2015</h3>
-<li><span class="t">Article</span>Senna, I., Russo, C., Parise, C. V., Ferrario, I., &amp; Bolognini, N. (2015). Altered visual feedback modulates cortical excitability in a mirror-box-like paradigm. <em>Experimental Brain Research</em>, 233(6), 1921–1929.</li>
-<li><span class="t">Article</span>Senna, I., Parise, C. V., &amp; Ernst, M. O. (2015). Hearing in slow-motion: Humans underestimate the speed of moving sounds. <em>Scientific Reports</em>, 5, 14054.</li>
-<li><span class="t">Abstract</span>Senna, I., Parise, C., &amp; Ernst, M. O. (2015). Temporal frequency modulates auditory speed perception.</li>
-<li><span class="t">Article</span>Everett, J. A. C., Schellhaas, F. M. H., Earp, B. D., Ando, V., Memarzia, J., Parise, C. V., Fell, B., &amp; Hewstone, M. (2015). Covered in stigma? The impact of differing levels of Islamic head-covering on explicit and implicit biases toward Muslim women. <em>Journal of Applied Social Psychology</em>, 45(2), 90–104.</li>
+<li><span class="t">Article</span>Senna, I., Russo, C., <strong>Parise, C.</strong>, Ferrario, I., &amp; Bolognini, N. (2015). Altered visual feedback modulates cortical excitability in a mirror-box-like paradigm. <em>Experimental Brain Research</em>, 233(6), 1921–1929.</li>
+<li><span class="t">Article</span>Senna, I., <strong>Parise, C.</strong>, &amp; Ernst, M. O. (2015). Hearing in slow-motion: Humans underestimate the speed of moving sounds. <em>Scientific Reports</em>, 5, 14054.</li>
+<li><span class="t">Article</span>Everett, J. A. C., Schellhaas, F. M. H., Earp, B. D., Ando, V., Memarzia, J., <strong>Parise, C.</strong>, Fell, B., &amp; Hewstone, M. (2015). Covered in stigma? The impact of differing levels of Islamic head-covering on explicit and implicit biases toward Muslim women. <em>Journal of Applied Social Psychology</em>, 45(2), 90–104.</li>
 <h3 class="yr">2014</h3>
-<li><span class="t">Article</span>Parise, C. V., Knorre, K., &amp; Ernst, M. O. (2014). Natural auditory scene statistics shapes human spatial hearing. <em>PNAS</em>, 111(16), 6104–6108.</li>
-<li><span class="t">Article</span>Senna, I., Maravita, A., Bolognini, N., &amp; Parise, C. V. (2014). The marble-hand illusion. <em>PLoS ONE</em>.</li>
-<li><span class="t">Abstract</span>Parise, C. V., &amp; Ernst, M. (2014). Multisensory classification images reveal the role of cross-correlation in audiovisual temporal processing. <em>Journal of Vision</em>, 14(10), 433.</li>
-<li><span class="t">Abstract</span>Senna, I., Parise, C., &amp; Ernst, M. O. (2014). Analogous motion illusion in vision and audition. <em>IMRF 2014</em>, 201.</li>
-<li><span class="t">Chapter</span>Van Dam, L. C. J., Parise, C. V., &amp; Ernst, M. O. (2014). Modeling multisensory integration. In <em>Sensory Integration and the Unity of Consciousness</em>.</li>
-<li><span class="t">Other</span>Parise, C. V., &amp; Ernst, M. O. (2014). What is the origin of cross-modal correspondences?</li>
+<span class="t">Article</span><strong>Parise, C.</strong>, Knorre, K., &amp; Ernst, M. O. (2014). Natural auditory scene statistics shapes human spatial hearing. <em>PNAS</em>, 111(16), 6104–6108.</li>
+<li><span class="t">Article</span>Senna, I., Maravita, A., Bolognini, N., &amp; <strong>Parise, C.</strong> (2014). The marble-hand illusion. <em>PLoS ONE</em>.</li>
+<li><span class="t">Chapter</span>Van Dam, L. C. J., <strong>Parise, C.</strong>, &amp; Ernst, M. O. (2014). Modeling multisensory integration. In <em>Sensory Integration and the Unity of Consciousness</em>.</li>
 <h3 class="yr">2013</h3>
-<li><span class="t">Article</span>Parise, C. V., Harrar, V., Ernst, M. O., &amp; Spence, C. (2013). Cross-correlation between auditory and visual signals promotes multisensory integration. <em>Multisensory Research</em>.</li>
-<li><span class="t">Chapter</span>Parise, C. V., &amp; Spence, C. (2013). Audiovisual crossmodal correspondences in the general population. In <em>The Oxford Handbook of Synesthesia</em>. Oxford University Press.</li>
-<li><span class="t">Other</span>Parise, C., &amp; Ernst, M. O. (2013). Multisensory mechanisms for perceptual disambiguation: A classification image study on the stream-bounce illusion.</li>
-<li><span class="t">Other</span>Parise, C. (2013). Metaphors in the ear and in the world.</li>
-<li><span class="t">Abstract</span>Knorre, K., Ernst, M. O., &amp; Parise, C. V. (2013). On pitch-elevation mapping. Nature, nurture and behaviour. <em>Multisensory Research</em>, 26(1–2), 190.</li>
-<li><span class="t">Abstract</span>Bolognini, N., Maravita, A., Senna, I., &amp; Parise, C. V. (2013). The marble-hand illusion. <em>Multisensory Research</em>, 26(1–2), 203.</li>
+<li><span class="t">Article</span><strong>Parise, C.</strong>, Harrar, V., Ernst, M. O., &amp; Spence, C. (2013). Cross-correlation between auditory and visual signals promotes multisensory integration. <em>Multisensory Research</em>.</li>
+<li><span class="t">Chapter</span><strong>Parise, C.</strong>, &amp; Spence, C. (2013). Audiovisual crossmodal correspondences in the general population. In <em>The Oxford Handbook of Synesthesia</em>. Oxford University Press.</li>
 <h3 class="yr">2012</h3>
-<li><span class="t">Article</span>Parise, C. V., &amp; Spence, C. (2012). Assessing the associations between brand packaging and brand attributes using an indirect performance measure. <em>Food Quality and Preference</em>, 24(1), 17–23.</li>
-<li><span class="t">Article</span>Parise, C. V., &amp; Spence, C. (2012). Audiovisual crossmodal correspondences and sound symbolism: A study using the implicit association test. <em>Experimental Brain Research</em>, 220(3), 319–333.</li>
-<li><span class="t">Article</span>Parise, C. V., Spence, C., &amp; Ernst, M. O. (2012). When correlation implies causation in multisensory integration. <em>Current Biology</em>, 22(1), 46–49.</li>
-<li><span class="t">Article</span>Spence, C., &amp; Parise, C. V. (2012). The cognitive neuroscience of crossmodal correspondences. <em>i-Perception</em>, 3(7), 410–412.</li>
-<li><span class="t">Abstract</span>Parise, C. V. (2012). Crossmodal correspondences. <em>Seeing and Perceiving</em>, 25, 68.</li>
-<li><span class="t">Thesis</span>Parise, C. (2012). Signal compatibility as a modulatory factor for audiovisual multisensory integration. PhD thesis, University of Oxford.</li>
-<li><span class="t">Other</span>Dwarakanath, A., Parise, C., Hartcher-O'Brien, J., &amp; Ernst, M. (2012). Motion parallax serves as an independent cue in sound source disambiguation.</li>
-<li><span class="t">Other</span>Spence, C., Parise, C. V., &amp; Chen, Y.-C. (2012). The Colavita visual dominance effect.</li>
-<h3 class="yr">2011</h3>
-<li><span class="t">Article</span>Parise, C. V., &amp; Pavani, F. (2011). Evidence of sound symbolism in simple vocalizations. <em>Experimental Brain Research</em>, 214(3), 373–380.</li>
-<li><span class="t">Abstract</span>Parise, C. V., Harrar, V., Spence, C., &amp; Ernst, M. (2011). Multisensory integration: When correlation implies causation. <em>i-Perception</em>, 2(8), 901.</li>
-<li><span class="t">Abstract</span>Spence, C., Parise, C. V., &amp; Deroy, O. (2011). Crossmodal correspondences. <em>i-Perception</em>, 2(8), 887.</li>
-<li><span class="t">Other</span>Spence, C., Deroy, O., &amp; Parise, C. V. (2011). Crossmodal correspondences and synaesthesia: Similarities and differences.</li>
-<h3 class="yr">2010</h3>
-<li><span class="t">Article</span>Spence, C., &amp; Parise, C. (2010). Prior-entry: A review. <em>Consciousness and Cognition</em>, 19(1), 364–379.</li>
-<li><span class="t">Other</span>Parise, C., Stewart, N., Föcker, J., Ngo, M., Browning, M., Roeder, B., Spence, C., &amp; Rogers, R. D. (2010). Emotional information enhances audiovisual speech integration.</li>
-<li><span class="t">Other</span>Parise, C., Di Luca, M., &amp; Ernst, M. O. (2010). Multiple criteria for multisensory signals.</li>
-<h3 class="yr">2009</h3>
-<li><span class="t">Article</span>Parise, C. V., &amp; Spence, C. (2009). 'When birds of a feather flock together': Synesthetic correspondences modulate audiovisual integration in non-synesthetes. <em>PLoS ONE</em>, 4(5), e5664.</li>
-<li><span class="t">Abstract</span>Spence, C., Navarra, J., Vatakis, A., Hartcher-O'Brien, J., &amp; Parise, C. (2009). The multisensory perception of synchrony. <em>Perception</em>, 38.</li>
-<li><span class="t">Abstract</span>Spence, C., &amp; Parise, C. (2009). Prior entry.</li>
-<li><span class="t">Other</span>Parise, C., &amp; Spence, C. (2009). Synesthetic constraints on multisensory integration.</li>
-<li><span class="t">Other</span>Parise, C., &amp; Spence, C. (2009). 'Quando chi si somiglia si piglia': corrispondenze sinestetiche modulano l'integrazione audiovisiva in soggetti non-sinesteti.</li>
-<h3 class="yr">2008</h3>
-<li><span class="t">Article</span>Parise, C., &amp; Spence, C. (2008). Synesthetic congruency modulates the temporal ventriloquism effect. <em>Neuroscience Letters</em>, 442(3), 257–261.</li>
-<li><span class="t">Other</span>Parise, C., &amp; Spence, C. (2008). Synaesthetic links in audiovisual temporal integration.</li>
-<h3 class="yr">2007</h3>
-<li><span class="t">Other</span>Petroni, L., &amp; Parise, C. (2007). Migliorare l'uso dei canali on-line verso gli utenti.</li>
-<h3 class="yr">2006</h3>
-<li><span class="t">Other</span>Parise, C., Bricolo, E., Vezzani, S., &amp; Zavagno, D. (2006). Somiglianze cross-modali fra stimoli visivi e stimoli uditivi.</li>
-<li><span class="t">Thesis</span>Parise, C. (2006). Somiglianze crossmodali: Interazioni fra stimoli visivi ed uditivi. PhD thesis.</li>
+<li><span class="t">Article</span><strong>Parise, C.</strong>, Spence, C., &amp; Ernst, M. O. (2012). When correlation implies causation in multisensory integration. <em>Current Biology</em>, 22(1), 46–49.</li>
+<li><span class="t">Article</span><strong>Parise, C.</strong>, &amp; Spence, C. (2012). Audiovisual crossmodal correspondences and sound symbolism: A study using the implicit association test. <em>Experimental Brain Research</em>, 220(3), 319–333.</li>
+<li><span class="t">Article</span>Spence, C., &amp; <strong>Parise, C.</strong> (2012). The cognitive neuroscience of crossmodal correspondences. <em>i-Perception</em>, 3(7), 410–412.</li>
+<li><span class="t">Article</span><strong>Parise, C.</strong>, &amp; Spence, C. (2012). Assessing the associations between brand packaging and brand attributes using an indirect performance measure. <em>Food Quality and Preference</em>, 24(1), 17–23.</li>
+<li><span class="t">Thesis</span><strong>Parise, C.</strong> (2012). Signal compatibility as a modulatory factor for audiovisual multisensory integration. PhD thesis, University of Oxford.</li>
+<h3 class="yr">2011 and older</h3>
+<li><span class="t">Article</span><strong>Parise, C.</strong>, &amp; Pavani, F. (2011). Evidence of sound symbolism in simple vocalizations. <em>Experimental Brain Research</em>, 214(3), 373–380.</li>
+<!-- <h3 class="yr">2010</h3> -->
+<li><span class="t">Article</span>Spence, C., &amp; <strong>Parise, C.</strong> (2010). Prior-entry: A review. <em>Consciousness and Cognition</em>, 19(1), 364–379.</li>
+<!-- <h3 class="yr">2009</h3> -->
+<li><span class="t">Article</span><strong>Parise, C.</strong>, &amp; Spence, C. (2009). 'When birds of a feather flock together': Synesthetic correspondences modulate audiovisual integration in non-synesthetes. <em>PLoS ONE</em>, 4(5), e5664.</li>
+<!-- <h3 class="yr">2008</h3> -->
+<li><span class="t">Article</span> , &amp; Spence, C. (2008). Synesthetic congruency modulates the temporal ventriloquism effect. <em>Neuroscience Letters</em>, 442(3), 257–261.</li>
+<!-- <h3 class="yr">2006</h3> -->
+<li><span class="t">Thesis</span>*<strong>Parise, C.</strong>* (2006). Somiglianze crossmodali: Interazioni fra stimoli visivi ed uditivi. PhD thesis.</li>
 </ul>
   </section>
 
   <!-- PATENTS -->
   <section class="page" id="page-patents">
     <h1>Patents</h1>
-    <p class="lead">Five US patents (2020–2022) on perceptual and multisensory technologies.</p>
+    <p class="lead">US patents on perceptual and multisensory technologies.</p>
     <div class="card paper">
       <h3>Impedance shaping for haptic interfaces on wearable devices</h3>
       <p class="meta">US Patent No. 11,385,716 · 2022</p>
-      <p>Mukherjee, G., Shimasaki, K., King, R., Israr, A., Parise, C. V., Piazza, D., Samad, M. J., Gatti, E., &amp; Corson, N. R.</p>
+      <p>Mukherjee, G., Shimasaki, K., King, R., Israr, A., Parise, C., Piazza, D., Samad, M. J., Gatti, E., &amp; Corson, N. R.</p>
       <p><a class="link" href="https://patents.google.com/patent/US11385716B2" target="_blank" rel="noopener">View on Google Patents →</a></p>
     </div>
     <div class="card paper">
       <h3>Using audio visual correspondence for sound source identification</h3>
       <p class="meta">US Patent No. 11,234,090 · 2022</p>
-      <p>Donley, J., Robinson, P., &amp; Parise, C. V.</p>
+      <p>Donley, J., Robinson, P., &amp; Parise, C.</p>
       <p><a class="link" href="https://patents.google.com/patent/US11234090B2" target="_blank" rel="noopener">View on Google Patents →</a></p>
     </div>
     <div class="card paper">
       <h3>Audiovisual correspondence based signal augmentation</h3>
       <p class="meta">US Patent No. 11,087,777 · 2021</p>
-      <p>Parise, C. V., Brimijoin, O., &amp; Robinson, P.</p>
+      <p>Parise, C., Brimijoin, O., &amp; Robinson, P.</p>
       <p><a class="link" href="https://patents.google.com/patent/US11087777B2" target="_blank" rel="noopener">View on Google Patents →</a></p>
     </div>
     <div class="card paper">
       <h3>Methods and systems to control tactile content</h3>
       <p class="meta">US Patent No. 10,970,036 · 2021</p>
-      <p>Parise, C. V., Khaleghimeybodi, M., Robinson, P., &amp; Gottlieb, P.</p>
+      <p>Parise, C., Khaleghimeybodi, M., Robinson, P., &amp; Gottlieb, P.</p>
       <p><a class="link" href="https://patents.google.com/patent/US10970036B2" target="_blank" rel="noopener">View on Google Patents →</a></p>
     </div>
-    <div class="card paper">
+    <!-- <div class="card paper">
       <h3>Perception Science Implementation of Audio and Tactile Frequency Congruency</h3>
       <p class="meta">US Patent No. 10,754,428 · 2020</p>
-      <p>Parise, C. V., Rahman, S., Gatti, E., &amp; Samad, M.</p>
+      <p>Parise, C., Rahman, S., Gatti, E., &amp; Samad, M.</p>
       <p><a class="link" href="https://patents.google.com/patent/US10754428B2" target="_blank" rel="noopener">View on Google Patents →</a></p>
-    </div>
+    </div> -->
   </section>
 
-  <!-- CONTACT -->
-  <section class="page" id="page-contact">
-    <h1>Contact</h1>
-    <p class="lead">For industry, consulting, and collaboration enquiries, email is the best route.</p>
-    <div class="card">
-      <p>Email: <a class="link" href="mailto:cesare.parise@liverpool.ac.uk">cesare.parise@liverpool.ac.uk</a></p>
-      <p>Department of Psychology, University of Liverpool</p>
+
+
+
+<!-- CONTACT -->
+<section class="page" id="page-contact">
+
+  <h1>Contact</h1>
+
+  <p class="lead">
+    I welcome opportunities to collaborate on fundamental research
+    and applied projects at the intersection of perception science,
+    neuroscience and technology.
+  </p>
+
+  <div class="contact-grid">
+
+    <!-- ACADEMIC COLLABORATIONS -->
+    <div class="card contact-card">
+
+      <h2>Academic collaborations</h2>
+
+      <p>
+        I welcome collaborations in multisensory perception,
+        psychophysics and computational neuroscience, as well
+        as invitations for seminars, research visits and
+        interdisciplinary projects.
+      </p>
+
+      <p>
+        <strong>Prospective PhD students and postdoctoral
+        researchers</strong> are also encouraged to get in
+        touch to discuss potential projects, supervision
+        and funding opportunities.
+      </p>
+
+      <div class="contact-card-footer">
+
+        <p class="contact-keywords">
+          Research collaborations &middot;
+          PhD &amp; postdoctoral enquiries &middot;
+          Seminars
+        </p>
+
+        <a class="contact-action"
+           href="mailto:cesare.parise@liverpool.ac.uk?subject=Academic%20collaboration"
+           onclick="event.stopPropagation();">
+          Discuss a collaboration
+        </a>
+
+      </div>
+
     </div>
-  </section>
+
+    <!-- INDUSTRY AND APPLIED RESEARCH -->
+    <div class="card contact-card">
+
+      <h2>Industry &amp; applied research</h2>
+
+      <p>
+        I work with industry partners on perceptual evaluation,
+        computational modelling and interface development,
+        particularly in immersive technologies, spatial audio,
+        haptics and sensory augmentation.
+      </p>
+
+      <div class="contact-card-footer">
+
+        <p class="contact-keywords">
+          R&amp;D collaborations &middot;
+          Perceptual evaluation &middot;
+          Technology transfer
+        </p>
+
+        <a class="contact-action"
+           href="mailto:cesare.parise@liverpool.ac.uk?subject=Industry%20and%20applied%20research"
+           onclick="event.stopPropagation();">
+          Discuss an applied project
+        </a>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- DIRECT CONTACT -->
+  <div class="contact-details">
+
+    <h2>Direct contact</h2>
+
+    <p>
+      <strong>Email:</strong>
+      <a class="link"
+         href="mailto:cesare.parise@liverpool.ac.uk"
+         onclick="event.stopPropagation();">
+        cesare.parise@liverpool.ac.uk
+      </a>
+
+      <button type="button"
+              class="copy-email"
+              onclick="
+                navigator.clipboard.writeText('cesare.parise@liverpool.ac.uk')
+                  .then(() => {
+                    this.textContent = 'Copied!';
+                  })
+                  .catch(() => {
+                    this.textContent = 'Select and copy the address';
+                  });
+              ">
+        Copy email
+      </button>
+    </p>
+
+    <p>
+      <strong>Affiliation:</strong>
+      Department of Psychology,
+      University of Liverpool, UK
+    </p>
+
+    <p>
+      <a class="link"
+         href="https://www.liverpool.ac.uk/people/cesare-parise"
+         target="_blank"
+         rel="noopener noreferrer"
+         onclick="event.stopPropagation();">
+        University of Liverpool profile
+      </a>
+    </p>
+
+  </div>
+
+</section>
+
+
+
 
 </main>
 
-<footer>© Cesare V. Parise · University of Liverpool</footer>
+<footer>© Cesare Parise · University of Liverpool</footer>
 
 <script>
   (function () {
+    'use strict';
     var pages = ['home', 'research', 'model', 'publications', 'patents', 'contact'];
+
+    // Keep the existing page hashes, and also support anchors inside a page.
+    // No link-click interception: external links and mailto links keep their native behaviour.
     function show() {
-      var name = (location.hash || '#home').replace('#', '');
-      if (pages.indexOf(name) === -1) name = 'home';
+      var hash;
+      try { hash = decodeURIComponent((location.hash || '#home').slice(1)); }
+      catch (error) { hash = 'home'; }
+      var target = document.getElementById(hash);
+      var parentPage = target ? target.closest('.page') : null;
+      var name = pages.indexOf(hash) !== -1 ? hash :
+        (parentPage ? parentPage.id.replace(/^page-/, '') : 'home');
+
       pages.forEach(function (p) {
-        document.getElementById('page-' + p).classList.toggle('active', p === name);
+        var page = document.getElementById('page-' + p);
+        if (page) page.classList.toggle('active', p === name);
       });
       document.querySelectorAll('nav a[data-page]').forEach(function (a) {
-        a.classList.toggle('active', a.getAttribute('data-page') === name);
+        var active = a.getAttribute('data-page') === name;
+        a.classList.toggle('active', active);
+        if (active) a.setAttribute('aria-current', 'page');
+        else a.removeAttribute('aria-current');
       });
-      window.scrollTo(0, 0);
+      document.querySelectorAll('#page-model video').forEach(function (video) {
+        if (name !== 'model') video.pause();
+      });
+
+      // A citation can link into a closed disclosure: open its ancestors before scrolling.
+      if (target && parentPage) {
+        var ancestor = target;
+        while (ancestor && ancestor !== parentPage) {
+          if (ancestor.tagName === 'DETAILS') ancestor.open = true;
+          ancestor = ancestor.parentElement;
+        }
+        window.requestAnimationFrame(function () {
+          target.scrollIntoView({ block: 'start', behavior: 'auto' });
+        });
+      } else {
+        window.scrollTo(0, 0);
+      }
+    }
+
+    // Avoid two audiovisual demonstrations playing over one another.
+    var model = document.getElementById('page-model');
+    if (model) {
+      model.addEventListener('play', function (event) {
+        if (event.target.tagName !== 'VIDEO') return;
+        model.querySelectorAll('video').forEach(function (video) {
+          if (video !== event.target) video.pause();
+        });
+      }, true);
+      model.querySelectorAll('details').forEach(function (details) {
+        details.addEventListener('toggle', function () {
+          if (!details.open) details.querySelectorAll('video').forEach(function (video) { video.pause(); });
+        });
+      });
     }
     window.addEventListener('hashchange', show);
     show();

@@ -1,0 +1,3 @@
+I am a perception scientist with a dual nature. As a computational neuroscientist, I investigate how the senses interact to generate a coherent representation of our body and environment, through the development of stimulus-computable theoretical models.
+
+Beyond fundamental research, a quantitative understanding of multisensory perception and action paves the way for next-generation interfaces for immersive technologies and sensory augmentation.
