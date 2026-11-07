@@ -1211,22 +1211,50 @@
         <p>The MCD works one step earlier. It operates on <strong>signals and their processing</strong>: images, sounds, and the changing structure they share over time and space. From a scientific perspective, this means that the problem it solves is closer to the one biological perceptual systems actually face. A further consequence is breadth: the same model that reproduces MLE-like cue combination and BCI-like segregation can also be run on realistic audiovisual scenes, such as a real ventriloquist performance, where classical parametric models do not directly operate. <a class="mcd-cite" href="#mcd-ref-population" aria-label="Reference 1">[1]</a></p>
       </div>
       <div class="mcd-signal-comparison" aria-label="Comparison between statistical-level models and the signal-computable MCD approach">
-        <article class="mcd-compare-card">
-          <h3>What statistically optimal models usually take as input</h3>
-          <ul>
-            <li>Estimated cue locations, lags, or intensities</li>
-            <li>Reliability terms and probability distributions</li>
-            <li>A decision about whether to integrate or segregate cues</li>
-          </ul>
-        </article>
-        <article class="mcd-compare-card">
-          <h3>What the MCD takes as input</h3>
-          <ul>
-            <li>The actual audiovisual signals: frames, pixels, waveforms and transients</li>
-            <li>Local computations of correlation and relative lag over space and time</li>
-            <li>Read-outs from which MLE-like integration, BCI-like behaviour and saliency can emerge</li>
-          </ul>
-        </article>
+ <article class="mcd-compare-card">
+    <h3>Statistically optimal models (MLE and BCI)</h3>
+    <ul>
+      <li>
+        <strong>Input:</strong>
+        Sensory estimates and their probability distributions,
+        including cue reliability and prior information.
+      </li>
+      <li>
+        <strong>Computations:</strong>
+        Reliability-weighted cue combination (MLE) and inference
+        about common versus independent sensory causes (BCI).
+      </li>
+      <li>
+        <strong>Outputs:</strong>
+        Predicted perceptual estimates, biases, precision
+        and patterns of sensory integration or segregation.
+      </li>
+    </ul>
+  </article>
+
+  <article class="mcd-compare-card">
+    <h3>Stimulus-computable MCD model</h3>
+    <ul>
+      <li>
+        <strong>Input:</strong>
+        Spatiotemporally varying audiovisual signals, 
+        including image sequences and acoustic waveforms.
+      </li>
+      <li>
+        <strong>Computations:</strong>
+        Unimodal transient detection and crossmodal correlation detection,
+        producing dynamic representations of correlation and
+        relative lag of unimodal transients across space and time.
+      </li>
+      <li>
+        <strong>Outputs:</strong>
+        Correlation and lag responses, spatial correspondence
+        maps and predictions of perceptual judgements,
+        cue integration and attentional orienting.
+      </li>
+    </ul>
+  </article>
+
       </div>
       <p class="mcd-small">In the 2025 population-model paper, the spatial population of MCD units reproduces the classic signatures associated with MLE and BCI, while also extending naturally to realistic, dynamic material. This is the bridge between ideal-observer theory and stimulus-computable modelling. <a class="mcd-cite" href="#mcd-ref-population" aria-label="Reference 1">[1]</a></p>
     </section>
