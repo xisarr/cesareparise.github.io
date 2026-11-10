@@ -184,3 +184,5 @@
   color: #fff;
 }
 .model-panel .temporal-preset[aria-pressed="true"]:hover { background: #084781; }
+
+.ready-to-start {color: #16803d;font-weight: 600;}

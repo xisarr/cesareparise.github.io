@@ -621,7 +621,7 @@ async function loadMovie(file,{builtInChart=false}={}){
     await initialiseCore(requestedGeometry());if(fileId!==fileGeneration)return;
     $('stillCanvas').hidden=true;$('sourceHint').hidden=true;setMirroring();
     movieLoading=false;runButton();updateMovieTransport();setStatus('Movie ready');
-    $('audioStatus').textContent=envelope.peak>0?'Mono soundtrack decoded. Press Start movie.':'The decoded soundtrack is silent.';
+    $('audioStatus').innerHTML = envelope.peak > 0? 'Mono soundtrack decoded. <span class="ready-to-start">Press Start movie.</span>': 'The decoded soundtrack is silent.';
     $('audioStatus').dataset.warning=String(envelope.peak===0);
   }catch(e){if(fileId!==fileGeneration)return;movieLoading=false;if(url)URL.revokeObjectURL(url);movie=null;runButton();fail(e);}
 }
