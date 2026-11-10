@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Interactive MCD · Cesare V. Parise</title>
+<link rel="icon" href="../favicon.ico">
+<link rel="stylesheet" href="mcd-live.css?v=chart-launch-13">
+</head>
+<body>
+<header class="site-header"><nav aria-label="Website"><a class="brand" href="../index.html#home">Cesare V. Parise</a><a href="../index.html#model">← MCD model</a></nav></header>
+<main>
+  <div class="page-heading"><p class="eyebrow">Interactive research demonstration</p><h1>Multisensory Correlation Detector</h1><p class="intro">Explore audiovisual correspondence using your camera and microphone or a movie of your own. Change the timing, tune the filters, and watch the same compiled model respond. All processing stays in your browser.</p></div>
+
+  <section class="source-toolbar" aria-label="Input source and playback">
+    <div class="source-main">
+      <div class="input-choice"><label for="inputMode">Input source</label><select id="inputMode"><option value="live">Live camera + microphone</option><option value="movie">Movie with embedded audio</option></select></div>
+      <button id="loadSynchronyChart" type="button" disabled title="Load the 20-second audiovisual synchrony chart; then press Start movie.">Try synchrony chart</button>
+      <button id="toggleRun" class="primary" type="button" disabled aria-pressed="false">Start live demo</button>
+      <span id="status" class="status" role="status" aria-live="polite">Loading model…</span>
+    </div>
+    <div id="liveControls" class="source-options">
+      <div class="field"><label for="videoDevice">Camera</label><select id="videoDevice"><option value="">System default</option></select></div>
+      <div class="field"><label for="audioDevice">Microphone</label><select id="audioDevice"><option value="">System default</option></select></div>
+      <label class="check camera-mirror" id="mirrorLabel"><input id="mirror" type="checkbox" checked> Mirror view</label>
+    </div>
+    <div id="movieControls" class="source-options movie-options" hidden>
+      <div class="field file-field"><label for="movieFile">Choose a local movie</label><input id="movieFile" type="file" accept="video/*,.mp4,.m4v,.mov,.webm"><span id="movieInfo" class="small">The file is not uploaded. Embedded audio is mixed to mono for the model.</span></div>
+      <label class="check"><input id="loopMovie" type="checkbox" checked> Loop continuously</label>
+      <label class="check"><input id="hearMovie" type="checkbox" checked> Hear movie audio</label>
+    </div>
+    <div class="audio-diagnostics"><div class="meter" role="meter" aria-label="Audio input level" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="audioMeter"><span id="audioBar"></span></div><span id="audioStatus" class="small" role="status">The live microphone is not played through the speakers.</span><span id="moviePosition" class="small"></span></div>
+  </section>
+
+
+
+  <div class="demo-grid" aria-label="Input, model parameters and output maps">
+    <article class="panel input-panel">
+      <div class="panel-heading"><h2>Stimulus</h2><span id="sourceSize" class="small">Full frame</span></div>
+      <div class="stage source-stage" id="sourceStage">
+        <video id="sourceVideo" playsinline muted preload="auto" aria-label="Video input"></video>
+        <canvas id="playbackCanvas" hidden aria-label="Movie picture with the imposed audiovisual delay"></canvas>
+        <canvas id="stillCanvas" hidden aria-hidden="true"></canvas>
+        <div id="sourceHint" class="stage-hint">Start the camera or choose a movie</div>
+      </div>
+      <div id="movieTransport" class="movie-transport" hidden aria-label="Movie playback position">
+        <div class="movie-controls-row">
+          <button id="pauseMovie" type="button" disabled>Pause</button>
+          <input id="movieSeek" type="range" min="0" max="1" step="0.01" value="0" disabled aria-label="Movie position" aria-valuetext="No movie loaded">
+          <output id="movieSeekTime" for="movieSeek" aria-label="Current movie time and duration">0:00.0 / 0:00.0</output>
+        </div>
+      </div>
+      <details id="downsamplingDetails" class="downsampling-details">
+        <summary id="downsamplingSummary"><span>Downsampling</span><span id="downsamplingValue" class="downsampling-value">1/8</span></summary>
+        <div id="downsamplingOptions" class="downsampling-options">
+          <div class="source-video-controls" role="group" aria-label="Video processing controls">
+            <div class="source-downsampling">
+              <select id="downsample" aria-label="Downsampling factor" aria-describedby="geometryReadout">
+                <option value="1">1× · no downsampling</option>
+                <option value="2">1/2</option>
+                <option value="4">1/4</option>
+                <option value="8" selected>1/8 · recommended</option>
+                <option value="16">1/16</option>
+                <option value="32">1/32</option>
+              </select>
+            </div>
+            <div id="movieCutControls" class="source-cut-control" hidden>
+              <button id="suppressCuts" class="cut-toggle" type="button"
+                      aria-label="Suppress video cuts" aria-pressed="true"
+                      title="Suppress editing and loop-boundary cuts while preserving auditory filter states.">
+                Suppress cuts: <span id="cutToggleState">On</span>
+              </button>
+            </div>
+          </div>
+          <p id="geometryReadout" class="source-processing-readout small">Full frame · original aspect ratio</p>
+          <p id="resolutionWarning" class="source-processing-readout small warning" hidden></p>
+        </div>
+      </details>
+    </article>
+
+    <section class="panel model-panel" aria-labelledby="modelHeading">
+      <div class="panel-heading"><h2 id="modelHeading">Model temporal controls</h2><span class="small">Base time constants</span></div>
+      <div class="control"><div class="label-row"><label for="tauV">Visual transient filter</label><div class="number-unit"><input id="tauVNumber" type="number" min="1" max="200" step="0.1" value="45" aria-label="Visual time constant in milliseconds"><span>ms</span></div></div><input id="tauV" type="range" min="1" max="200" step="0.1" value="45"><div class="endpoints"><span>1 ms</span><span>200 ms</span></div></div>
+      <div class="control"><div class="label-row"><label for="tauA">Auditory transient filter</label><div class="number-unit"><input id="tauANumber" type="number" min="1" max="200" step="0.1" value="36.7" aria-label="Auditory time constant in milliseconds"><span>ms</span></div></div><input id="tauA" type="range" min="1" max="200" step="0.1" value="36.7"><div class="endpoints"><span>1 ms</span><span>200 ms</span></div></div>
+      <div class="control"><div class="label-row"><label for="tauLate">Second-stage filter · shared</label><div class="number-unit"><input id="tauLateNumber" type="number" min="1" max="800" step="1" value="180" aria-label="Shared second-stage time constant in milliseconds"><span>ms</span></div></div><input id="tauLate" type="range" min="1" max="800" step="1" value="180"><div class="endpoints"><span>1 ms</span><span>800 ms</span></div></div>
+      <div class="control divided"><div class="label-row"><label for="timeScale">Global time scale</label><output id="readScale" for="timeScale">1×</output></div><input id="timeScale" type="range" min="-2" max="2" step="0.02" value="0"><div class="endpoints"><span>0.25× · faster</span><span>4× · slower</span></div></div>
+      <div class="effective"><span>Effective constants</span><strong>V <b id="effectiveV">45</b> ms</strong><strong>A <b id="effectiveA">36.7</b> ms</strong><strong>Shared <b id="effectiveLate">180</b> ms</strong></div>
+      <div class="control delay-control"><div class="label-row"><label for="avDelay">Imposed audiovisual delay</label><output id="readDelay" for="avDelay">0 ms</output></div><input id="avDelay" type="range" min="-600" max="600" step="10" value="0"><div class="endpoints"><span>−600 ms · vision leads</span><span>+600 ms · audio leads</span></div><p id="delayExplanation" class="small">No additional offset between the model inputs.</p></div>
+      <div class="button-row" role="group" aria-label="Temporal presets and model reset">
+        <button id="resetTuning" class="temporal-preset" type="button" aria-pressed="true" title="Visual 45 ms, auditory 36.7 ms, shared second stage 180 ms; global scale 1×.">human temporal constants</button>
+        <button id="ratTuning" class="temporal-preset" type="button" aria-pressed="false" title="Visual 10 ms, auditory 10 ms, shared second stage 138 ms; global scale 1×.">rat temporal constant</button>
+        <button id="zeroDelay" type="button">Zero delay</button><button id="resetState" type="button">Clear states &amp; traces</button>
+      </div>
+      <details class="model-note-details"><summary>Model and timing notes</summary><p class="small">In movie mode the slider changes both playback and model inputs: negative delays the sound, positive delays the picture. In live mode it changes the model inputs only; the microphone is not played through the speakers. Model states normally persist across movie loops; optional cut suppression re-establishes only visual states at cuts. Changing model/input settings restarts processing; display gains do not.</p></details>
+      <p id="samplingWarning" class="small warning" hidden></p>
+    </section>
+
+    <article class="panel corr-panel">
+      <div class="panel-heading"><h2>MCD<sub>corr</sub></h2><span class="small">Correlation</span></div>
+      <div class="stage output-stage"><canvas id="correlationCanvas" aria-label="Correlation map: black at zero, increasing violet with activity"></canvas></div>
+      <div class="legend"><span>Zero</span><span class="colour-bar correlation-bar" aria-hidden="true"></span><span>High correspondence</span></div>
+      <div class="map-controls" role="group" aria-label="Correlation display settings">
+        <div class="map-scale-field">
+          <label for="scaleCorr">Scale</label>
+          <select id="scaleCorr" aria-label="Correlation display scale"><option value="db" selected>Logarithmic</option><option value="linear">Linear</option></select>
+        </div>
+        <div class="map-gain-field">
+          <div class="label-row"><label for="gainCorr">Display gain</label><output id="gainCorrValue" for="gainCorr">0 dB</output></div>
+          <input id="gainCorr" type="range" min="-60" max="40" step="1" value="0" aria-label="Correlation display gain">
+        </div>
+      </div>
+    </article>
+    <article class="panel lag-panel">
+      <div class="panel-heading"><h2>MCD<sub>lag</sub></h2><span class="small">Relative timing</span></div>
+      <div class="stage output-stage"><canvas id="lagCanvas" aria-label="Signed lag map: blue vision leads, black zero, orange audio leads"></canvas></div>
+      <div class="legend"><span>Vision lead</span><span class="colour-bar lag-bar" aria-hidden="true"></span><span>Audio lead</span></div>
+      <div class="map-controls" role="group" aria-label="Lag display settings">
+        <div class="map-scale-field">
+          <label for="scaleLag">Scale</label>
+          <select id="scaleLag" aria-label="Lag display scale"><option value="db" selected>Logarithmic</option><option value="linear">Linear</option></select>
+        </div>
+        <div class="map-gain-field">
+          <div class="label-row"><label for="gainLag">Display gain</label><output id="gainLagValue" for="gainLag">-40 dB</output></div>
+          <input id="gainLag" type="range" min="-60" max="20" step="1" value="-40" aria-label="Lag display gain">
+        </div>
+      </div>
+    </article>
+  </div>
+
+  <details class="performance-detail">
+    <summary class="performance-summary">
+      <span class="performance-heading">Frame and timing diagnostics</span>
+      <span class="performance-strip" id="performance" aria-live="off">
+        <span id="fpsReadout">Input — fps · MCD — fps</span>
+        <span id="computeReadout">— ms/frame</span>
+        <span id="skipReadout">Skipped — · Cuts —</span>
+        <span id="resolution" aria-label="Processing resolution">— × —</span>
+      </span>
+    </summary>
+    <p id="performanceDetail" class="small">Counters appear after starting. Browser counters cannot reveal losses inside camera hardware or its driver.</p>
+    <p id="cutStatus" class="small" role="status">No cuts detected in this run.</p>
+  </details>
+
+  <section class="traces-section" aria-labelledby="tracesHeading"><div class="section-heading"><h2 id="tracesHeading">Signals and detector responses</h2><span class="small">Spatial means · latest 10 seconds</span></div><div class="trace-list">
+    <div class="trace-row"><span class="trace-label">Video changes</span><canvas id="trace0" aria-label="Visual change over time"></canvas><output id="traceValue0">—</output></div>
+    <div class="trace-row"><span class="trace-label">Audio envelope</span><canvas id="trace1" aria-label="Mono auditory RMS envelope"></canvas><output id="traceValue1">—</output></div>
+    <div class="trace-row"><span class="trace-label">Visual transient</span><canvas id="trace2" aria-label="Spatial mean visual transient"></canvas><output id="traceValue2">—</output></div>
+    <div class="trace-row"><span class="trace-label">Auditory transient</span><canvas id="trace3" aria-label="Auditory transient"></canvas><output id="traceValue3">—</output></div>
+    <div class="trace-row"><span class="trace-label">MCD correlation</span><canvas id="trace4" aria-label="Spatial mean correlation response"></canvas><output id="traceValue4">—</output></div>
+    <div class="trace-row"><span class="trace-label">MCD lag · signed</span><canvas id="trace5" aria-label="Spatial mean signed lag response"></canvas><output id="traceValue5">—</output></div>
+    <div class="trace-row axis-row"><span class="trace-label">Elapsed time (s)</span><canvas id="timeAxis" aria-label="Elapsed time in seconds"></canvas><span></span></div>
+  </div></section>
+
+  <p class="build-label">Build: <strong>chart-launch-13</strong></p>
+  <details class="technical-notes"><summary>Scientific and technical notes</summary><div>
+    <p>The numerical engine is compiled C running as WebAssembly (SIMD where supported), implementing the continuous-time biphasic filters, unsigned transient energy, delayed multiplicative interactions, and correlation/lag outputs from the supplied <code>MCDq.m</code>. The default human temporal constants are 45 ms (visual), 36.7 ms (auditory), and 180 ms for both second-stage filters. The rat preset uses 10 ms (visual), 10 ms (auditory), and 138 ms for both second-stage filters. Each preset restores global scaling to 1× and clears filter states and traces without changing the imposed audiovisual delay or display settings.</p>
+    <p>For negative imposed delays the auditory input is delayed; for positive delays the visual input is delayed. Brief signal histories implement this experimental manipulation. Video delays use available frame timestamps, so a 10 ms slider step does not imply 10 ms video resolution. Live camera/microphone acquisition offsets are not calibrated. Recorded-file timing uses the movie timestamps and a decoded mono envelope. Movie playback uses the same relative offset: a causal audio delay for negative settings and buffered video frames for positive settings. Device output latency is not calibrated.</p>
+    <p>When editing-cut suppression is enabled, automatically detected scene cuts and movie loop boundaries re-establish the visual baseline while retaining auditory filter states. Disabling it preserves all states. Manual seeking starts a new analysis segment and clears both sensory histories; ordinary detected cuts reset only the visual pathway. Automatic cut detection is heuristic and uses a fixed balanced sensitivity. The bipolar lag map represents signed detector output, not an estimated delay in milliseconds. Logarithmic display is <code>20 log10(1 + magnitude/reference)</code>, a soft-log visual convention, not sound pressure level. Output colour and gain affect display only.</p>
+    <p>Linear filter cascades are advanced analytically for the actual sample interval; Gauss–Legendre quadrature integrates the nonlinear transient drive into the second-stage filters. Captured frames are processed in order. If processing falls substantially behind or input is interrupted, both pathways are explicitly re-primed at the current sample rather than pretending that missing frames were observed. Such resynchronisations are counted in the timing diagnostics and leave gaps in the traces. Detected editing cuts still re-establish only the visual baseline.</p>
+    <p>Very short effective constants cannot recover temporal detail absent from the camera frames. Increase spatial downsampling if the processing counters show skipped updates. This interactive demonstration is not a calibrated psychophysical experiment.</p>
+    <p><a href="https://elifesciences.org/articles/106122" target="_blank" rel="noopener noreferrer">Population-model paper</a> · <a href="reference/MCDq.m">MATLAB reference</a> · <a href="README_DEVELOPER.md">Implementation notes</a></p>
+  </div></details>
+  <details class="technical-notes"><summary>Privacy and usage statistics</summary><div>
+    <p>Your webcam images, microphone audio and movie files are processed on your device. They are not uploaded.</p>
+    <p>On the published site, Cloudflare Web Analytics records page traffic. When enabled, a separate counter records whether this page successfully ran the model, which input modes were used, and whether it completed 30 seconds of active, visible processing. It uses a temporary random page token, not a name or a persistent visitor identifier. No recordings, filenames, model values or device labels are sent.</p>
+    <p>Local previews are excluded. The usage counter does not use cookies or browser storage and does not write IP addresses or browser identifiers to its database. Cloudflare still handles ordinary network metadata to deliver these services. Reloading the page starts a new session; these counts do not identify unique people.</p>
+  </div></details>
+</main>
+<noscript><p>This interactive demo requires JavaScript and WebAssembly.</p></noscript>
+<script type="module" src="mcd-live.js?v=chart-launch-13"></script>
+</body>
+</html>

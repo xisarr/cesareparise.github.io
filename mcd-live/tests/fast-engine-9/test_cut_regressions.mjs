@@ -1,0 +1,15 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import {SceneCutDetector,detectSceneCut,visualTraceSample,FrameHistory} from '../../signal-utils.js';
+const checks={};const W=96,H=54,n=W*H;
+const oldDetector=(a,b)=>{let sum=0,changed=0,pos=0,neg=0;for(let i=0;i<n;i++){const d=(b[i]-a[i])/65535;sum+=Math.abs(d);if(Math.abs(d)>.18){changed++;if(d>0)pos++;else neg++;}}return sum/n>=.17&&changed/n>=.5&&Math.min(pos,neg)/changed>=.12;};
+const texture=(phase,amplitude=.045,letterbox=false)=>Uint16Array.from({length:n},(_,i)=>{const x=i%W,y=Math.floor(i/W);if(letterbox&&(x<24||x>=72))return 0;const d=((Math.floor(x/6)+Math.floor(y/6)+phase)%2?1:-1)*amplitude;return Math.round((.45+d)*65535);});
+let a=texture(0),b=texture(1);assert.equal(oldDetector(a,b),false);assert.equal(detectSceneCut(a,b).cut,true);checks.moderate_cut_missed_by_previous_thresholds='PASS';
+a=texture(0,.045,true);b=texture(1,.045,true);assert.equal(oldDetector(a,b),false);assert.equal(detectSceneCut(a,b).cut,true);checks.moderate_cut_with_black_sidebars='PASS';
+a=texture(0);b=Uint16Array.from(a,x=>x+Math.round(.2*65535));assert.equal(detectSceneCut(a,b).cut,false);checks.uniform_flash_retained='PASS';
+a=texture(0);b=a.slice();for(let i=0;i<n;i++)if(i%W<6)b[i]=65535-b[i];assert.equal(detectSceneCut(a,b).cut,false);checks.local_motion_retained='PASS';
+const detector=new SceneCutDetector();a=texture(0);assert.equal(detector.inspect(a).cut,false);for(let i=0;i<20;i++)assert.equal(detector.inspect(a).cut,false);assert.equal(detector.inspect(texture(1)).cut,true);checks.adaptive_cut_from_stable_scene='PASS';
+assert.equal(detector.inspect(texture(1),{forced:true}).cut,true);checks.known_loop_boundary_not_dependent_on_detection='PASS';
+assert.ok(Number.isNaN(visualTraceSample(.8,{suppression:true,crossedCut:true})));assert.ok(Number.isNaN(visualTraceSample(.3,{suppression:true,inCutWindow:true})));assert.equal(visualTraceSample(.4,{suppression:false,crossedCut:true}),.4);assert.equal(visualTraceSample(.02,{suppression:true}),.02);checks.cut_is_missing_not_zero_and_raw_mode_retained='PASS';
+const frames=new FrameHistory(2);for(let i=0;i<70;i++)frames.push({t:i/30,id:i,cutSerial:i>=30?1:0,visualChange:i===30?.8:.01});for(const lag of [0,.2,.6]){const before=frames.at(1-1/30);const after=frames.at(1+lag-lag);assert.equal(before.cutSerial,0);assert.equal(after.cutSerial,1);assert.ok(Number.isNaN(visualTraceSample(after.visualChange,{suppression:true,crossedCut:after.cutSerial!==before.cutSerial})));}checks.cut_flag_survives_delay_history='PASS';
+const r={status:'PASS',checks};console.log(JSON.stringify(r,null,2));fs.writeFileSync(new URL('cut_regression_report.json',import.meta.url),JSON.stringify(r,null,2));

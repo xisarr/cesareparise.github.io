@@ -1,0 +1,196 @@
+{
+  "worker_mode": "in-page substitute",
+  "native_audio_video_decoding": true,
+  "native_web_audio": true,
+  "checks": {
+    "no_extra_control_and_palettes_preserved": "PASS",
+    "delay_-600_model_and_playback": "PASS",
+    "delay_-200_model_and_playback": "PASS",
+    "delay_0_model_and_playback": "PASS",
+    "delay_200_model_and_playback": "PASS",
+    "delay_600_model_and_playback": "PASS",
+    "single_movie_decoder_and_unchanged_tuning": "PASS",
+    "palette_switching": "PASS",
+    "actual_decoded_audio_delayed_200ms": "PASS",
+    "pause_seek_resume_no_background_audio": "PASS",
+    "positive_delay_across_loop": "PASS",
+    "positive_end_drains_then_stops": "PASS",
+    "negative_end_drains_then_stops": "PASS",
+    "stop_restart_single_audio_source": "PASS",
+    "hear_movie_switch_retained": "PASS",
+    "responsive_layout": "PASS",
+    "live_mode_does_not_monitor_microphone": "PASS",
+    "no_browser_javascript_errors": "PASS"
+  },
+  "hardware_av_timing_tested": false,
+  "start": {
+    "version": "playback-8",
+    "playback": {
+      "mode": "movie",
+      "automatic": true,
+      "audio": {
+        "routed": true,
+        "active": true,
+        "audible": true,
+        "contextState": "running",
+        "audioDelayMs": 0
+      },
+      "video": {
+        "visible": false,
+        "bufferedFrames": 0,
+        "anchorTime": null,
+        "sourceTime": null,
+        "targetTime": null,
+        "actualVideoDelayMs": 0
+      },
+      "draining": false
+    },
+    "phase": "running",
+    "running": true,
+    "starting": false,
+    "mode": "movie",
+    "moviePaused": false,
+    "seekActive": false,
+    "position": 0.352,
+    "duration": 3,
+    "modelReady": true,
+    "busy": false,
+    "geometry": {
+      "vw": 640,
+      "vh": 360,
+      "w": 80,
+      "h": 45,
+      "downsample": 8,
+      "capped": false,
+      "tooLarge": false,
+      "aspect": 1.7777777777777777
+    },
+    "display": {
+      "corr": {
+        "palette": "teal",
+        "scale": "db",
+        "gainDb": -20
+      },
+      "lag": {
+        "palette": "blue-orange",
+        "scale": "db",
+        "gainDb": -40
+      }
+    },
+    "tuning": {
+      "v": 45,
+      "a": 36.7,
+      "late": 180,
+      "scale": 1
+    },
+    "delay": 0,
+    "loopCount": 0,
+    "steps": 10,
+    "resetCount": 4,
+    "detectedCuts": 0,
+    "suppressedCuts": 0,
+    "cutSuppression": true,
+    "cutSensitivity": 50,
+    "lastCut": null,
+    "cutWindows": [],
+    "captured": 11,
+    "processed": 11,
+    "skipped": 0,
+    "rms": 0.002530281504385735,
+    "audioCoverage": 1,
+    "actualVideoLag": 0,
+    "lastTrace": {
+      "t": 0.333334,
+      "sourceT": 0.366667,
+      "previousDifferenceT": 0.333333,
+      "v": [
+        0.009445699075133727,
+        0.0025302814319729805,
+        0.0003008812782354653,
+        0.0001813039561966434,
+        3.312396455620826e-17,
+        1.7359107484793412e-09
+      ]
+    },
+    "tracePoints": 11,
+    "visualTraceGaps": 0,
+    "visualTraceSamples": 10,
+    "movieChannels": 2,
+    "visualTracePeak": 0.010152649559607672,
+    "recentVisualTrace": [
+      {
+        "t": 0,
+        "sourceT": 0.033333,
+        "previousDifferenceT": 0.033333,
+        "value": 0
+      },
+      {
+        "t": 0.033334,
+        "sourceT": 0.066667,
+        "previousDifferenceT": 0.033333,
+        "value": 0.004093806956418537
+      },
+      {
+        "t": 0.066667,
+        "sourceT": 0.1,
+        "previousDifferenceT": 0.066667,
+        "value": 0.008954201741223942
+      },
+      {
+        "t": 0.1,
+        "sourceT": 0.133333,
+        "previousDifferenceT": 0.1,
+        "value": 0.009887301526749912
+      },
+      {
+        "t": 0.133334,
+        "sourceT": 0.166667,
+        "previousDifferenceT": 0.133333,
+        "value": 0.010152649559607672
+      },
+      {
+        "t": 0.166667,
+        "sourceT": 0.2,
+        "previousDifferenceT": 0.166667,
+        "value": 0.00948237371040072
+      },
+      {
+        "t": 0.2,
+        "sourceT": 0.233333,
+        "previousDifferenceT": 0.2,
+        "value": 0.009429176945313361
+      },
+      {
+        "t": 0.23333399999999999,
+        "sourceT": 0.266667,
+        "previousDifferenceT": 0.233333,
+        "value": 0.010109214329917009
+      },
+      {
+        "t": 0.266667,
+        "sourceT": 0.3,
+        "previousDifferenceT": 0.266667,
+        "value": 0.010113724218610922
+      },
+      {
+        "t": 0.3,
+        "sourceT": 0.333333,
+        "previousDifferenceT": 0.3,
+        "value": 0.009448837771165536
+      },
+      {
+        "t": 0.333334,
+        "sourceT": 0.366667,
+        "previousDifferenceT": 0.333333,
+        "value": 0.009445699075133727
+      }
+    ]
+  },
+  "audio_measured": {
+    "delay_s": 0.2,
+    "correlation": 0.9976015855296273,
+    "max_source_rms": 0.07953572610066371,
+    "max_delayed_rms": 0.08024350500432138
+  },
+  "status": "PASS"
+}

@@ -1,0 +1,277 @@
+{
+  "runtime": "v22.16.0",
+  "cpu": "AMD EPYC 9V74 80-Core Processor",
+  "method": "same process, 16 steps, first 4 discarded; engine only",
+  "rows": [
+    {
+      "engine": "previous RK4",
+      "width": 160,
+      "height": 90,
+      "dt": 0.03333333333333333,
+      "median_ms": 5.213650500000007,
+      "min_ms": 4.724155999999994,
+      "max_ms": 6.815748999999997,
+      "quadrature_nodes": null
+    },
+    {
+      "engine": "previous RK4",
+      "width": 160,
+      "height": 90,
+      "dt": 0.06024096385542168,
+      "median_ms": 8.931057499999994,
+      "min_ms": 8.527653000000015,
+      "max_ms": 10.997381000000019,
+      "quadrature_nodes": null
+    },
+    {
+      "engine": "previous RK4",
+      "width": 160,
+      "height": 90,
+      "dt": 0.24,
+      "median_ms": 32.182953000000055,
+      "min_ms": 30.628125000000068,
+      "max_ms": 36.25502999999992,
+      "quadrature_nodes": null
+    },
+    {
+      "engine": "previous RK4",
+      "width": 320,
+      "height": 180,
+      "dt": 0.03333333333333333,
+      "median_ms": 18.496436999999958,
+      "min_ms": 17.939661,
+      "max_ms": 21.548818999999867,
+      "quadrature_nodes": null
+    },
+    {
+      "engine": "previous RK4",
+      "width": 320,
+      "height": 180,
+      "dt": 0.06024096385542168,
+      "median_ms": 34.616796499999964,
+      "min_ms": 32.88891899999999,
+      "max_ms": 43.04833400000007,
+      "quadrature_nodes": null
+    },
+    {
+      "engine": "previous RK4",
+      "width": 320,
+      "height": 180,
+      "dt": 0.24,
+      "median_ms": 127.6787945000001,
+      "min_ms": 124.92417100000011,
+      "max_ms": 164.2995450000003,
+      "quadrature_nodes": null
+    },
+    {
+      "engine": "previous RK4",
+      "width": 640,
+      "height": 360,
+      "dt": 0.03333333333333333,
+      "median_ms": 77.52319600000055,
+      "min_ms": 75.41127799999958,
+      "max_ms": 78.79685900000004,
+      "quadrature_nodes": null
+    },
+    {
+      "engine": "previous RK4",
+      "width": 640,
+      "height": 360,
+      "dt": 0.06024096385542168,
+      "median_ms": 142.58400949999987,
+      "min_ms": 140.0988379999999,
+      "max_ms": 146.65848000000005,
+      "quadrature_nodes": null
+    },
+    {
+      "engine": "previous RK4",
+      "width": 640,
+      "height": 360,
+      "dt": 0.24,
+      "median_ms": 525.7907070000001,
+      "min_ms": 515.7476860000006,
+      "max_ms": 588.3059880000001,
+      "quadrature_nodes": null
+    },
+    {
+      "engine": "new SIMD",
+      "width": 160,
+      "height": 90,
+      "dt": 0.03333333333333333,
+      "median_ms": 0.9806950000001962,
+      "min_ms": 0.8928980000000593,
+      "max_ms": 1.2059299999982613,
+      "quadrature_nodes": 8
+    },
+    {
+      "engine": "new SIMD",
+      "width": 160,
+      "height": 90,
+      "dt": 0.06024096385542168,
+      "median_ms": 0.9426980000007461,
+      "min_ms": 0.8681900000010501,
+      "max_ms": 4.171787999999651,
+      "quadrature_nodes": 8
+    },
+    {
+      "engine": "new SIMD",
+      "width": 160,
+      "height": 90,
+      "dt": 0.24,
+      "median_ms": 2.2170015000001513,
+      "min_ms": 2.054291000000376,
+      "max_ms": 2.5236800000002404,
+      "quadrature_nodes": 24
+    },
+    {
+      "engine": "new SIMD",
+      "width": 320,
+      "height": 180,
+      "dt": 0.03333333333333333,
+      "median_ms": 3.8157554999997956,
+      "min_ms": 3.599974000000657,
+      "max_ms": 4.958454999999958,
+      "quadrature_nodes": 8
+    },
+    {
+      "engine": "new SIMD",
+      "width": 320,
+      "height": 180,
+      "dt": 0.06024096385542168,
+      "median_ms": 3.7688039999993634,
+      "min_ms": 3.4644900000002963,
+      "max_ms": 4.7817680000007385,
+      "quadrature_nodes": 8
+    },
+    {
+      "engine": "new SIMD",
+      "width": 320,
+      "height": 180,
+      "dt": 0.24,
+      "median_ms": 9.003827000000456,
+      "min_ms": 8.579270999998698,
+      "max_ms": 23.376858999999968,
+      "quadrature_nodes": 24
+    },
+    {
+      "engine": "new SIMD",
+      "width": 640,
+      "height": 360,
+      "dt": 0.03333333333333333,
+      "median_ms": 14.855095000000802,
+      "min_ms": 14.28035699999964,
+      "max_ms": 15.81772799999817,
+      "quadrature_nodes": 8
+    },
+    {
+      "engine": "new SIMD",
+      "width": 640,
+      "height": 360,
+      "dt": 0.06024096385542168,
+      "median_ms": 14.903413500001989,
+      "min_ms": 14.160616000001028,
+      "max_ms": 17.676244000002043,
+      "quadrature_nodes": 8
+    },
+    {
+      "engine": "new SIMD",
+      "width": 640,
+      "height": 360,
+      "dt": 0.24,
+      "median_ms": 42.13630000000194,
+      "min_ms": 34.9946060000002,
+      "max_ms": 59.65358500000002,
+      "quadrature_nodes": 24
+    },
+    {
+      "engine": "new scalar",
+      "width": 160,
+      "height": 90,
+      "dt": 0.03333333333333333,
+      "median_ms": 2.450794499998665,
+      "min_ms": 1.76086800000121,
+      "max_ms": 2.661909000002197,
+      "quadrature_nodes": 8
+    },
+    {
+      "engine": "new scalar",
+      "width": 160,
+      "height": 90,
+      "dt": 0.06024096385542168,
+      "median_ms": 1.883469000000332,
+      "min_ms": 1.701798999998573,
+      "max_ms": 2.1903159999965283,
+      "quadrature_nodes": 8
+    },
+    {
+      "engine": "new scalar",
+      "width": 160,
+      "height": 90,
+      "dt": 0.24,
+      "median_ms": 5.043453000000227,
+      "min_ms": 4.41016700000182,
+      "max_ms": 6.320029999998951,
+      "quadrature_nodes": 24
+    },
+    {
+      "engine": "new scalar",
+      "width": 320,
+      "height": 180,
+      "dt": 0.03333333333333333,
+      "median_ms": 8.409114000000045,
+      "min_ms": 7.523237000001245,
+      "max_ms": 9.610051999999996,
+      "quadrature_nodes": 8
+    },
+    {
+      "engine": "new scalar",
+      "width": 320,
+      "height": 180,
+      "dt": 0.06024096385542168,
+      "median_ms": 7.92841899999803,
+      "min_ms": 7.161141000000498,
+      "max_ms": 9.946004000001267,
+      "quadrature_nodes": 8
+    },
+    {
+      "engine": "new scalar",
+      "width": 320,
+      "height": 180,
+      "dt": 0.24,
+      "median_ms": 19.140393499999846,
+      "min_ms": 17.885678999999072,
+      "max_ms": 27.419701999999234,
+      "quadrature_nodes": 24
+    },
+    {
+      "engine": "new scalar",
+      "width": 640,
+      "height": 360,
+      "dt": 0.03333333333333333,
+      "median_ms": 32.8592179999996,
+      "min_ms": 29.42173399999956,
+      "max_ms": 47.3891369999983,
+      "quadrature_nodes": 8
+    },
+    {
+      "engine": "new scalar",
+      "width": 640,
+      "height": 360,
+      "dt": 0.06024096385542168,
+      "median_ms": 30.792969500002073,
+      "min_ms": 29.70368900000176,
+      "max_ms": 33.44588900000235,
+      "quadrature_nodes": 8
+    },
+    {
+      "engine": "new scalar",
+      "width": 640,
+      "height": 360,
+      "dt": 0.24,
+      "median_ms": 74.38955600000008,
+      "min_ms": 69.76772899999924,
+      "max_ms": 86.38533500000267,
+      "quadrature_nodes": 24
+    }
+  ]
+}

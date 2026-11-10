@@ -1,0 +1,38 @@
+{
+  "worker_mode": "in-page Worker substitute; actual shipped WASM",
+  "native_media_decoding": true,
+  "physical_devices_tested": false,
+  "checks": {
+    "fixed_palettes_controls_defaults": "PASS",
+    "full_640x360_movie_processing": "PASS",
+    "scale_and_gain_do_not_reset_model": "PASS",
+    "loop_continuity": "PASS",
+    "automatic_audiovisual_playback_delay": "PASS",
+    "pause_seek_resume": "PASS",
+    "overload_counted_gaps_and_recovery": "PASS",
+    "movie_cut_toggle_and_missing_values": "PASS",
+    "temporal_controls_and_reset": "PASS",
+    "synthetic_live_640x360_16_7fps": "PASS",
+    "stop_releases_synthetic_tracks": "PASS"
+  },
+  "full_resolution_snapshot": {
+    "captured": 115,
+    "processed": 115,
+    "skipped": 0,
+    "resyncs": 0,
+    "meanComputeMs": 17.61739130435289,
+    "meanRenderMs": 10.359016393439187,
+    "engine": "SIMD state-transition"
+  },
+  "live_snapshot": {
+    "captured": 38,
+    "processed": 38,
+    "skipped": 0,
+    "resyncs": 0,
+    "meanComputeMs": 16.01315789471846,
+    "meanRenderMs": 4.1736842105379575,
+    "rms": 0.07071257149644866
+  },
+  "javascript_errors": [],
+  "status": "PASS"
+}

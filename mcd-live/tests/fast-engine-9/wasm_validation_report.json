@@ -1,0 +1,33 @@
+{
+  "status": "PASS",
+  "wasmBytes": 13250,
+  "numericalImports": 0,
+  "maxPeakNormalisedError": 2.2316958923466833e-7,
+  "benchmarks": [
+    {
+      "width": 90,
+      "height": 160,
+      "timeScale": 1,
+      "frames": 45,
+      "msPerFrame": 0.9672075777777777,
+      "stateBytes": 1612912
+    },
+    {
+      "width": 180,
+      "height": 320,
+      "timeScale": 1,
+      "frames": 45,
+      "msPerFrame": 4.018367244444444,
+      "stateBytes": 6451312
+    },
+    {
+      "width": 90,
+      "height": 160,
+      "timeScale": 0.25,
+      "frames": 45,
+      "msPerFrame": 1.6247874666666677,
+      "stateBytes": 1612912
+    }
+  ],
+  "benchmarkScope": "Node WebAssembly runtime on this machine; model plus input fills only, not capture, copying to/from worker, rendering or real devices."
+}

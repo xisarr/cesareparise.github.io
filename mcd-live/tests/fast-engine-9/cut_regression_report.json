@@ -1,0 +1,13 @@
+{
+  "status": "PASS",
+  "checks": {
+    "moderate_cut_missed_by_previous_thresholds": "PASS",
+    "moderate_cut_with_black_sidebars": "PASS",
+    "uniform_flash_retained": "PASS",
+    "local_motion_retained": "PASS",
+    "adaptive_cut_from_stable_scene": "PASS",
+    "known_loop_boundary_not_dependent_on_detection": "PASS",
+    "cut_is_missing_not_zero_and_raw_mode_retained": "PASS",
+    "cut_flag_survives_delay_history": "PASS"
+  }
+}

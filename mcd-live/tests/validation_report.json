@@ -1,0 +1,63 @@
+{
+  "authoritative_defaults_seconds": [
+    0.045,
+    0.0367,
+    0.18,
+    0.18
+  ],
+  "checks": {
+    "defaults_and_input_validation": "PASS",
+    "analytic_biphasic_step_response": {
+      "status": "PASS",
+      "max_peak_normalised_error": 7.799033598862211e-07
+    },
+    "independent_ode_reference": {
+      "status": "PASS",
+      "reference": "SciPy DOP853; rtol=2e-12; atol=2e-15",
+      "samples": 160,
+      "irregular_time_steps": true,
+      "live_parameter_changes": 2,
+      "peak_normalised_errors": {
+        "V slow": 7.802677515688995e-07,
+        "V fast": 7.544460934380085e-07,
+        "A slow": 8.05848501217216e-07,
+        "A fast": 2.040832370868645e-06,
+        "V transient": 6.847383667342869e-07,
+        "A transient": 1.244773462421739e-06,
+        "V delayed": 4.0239102237680583e-07,
+        "A delayed": 5.67654210913161e-08,
+        "u1": 6.830394841018975e-07,
+        "u2": 1.2987972010565268e-06,
+        "corr": 1.6466574208951236e-06,
+        "lag": 1.839467447300127e-06
+      }
+    },
+    "priming_and_live_response": "PASS",
+    "visual_rebaseline_preserves_auditory_ode": "PASS",
+    "symmetric_lag_and_nonnegative_correlation": "PASS",
+    "no_two_second_tail_truncation": "PASS",
+    "constant_state_memory": {
+      "status": "PASS",
+      "state_bytes_at_90x160": 1612912,
+      "double_states_per_visual_pixel": 14
+    },
+    "shared_late_and_global_scale": {
+      "status": "PASS",
+      "scales": [
+        0.25,
+        0.5,
+        1.0,
+        2.0,
+        4.0
+      ],
+      "base_values_preserved": true,
+      "late_constants_equal": true,
+      "reset_preserves_states": true
+    },
+    "time_scale_and_original_kernel_gains": {
+      "status": "PASS",
+      "max_peak_normalised_error": 1.5170340164537509e-06
+    },
+    "no_fir_interface": "PASS"
+  }
+}

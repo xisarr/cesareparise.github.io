@@ -1,0 +1,18 @@
+{
+  "status": "PASS",
+  "checks": {
+    "delay_polarity": "PASS",
+    "actual_1x_without_silent_capping": "PASS",
+    "two_difference_display_summary": "PASS",
+    "mode_specific_display_defaults": "PASS",
+    "grayscale_difference": "PASS",
+    "cut_detection_conservative": "PASS",
+    "frame_delay_quantisation": "PASS",
+    "audio_packet_integral": "PASS",
+    "mono_before_rms_and_loop_boundary": "PASS",
+    "black_baseline": "PASS",
+    "compiled_frame_difference": "PASS",
+    "visual_only_cut_rebaseline": "PASS",
+    "full_control_range": "PASS"
+  }
+}

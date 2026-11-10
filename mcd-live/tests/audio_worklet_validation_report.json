@@ -1,0 +1,6 @@
+{
+  "status": "PASS",
+  "timestamped_5ms_packets": true,
+  "mono_mean_before_RMS": true,
+  "silent_speaker_output": true
+}

@@ -1,0 +1,13 @@
+{
+  "status": "PASS",
+  "checks": {
+    "simd_scalar_even_odd_pixels": {
+      "status": "PASS",
+      "updates": 900,
+      "max_relative_difference": 0
+    },
+    "ordered_queue_and_explicit_overload": "PASS",
+    "fixed_palettes_black_zero": "PASS",
+    "native_worker_scalar_fallback_and_explicit_resync": "PASS"
+  }
+}

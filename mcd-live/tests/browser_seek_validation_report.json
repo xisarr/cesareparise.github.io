@@ -1,0 +1,287 @@
+{
+  "status": "PASS",
+  "worker_mode": "in-page shim",
+  "checks": {
+    "scrubber_loaded_with_duration": "PASS",
+    "seeking_stopped_then_start_at_selected_position": "PASS",
+    "moderate_edit_gap_and_no_residual_spike": "PASS",
+    "paused_scrub_stays_paused_and_resumes": "PASS",
+    "mouse_drag_backwards_resumes_without_false_loop": "PASS",
+    "keyboard_scrub_accessibility": "PASS",
+    "gaps_aligned_at_positive_and_negative_av_delay": "PASS",
+    "known_loop_boundary_gap_without_full_reset": "PASS",
+    "suppression_off_keeps_actual_cut_spike": "PASS",
+    "desktop_mobile_layout": "PASS",
+    "stop_cancels_pending_seek": "PASS"
+  },
+  "hardware_capture_tested": false,
+  "cut_example": {
+    "version": "seek-cuts-4",
+    "phase": "running",
+    "running": true,
+    "starting": false,
+    "mode": "movie",
+    "moviePaused": false,
+    "seekActive": false,
+    "position": 1.661499,
+    "duration": 5,
+    "modelReady": true,
+    "busy": false,
+    "geometry": {
+      "vw": 384,
+      "vh": 216,
+      "cw": 384,
+      "ch": 216,
+      "sx": 0,
+      "sy": 0,
+      "w": 48,
+      "h": 27,
+      "capped": false,
+      "tooLarge": false,
+      "aspect": 1.7777777777777777
+    },
+    "tuning": {
+      "v": 45,
+      "a": 36.7,
+      "late": 180,
+      "scale": 1
+    },
+    "delay": 0,
+    "loopCount": 0,
+    "steps": 35,
+    "resetCount": 5,
+    "detectedCuts": 1,
+    "suppressedCuts": 1,
+    "cutSuppression": true,
+    "cutSensitivity": 50,
+    "lastCut": {
+      "t": 1.4,
+      "start": 1.3496914966680773,
+      "end": 1.4509265099957684,
+      "kind": "edit",
+      "mediaTime": 1.4,
+      "cut": true,
+      "meanChange": 0.09189360929557128,
+      "changedFraction": 0.9976851851851852,
+      "oppositeFraction": 0.4988399071925754,
+      "structureChange": 0.09188425141432356,
+      "correlation": -0.9890861229722132,
+      "histogramChange": 0.4996141975308642,
+      "threshold": 0.028
+    },
+    "cutWindows": [
+      {
+        "start": 1.3496914966680773,
+        "end": 1.4509265099957684,
+        "t": 1.4,
+        "kind": "edit"
+      }
+    ],
+    "captured": 36,
+    "processed": 36,
+    "skipped": 0,
+    "rms": 0.08700752339897852,
+    "audioCoverage": 1,
+    "actualVideoLag": 0,
+    "lastTrace": {
+      "t": 1.233334,
+      "sourceT": 1.666667,
+      "v": [
+        1.2103606874848705e-05,
+        0.08700752258300781,
+        5.47825266039581e-07,
+        1.6910005797399208e-05,
+        1.1338599135607397e-23,
+        4.647579521753487e-13
+      ]
+    },
+    "tracePoints": 36,
+    "visualTraceGaps": 3,
+    "visualTraceSamples": 26,
+    "movieChannels": 1,
+    "visualTracePeak": 0.0029411764705882353,
+    "recentVisualTrace": [
+      {
+        "t": 0,
+        "sourceT": 0.433333,
+        "value": 0
+      },
+      {
+        "t": 0.033333999999999975,
+        "sourceT": 0.466667,
+        "value": 7.262164124909223e-05
+      },
+      {
+        "t": 0.06666699999999998,
+        "sourceT": 0.5,
+        "value": 3.328491890583394e-05
+      },
+      {
+        "t": 0.09999999999999992,
+        "sourceT": 0.533333,
+        "value": 3.328491890583394e-05
+      },
+      {
+        "t": 0.133334,
+        "sourceT": 0.566667,
+        "value": 5.7492132655531346e-05
+      },
+      {
+        "t": 0.16666699999999995,
+        "sourceT": 0.6,
+        "value": 3.6310820624546116e-05
+      },
+      {
+        "t": 0.2,
+        "sourceT": 0.633333,
+        "value": 3.328491890583394e-05
+      },
+      {
+        "t": 0.23333399999999999,
+        "sourceT": 0.666667,
+        "value": 3.6310820624546116e-05
+      },
+      {
+        "t": 0.26666699999999993,
+        "sourceT": 0.7,
+        "value": 3.6310820624546116e-05
+      },
+      {
+        "t": 0.3,
+        "sourceT": 0.733333,
+        "value": 0
+      },
+      {
+        "t": 0.33333399999999996,
+        "sourceT": 0.766667,
+        "value": 0
+      },
+      {
+        "t": 0.366667,
+        "sourceT": 0.8,
+        "value": 0
+      },
+      {
+        "t": 0.43333399999999994,
+        "sourceT": 0.866667,
+        "value": 7.262164124909223e-05
+      },
+      {
+        "t": 0.466667,
+        "sourceT": 0.9,
+        "value": 3.328491890583394e-05
+      },
+      {
+        "t": 0.49999999999999994,
+        "sourceT": 0.933333,
+        "value": 3.328491890583394e-05
+      },
+      {
+        "t": 0.533334,
+        "sourceT": 0.966667,
+        "value": 6.051803437424353e-05
+      },
+      {
+        "t": 0.566667,
+        "sourceT": 1,
+        "value": 3.6310820624546116e-05
+      },
+      {
+        "t": 0.6000000000000001,
+        "sourceT": 1.033333,
+        "value": 3.0259017187121764e-05
+      },
+      {
+        "t": 0.6333340000000001,
+        "sourceT": 1.066667,
+        "value": 7.262164124909223e-05
+      },
+      {
+        "t": 0.6666670000000001,
+        "sourceT": 1.1,
+        "value": 3.328491890583394e-05
+      },
+      {
+        "t": 0.7,
+        "sourceT": 1.133333,
+        "value": 0.0029411764705882353
+      },
+      {
+        "t": 0.7333339999999999,
+        "sourceT": 1.166667,
+        "value": 1.5129508593560882e-05
+      },
+      {
+        "t": 0.766667,
+        "sourceT": 1.2,
+        "value": 1.8155410312273058e-05
+      },
+      {
+        "t": 0.8,
+        "sourceT": 1.233333,
+        "value": 0
+      },
+      {
+        "t": 0.833334,
+        "sourceT": 1.266667,
+        "value": 0
+      },
+      {
+        "t": 0.8666670000000001,
+        "sourceT": 1.3,
+        "value": 0
+      },
+      {
+        "t": 0.9000000000000001,
+        "sourceT": 1.333333,
+        "value": 1.8155410312273058e-05
+      },
+      {
+        "t": 0.9333340000000001,
+        "sourceT": 1.366667,
+        "value": null
+      },
+      {
+        "t": 0.9666669999999999,
+        "sourceT": 1.4,
+        "value": null
+      },
+      {
+        "t": 1,
+        "sourceT": 1.433333,
+        "value": null
+      },
+      {
+        "t": 1.033334,
+        "sourceT": 1.466667,
+        "value": 2.420721374969741e-05
+      },
+      {
+        "t": 1.066667,
+        "sourceT": 1.5,
+        "value": 1.5129508593560882e-05
+      },
+      {
+        "t": 1.1,
+        "sourceT": 1.533333,
+        "value": 1.2103606874848705e-05
+      },
+      {
+        "t": 1.133334,
+        "sourceT": 1.566667,
+        "value": 1.8155410312273058e-05
+      },
+      {
+        "t": 1.2,
+        "sourceT": 1.633333,
+        "value": 3.0259017187121764e-05
+      },
+      {
+        "t": 1.233334,
+        "sourceT": 1.666667,
+        "value": 1.2103606874848705e-05
+      }
+    ]
+  },
+  "javascript_errors": []
+}

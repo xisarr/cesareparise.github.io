@@ -1,0 +1,128 @@
+{
+  "build": "simple-display-5",
+  "status": "PASS",
+  "physical_camera_and_microphone_tested": false,
+  "browser_worker_note": "In-page substitute used in browser tests because this environment blocks native browser Worker creation. The actual compiled WebAssembly and native movie decoders were used; the unchanged worker was tested separately in Node. No substitute is included in the app.",
+  "reports": {
+    "unit": {
+      "status": "PASS",
+      "checks": {
+        "exact_two_difference_average": "PASS",
+        "zero_frames_stay_zero": "PASS",
+        "missing_values_not_replaced_with_zero": "PASS",
+        "full_frame_and_downsampling": "PASS",
+        "mode_specific_gains_and_display_transforms": "PASS",
+        "scientific_engine_audio_and_analytics_unchanged": "PASS",
+        "home_promotion_removed_other_pages_unchanged": "PASS",
+        "removed_crop_camera_check_and_global_scale": "PASS"
+      },
+      "wasm_sha256": "98a4948181a8b7b3c9883d63834d96ef420ac7729b7e662f0aee48778f4157fa"
+    },
+    "browser_interface": {
+      "status": "PASS",
+      "worker_mode": "in-page Worker substitute with actual compiled WASM; native media decoders",
+      "physical_devices_tested": false,
+      "checks": {
+        "simple_interface_and_live_defaults": "PASS",
+        "independent_scales_and_units_no_reset": "PASS",
+        "source_defaults_and_choices_remembered": "PASS",
+        "movie_audio_and_full_frame_processing": "PASS",
+        "captured_frame_two_difference_mean": "PASS: 46 points",
+        "each_control_only_changes_its_own_map_raw_outputs_unchanged": "PASS",
+        "controls_beneath_corresponding_maps": "PASS",
+        "cut_gaps_include_both_averaged_samples_no_spike_leak": "PASS",
+        "paused_seek_and_resume": "PASS",
+        "true_full_resolution_and_downsampling": "PASS",
+        "mobile_layout_no_horizontal_overflow": "PASS",
+        "no_analytics_requests_during_preview": "PASS"
+      }
+    },
+    "main_website": {
+      "status": "PASS",
+      "checks": {
+        "homepage_promotion_removed_nav_and_model_entry_retained": "PASS",
+        "home_alignment_and_no_horizontal_overflow_320_to_1280": "PASS",
+        "hash_navigation_unchanged": "PASS"
+      }
+    },
+    "input": {
+      "status": "PASS",
+      "checks": {
+        "delay_polarity": "PASS",
+        "actual_1x_without_silent_capping": "PASS",
+        "two_difference_display_summary": "PASS",
+        "mode_specific_display_defaults": "PASS",
+        "grayscale_difference": "PASS",
+        "cut_detection_conservative": "PASS",
+        "frame_delay_quantisation": "PASS",
+        "audio_packet_integral": "PASS",
+        "mono_before_rms_and_loop_boundary": "PASS",
+        "white_baseline": "PASS",
+        "compiled_frame_difference": "PASS",
+        "visual_only_cut_rebaseline": "PASS",
+        "full_control_range": "PASS"
+      },
+      "scope": ""
+    },
+    "cuts": {
+      "status": "PASS",
+      "checks": {
+        "moderate_cut_missed_by_previous_thresholds": "PASS",
+        "moderate_cut_with_black_sidebars": "PASS",
+        "uniform_flash_retained": "PASS",
+        "local_motion_retained": "PASS",
+        "adaptive_cut_from_stable_scene": "PASS",
+        "known_loop_boundary_not_dependent_on_detection": "PASS",
+        "cut_is_missing_not_zero_and_raw_mode_retained": "PASS",
+        "cut_flag_survives_delay_history": "PASS"
+      },
+      "scope": ""
+    },
+    "compiled_wasm": {
+      "status": "PASS",
+      "checks": {},
+      "scope": "Node WebAssembly runtime on this machine; model plus input fills only, not capture, copying to/from worker, rendering or real devices."
+    },
+    "worker": {
+      "status": "PASS",
+      "checks": {},
+      "scope": ""
+    },
+    "movie_seek": {
+      "status": "PASS",
+      "checks": {
+        "scrubber_loaded_with_duration": "PASS",
+        "seeking_stopped_then_start_at_selected_position": "PASS",
+        "moderate_edit_gap_and_no_residual_spike": "PASS",
+        "paused_scrub_stays_paused_and_resumes": "PASS",
+        "mouse_drag_backwards_resumes_without_false_loop": "PASS",
+        "keyboard_scrub_accessibility": "PASS",
+        "gaps_aligned_at_positive_and_negative_av_delay": "PASS",
+        "known_loop_boundary_gap_without_full_reset": "PASS",
+        "suppression_off_keeps_actual_cut_spike": "PASS",
+        "desktop_mobile_layout": "PASS",
+        "stop_cancels_pending_seek": "PASS"
+      },
+      "scope": "in-page shim"
+    },
+    "movie_and_synthetic_live": {
+      "status": "PASS",
+      "checks": {
+        "controls_and_defaults": "PASS",
+        "stereo_movie_full_frame_and_continuous_loops": "PASS",
+        "positive_and_negative_delay": "PASS",
+        "full_frame_downsampling_no_stretch": "PASS",
+        "true_full_resolution_option": "PASS",
+        "display_only_settings": "PASS",
+        "independent_temporal_controls_and_reset": "PASS",
+        "stop_restart_during_parameter_change": "PASS",
+        "portrait_webm_and_mobile_layout": "PASS",
+        "synthetic_live_audio_and_video": "PASS",
+        "cancel_start_releases_late_media_tracks": "PASS",
+        "encoded_scene_edit_suppression_and_trace_gap": "PASS",
+        "raw_video_changes_when_cut_suppression_disabled": "PASS"
+      },
+      "scope": "in-page shim"
+    }
+  }
+}

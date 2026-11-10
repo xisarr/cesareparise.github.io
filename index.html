@@ -629,6 +629,81 @@
   #page-model * { scroll-behavior: auto; }
 }
 
+
+
+/* ===== LIVE MCD DEMONSTRATION: prominent links only =====
+   Scoped to the menu, Home and MCD model pages; other pages are unchanged. */
+nav a.nav-live-mcd {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.26rem 0.72rem;
+  border: 1px solid #b4d0ee;
+  border-radius: 999px;
+  background: #eef5ff;
+  color: var(--accent);
+  font-weight: 700;
+  line-height: 1.45;
+  white-space: nowrap;
+}
+nav a.nav-live-mcd:hover,
+nav a.nav-live-mcd:focus-visible {
+  background: #dcecff;
+  border-color: var(--accent);
+}
+nav a.nav-live-mcd:focus-visible,
+#page-model .mcd-live-feature a:focus-visible {
+  outline: 3px solid #72a8e0;
+  outline-offset: 3px;
+}
+
+/* Large feature immediately below the MCD page heading. */
+#page-model .mcd-live-feature {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(170px, auto);
+  align-items: center;
+  gap: 1.5rem;
+  margin: 0 0 2.35rem;
+  padding: 1.5rem 1.65rem;
+  border: 1px solid #c8dbf0;
+  border-radius: var(--mcd-radius);
+  background: linear-gradient(125deg, #eef4fb 0%, #f8fbff 100%);
+}
+#page-model .mcd-live-feature .mcd-eyebrow { margin-bottom: 0.45rem; }
+#page-model .mcd-live-feature h2 {
+  margin: 0 0 0.5rem;
+  font-size: clamp(1.22rem, 2.5vw, 1.5rem);
+}
+#page-model .mcd-live-feature p:not(.mcd-eyebrow) {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.94rem;
+  line-height: 1.55;
+}
+#page-model .mcd-live-feature-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.55rem;
+  min-width: 0;
+}
+#page-model .mcd-live-feature-actions .mcd-button { white-space: nowrap; gap: 0.32rem; }
+#page-model .mcd-live-feature-actions small {
+  display: block;
+  max-width: 31ch;
+  font-size: 0.77rem;
+  line-height: 1.45;
+  color: var(--muted);
+}
+@media (max-width: 690px) {
+  #page-model .mcd-live-feature {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1rem;
+    padding: 1.2rem;
+  }
+  #page-model .mcd-live-feature-actions { align-items: flex-start; }
+}
+
 </style>
 </head>
 <body>
@@ -640,6 +715,7 @@
       <li><a href="#home" data-page="home">Home</a></li>
       <li><a href="#research" data-page="research">Research</a></li>
       <li><a href="#model" data-page="model">MCD model</a></li>
+      <li><a class="nav-live-mcd" href="mcd-live/" target="_blank" rel="noopener noreferrer" aria-label="Open the live MCD demonstration in a new tab">Live demo <span aria-hidden="true">↗</span></a></li>
       <li><a href="#publications" data-page="publications">Publications</a></li>
       <li><a href="#patents" data-page="patents">Patents</a></li>
       <li><a href="#contact" data-page="contact">Contact</a></li>
@@ -1147,6 +1223,19 @@
       <h1 id="mcd-title">Multisensory Correlation Detector model</h1>
       <p class="mcd-lead">A biologically inspired model that turns movies and sounds into predictions of what we perceive&mdash;and where we look.</p>
     </header>
+
+    <!-- Featured live MCD: placed before the theoretical presentation. -->
+    <section class="mcd-live-feature" aria-labelledby="mcd-live-feature-heading">
+      <div>
+        <p class="mcd-eyebrow">Try the model yourself</p>
+        <h2 id="mcd-live-feature-heading">Run the MCD on your own audiovisual signals</h2>
+        <p>Use a webcam and microphone, or analyse an uploaded movie with sound. Change the temporal filters, introduce audiovisual delays and explore the model's correlation and lag maps as it runs.</p>
+      </div>
+      <div class="mcd-live-feature-actions">
+        <a class="mcd-button mcd-button-primary" href="mcd-live/" target="_blank" rel="noopener noreferrer">Launch the live demo <span aria-hidden="true">↗</span></a>
+        <small>Runs in your browser. Your video and audio are processed locally; camera and microphone use requires permission.</small>
+      </div>
+    </section>
 
     <div class="mcd-hero">
       <div class="mcd-hero-copy">

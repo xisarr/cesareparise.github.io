@@ -1,0 +1,24 @@
+{
+  "build": "fast-engine-9",
+  "abi": 9,
+  "compiler": "clang 17 (wasm32), -O3, -ffp-contract=off; SIMD + scalar",
+  "equations_reference": "MCDq.m",
+  "defaults_seconds": [
+    0.045,
+    0.0367,
+    0.18,
+    0.18
+  ],
+  "core_sha256": "5bda4b9b8f868930a9a9924cc10020fb2c7c41a86b9d621145ab6d489ad78495",
+  "wasm_sha256": "1a97449aa80da3d835b396b9a4525226fab6ee9f6414f6abbd9d01bf869e040d",
+  "scalar_wasm_sha256": "3b1632bcc32d85cdd42e8cb8aab8910448db47c8debc7943359e8895cc30ea7e",
+  "unchanged_components_not_overwritten": {
+    "usage-config.js": "1f588874dbe7d133c026ad56994471211a4252e1573ff2ff7162445ea9508d5f",
+    "usage-analytics.js": "ad3360dd0995289da2c2e229f5ccc9ebd4a335528f559e26cde42f53301d1f29",
+    "playback-timing.js": "71786e78501a670d8468db1a25f309ab11d92c49432d9309c314e6745b6bd12d",
+    "audio-worklet.js": "089ca9d4f312e7395dee86622a28f4b9e88499f79f69acb062685fc955dcdea4",
+    "movie-audio-worker.js": "68fa9918566b11db19a8ba317750ebc3cf7020627928738883896e3e089560e1",
+    "reference/MCDq.m": "c7a727655de0c6f10a2db0918a3da55b4c26681f93f4c6031f871cc845b5ba90"
+  },
+  "verification": "See tests/fast-engine-9; browser tests used a Worker substitute; hardware untested."
+}

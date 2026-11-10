@@ -1,0 +1,30 @@
+{
+  "mcd.wasm": {
+    "unchanged": true,
+    "sha256": "98a4948181a8b7b3c9883d63834d96ef420ac7729b7e662f0aee48778f4157fa"
+  },
+  "src/mcd.c": {
+    "unchanged": true,
+    "sha256": "1641cf2e00ec8d2b03b925b3dec98754b3466233e37dfa95aa6be4df20642e03"
+  },
+  "mcd-worker.js": {
+    "unchanged": true,
+    "sha256": "3e48d279a2f9ebef62f0209309ffeeae3ff2c135bff09f61bdb26e70c27146b3"
+  },
+  "signal-utils.js": {
+    "unchanged": true,
+    "sha256": "dc0cff6101c075abb5935eafd0063d034aedc928a88ec9afa20f20149a6249ee"
+  },
+  "usage-config.js": {
+    "unchanged": true,
+    "sha256": "1f588874dbe7d133c026ad56994471211a4252e1573ff2ff7162445ea9508d5f"
+  },
+  "usage-analytics.js": {
+    "unchanged": true,
+    "sha256": "ad3360dd0995289da2c2e229f5ccc9ebd4a335528f559e26cde42f53301d1f29"
+  },
+  "mcd-palettes.js": {
+    "unchanged": true,
+    "sha256": "7e85af12f5adcf9183419eaca8967bd94de16c3780ac603a7e4d7c7cfcff4678"
+  }
+}
