@@ -5,19 +5,20 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Interactive MCD · Cesare V. Parise</title>
 <link rel="icon" href="../favicon.ico">
-<link rel="stylesheet" href="mcd-live.css?v=chart-launch-13">
+<link rel="stylesheet" href="mcd-live.css?v=youtube-capture-15">
 </head>
 <body>
 <header class="site-header"><nav aria-label="Website"><a class="brand" href="../index.html#home">Cesare V. Parise</a><a href="../index.html#model">← MCD model</a></nav></header>
 <main>
-  <div class="page-heading"><p class="eyebrow">Interactive research demonstration</p><h1>Multisensory Correlation Detector</h1><p class="intro">Explore audiovisual correspondence using your camera and microphone or a movie of your own. Change the timing, tune the filters, and watch the model respond. All processing stays in your browser.</p></div>
+  <div class="page-heading"><p class="eyebrow">Interactive research demonstration</p><h1>Multisensory Correlation Detector</h1><p class="intro">Explore audiovisual correspondence using your camera and microphone, a movie, or a YouTube video. Change the timing, tune the filters, and watch the same compiled model respond. All model processing stays in your browser.</p></div>
 
   <section class="source-toolbar" aria-label="Input source and playback">
     <div class="source-main">
-      <div class="input-choice"><label for="inputMode">Input source</label><select id="inputMode"><option value="live">Live camera + microphone</option><option value="movie">Movie with embedded audio</option></select></div>
+      <div class="input-choice"><label for="inputMode">Input source</label><select id="inputMode"><option value="live">Live camera + microphone</option><option value="movie">Movie with embedded audio</option><option value="youtube">YouTube (tab audio)</option></select></div>
       <button id="loadSynchronyChart" type="button" disabled title="Load the 20-second audiovisual synchrony chart; then press Start movie.">Try synchrony chart</button>
       <button id="toggleRun" class="primary" type="button" disabled aria-pressed="false">Start live demo</button>
       <span id="status" class="status" role="status" aria-live="polite">Loading model…</span>
+      <span id="movieInfo" class="small movie-info" hidden>Local files stay on this device · mono audio.</span>
     </div>
     <div id="liveControls" class="source-options">
       <div class="field"><label for="videoDevice">Camera</label><select id="videoDevice"><option value="">System default</option></select></div>
@@ -25,11 +26,18 @@
       <label class="check camera-mirror" id="mirrorLabel"><input id="mirror" type="checkbox" checked> Mirror view</label>
     </div>
     <div id="movieControls" class="source-options movie-options" hidden>
-      <div class="field file-field"><label for="movieFile">Choose a local movie</label><input id="movieFile" type="file" accept="video/*,.mp4,.m4v,.mov,.webm"><span id="movieInfo" class="small">The file is not uploaded. Embedded audio is mixed to mono for the model.</span></div>
-      <label class="check"><input id="loopMovie" type="checkbox" checked> Loop continuously</label>
-      <label class="check"><input id="hearMovie" type="checkbox" checked> Hear movie audio</label>
+      <div class="field example-field"><label for="exampleMovie">Example movies</label><select id="exampleMovie" disabled aria-label="Example movies"><option value="">Select an example…</option></select></div>
+      <div class="field file-field"><label for="movieFile">Choose a local movie</label><input id="movieFile" type="file" accept="video/*,.mp4,.m4v,.mov,.webm"></div>
+      <label class="check"><input id="loopMovie" type="checkbox" checked> Loop</label>
+      <label class="check"><input id="hearMovie" type="checkbox" checked> Play audio</label>
     </div>
-    <div class="audio-diagnostics"><div class="meter" role="meter" aria-label="Audio input level" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="audioMeter"><span id="audioBar"></span></div><span id="audioStatus" class="small" role="status">The live microphone is not played through the speakers.</span><span id="moviePosition" class="small"></span></div>
+    <div id="youtubeControls" class="source-options youtube-options" hidden>
+      <div class="field youtube-url-field"><label for="youtubeURL">YouTube URL</label><input id="youtubeURL" type="url" placeholder="Paste a YouTube URL" autocomplete="off" spellcheck="false" aria-describedby="youtubeHelp youtubeStatus"></div>
+      <button id="loadYouTube" type="button" disabled>Load &amp; share tab</button>
+      <p id="youtubeHelp" class="small">Paste a URL, then load and share. Choose <strong>This Tab</strong> and enable <strong>Share tab audio</strong> in the browser prompt.</p>
+      <p id="youtubeStatus" class="small" role="status" aria-live="polite">The player picture and tab soundtrack are used for analysis.</p>
+    </div>
+    <div class="audio-diagnostics"><div class="meter" role="meter" aria-label="Audio input level" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="audioMeter"><span id="audioBar"></span></div><span id="audioStatus" class="small" role="status">The live microphone is not played through the speakers.</span></div>
   </section>
 
 
@@ -39,10 +47,12 @@
       <div class="panel-heading"><h2>Stimulus</h2><span id="sourceSize" class="small">Full frame</span></div>
       <div class="stage source-stage" id="sourceStage">
         <video id="sourceVideo" playsinline muted preload="auto" aria-label="Video input"></video>
+        <div id="youtubePlayerRegion" hidden aria-label="YouTube player capture region"><iframe id="youtubePlayer" title="YouTube video player" allow="autoplay; encrypted-media" referrerpolicy="strict-origin-when-cross-origin"></iframe></div>
         <canvas id="playbackCanvas" hidden aria-label="Movie picture with the imposed audiovisual delay"></canvas>
         <canvas id="stillCanvas" hidden aria-hidden="true"></canvas>
         <div id="sourceHint" class="stage-hint">Start the camera or choose a movie</div>
       </div>
+      <p id="youtubePlaybackNote" class="caption" hidden>Use the YouTube player to play, pause and seek; keep it visible in this tab. The delay slider changes <strong>model inputs only</strong>; YouTube picture and sound playback retain their own timing. Audio input includes all sound from this tab; the microphone is not used. Captured audio is analysed without being replayed.</p>
       <div id="movieTransport" class="movie-transport" hidden aria-label="Movie playback position">
         <div class="movie-controls-row">
           <button id="pauseMovie" type="button" disabled>Pause</button>
@@ -85,13 +95,13 @@
       <div class="control"><div class="label-row"><label for="tauLate">Second-stage filter · shared</label><div class="number-unit"><input id="tauLateNumber" type="number" min="1" max="800" step="1" value="180" aria-label="Shared second-stage time constant in milliseconds"><span>ms</span></div></div><input id="tauLate" type="range" min="1" max="800" step="1" value="180"><div class="endpoints"><span>1 ms</span><span>800 ms</span></div></div>
       <div class="control divided"><div class="label-row"><label for="timeScale">Global time scale</label><output id="readScale" for="timeScale">1×</output></div><input id="timeScale" type="range" min="-2" max="2" step="0.02" value="0"><div class="endpoints"><span>0.25× · faster</span><span>4× · slower</span></div></div>
       <div class="effective"><span>Effective constants</span><strong>V <b id="effectiveV">45</b> ms</strong><strong>A <b id="effectiveA">36.7</b> ms</strong><strong>Shared <b id="effectiveLate">180</b> ms</strong></div>
-      <div class="control delay-control"><div class="label-row"><label for="avDelay">Imposed audiovisual delay</label><output id="readDelay" for="avDelay">0 ms</output></div><input id="avDelay" type="range" min="-600" max="600" step="10" value="0"><div class="endpoints"><span>−600 ms · vision leads</span><span>+600 ms · audio leads</span></div><p id="delayExplanation" class="small">No additional offset between the model inputs.</p></div>
+      <div class="control delay-control"><div class="label-row"><label id="delayLabel" for="avDelay">Imposed audiovisual delay</label><output id="readDelay" for="avDelay">0 ms</output></div><input id="avDelay" type="range" min="-600" max="600" step="10" value="0"><div class="endpoints"><span>−600 ms · vision leads</span><span>+600 ms · audio leads</span></div><p id="delayExplanation" class="small">No additional offset between the model inputs.</p></div>
       <div class="button-row" role="group" aria-label="Temporal presets and model reset">
         <button id="resetTuning" class="temporal-preset" type="button" aria-pressed="true" title="Visual 45 ms, auditory 36.7 ms, shared second stage 180 ms; global scale 1×.">human temporal constants</button>
         <button id="ratTuning" class="temporal-preset" type="button" aria-pressed="false" title="Visual 10 ms, auditory 10 ms, shared second stage 138 ms; global scale 1×.">rat temporal constant</button>
         <button id="zeroDelay" type="button">Zero delay</button><button id="resetState" type="button">Clear states &amp; traces</button>
       </div>
-      <details class="model-note-details"><summary>Model and timing notes</summary><p class="small">In movie mode the slider changes both playback and model inputs: negative delays the sound, positive delays the picture. In live mode it changes the model inputs only; the microphone is not played through the speakers. Model states normally persist across movie loops; optional cut suppression re-establishes only visual states at cuts. Changing model/input settings restarts processing; display gains do not.</p></details>
+      <details class="model-note-details"><summary>Model and timing notes</summary><p class="small">In movie mode the slider changes both playback and model inputs: negative delays the sound, positive delays the picture. In live and YouTube modes it changes the model inputs only. The microphone and captured tab audio are not replayed through the speakers; the YouTube player supplies its own sound. Model states normally persist across movie loops; optional cut suppression re-establishes only visual states at cuts. Changing model/input settings restarts processing; display gains do not.</p></details>
       <p id="samplingWarning" class="small warning" hidden></p>
     </section>
 
@@ -151,22 +161,22 @@
     <div class="trace-row axis-row"><span class="trace-label">Elapsed time (s)</span><canvas id="timeAxis" aria-label="Elapsed time in seconds"></canvas><span></span></div>
   </div></section>
 
-  <p class="build-label">Build: <strong>chart-launch-13</strong></p>
+  <p class="build-label">Build: <strong>youtube-capture-15</strong></p>
   <details class="technical-notes"><summary>Scientific and technical notes</summary><div>
-    <p>The numerical engine is written in C and compiled to WebAssembly, with SIMD acceleration where supported. It follows the implementation in <code>MCDq.m</code> (Parise, 2025, eLife), including biphasic temporal filters, unsigned transient energy, and delayed multiplicative interactions. It produces two numerical outputs: a correlation response that reflects the strength of audiovisual temporal correspondence, and a signed lag response that reflects the direction of the temporal offset between the signals. The default human temporal constants are 45 ms (visual), 36.7 ms (auditory), and 180 ms for both second-stage filters. The rat preset uses 10 ms (visual), 10 ms (auditory), and 138 ms for both second-stage filters. Each preset restores global scaling to 1× and clears filter states and traces without changing the imposed audiovisual delay or display settings.</p>
-    <p>For negative imposed delays the auditory input is delayed; for positive delays the visual input is delayed. Brief signal histories implement this experimental manipulation. Video delays use available frame timestamps, so a 10 ms slider step does not imply 10 ms video resolution. Live camera/microphone acquisition offsets are not calibrated. Recorded-file timing uses the movie timestamps and a decoded mono envelope. Movie playback uses the same relative offset: a causal audio delay for negative settings and buffered video frames for positive settings. Device output latency is not calibrated.</p>
+    <p>The numerical engine is compiled C running as WebAssembly (SIMD where supported), implementing the continuous-time biphasic filters, unsigned transient energy, delayed multiplicative interactions, and correlation/lag outputs from the supplied <code>MCDq.m</code>. The default human temporal constants are 45 ms (visual), 36.7 ms (auditory), and 180 ms for both second-stage filters. The rat preset uses 10 ms (visual), 10 ms (auditory), and 138 ms for both second-stage filters. Each preset restores global scaling to 1× and clears filter states and traces without changing the imposed audiovisual delay or display settings.</p>
+    <p>For negative imposed delays the auditory input is delayed; for positive delays the visual input is delayed. Brief signal histories implement this experimental manipulation. Video delays use available frame timestamps, so a 10 ms slider step does not imply 10 ms video resolution. Live camera/microphone acquisition offsets are not calibrated. Recorded-file timing uses the movie timestamps and a decoded mono envelope. Movie playback uses the same relative offset: a causal audio delay for negative settings and buffered video frames for positive settings. Device output latency is not calibrated. YouTube uses the captured player picture and tab soundtrack. Its delay slider changes the model inputs only, independently of the embedded player’s playback timing. Browser capture latency and audiovisual offsets are not calibrated.</p>
     <p>When editing-cut suppression is enabled, automatically detected scene cuts and movie loop boundaries re-establish the visual baseline while retaining auditory filter states. Disabling it preserves all states. Manual seeking starts a new analysis segment and clears both sensory histories; ordinary detected cuts reset only the visual pathway. Automatic cut detection is heuristic and uses a fixed balanced sensitivity. The bipolar lag map represents signed detector output, not an estimated delay in milliseconds. Logarithmic display is <code>20 log10(1 + magnitude/reference)</code>, a soft-log visual convention, not sound pressure level. Output colour and gain affect display only.</p>
-    <p>Linear filter cascades are advanced analytically for the actual sample interval; Gauss–Legendre quadrature integrates the nonlinear transient drive into the second-stage filters. Captured frames are processed in order. If processing falls substantially behind or input is interrupted, both pathways are explicitly re-primed at the current sample rather than pretending that missing frames were observed. Such resynchronisations are counted in the timing diagnostics and leave gaps in the traces. Detected editing cuts still re-establish only the visual baseline.</p>
-    <p>Very short effective constants cannot recover temporal detail absent from the camera frames. Increase spatial downsampling if the processing counters show skipped updates. This interactive demonstration is NOT a calibrated psychophysical experiment.</p>
+    <p>Linear filter cascades are advanced analytically for the actual sample interval; Gauss–Legendre quadrature integrates the nonlinear transient drive into the second-stage filters. Camera and local-movie frames are processed in order. For YouTube, a nominal 30 Hz timer samples the latest decoded player crop; successive samples can repeat a frame. These are browser-capture samples, not original YouTube video timestamps. If processing falls substantially behind or input is interrupted, both pathways are explicitly re-primed at the current sample rather than pretending that missing frames were observed. Such resynchronisations are counted in the timing diagnostics and leave gaps in the traces. Detected editing cuts still re-establish only the visual baseline.</p>
+    <p>Very short effective constants cannot recover temporal detail absent from the camera frames. Increase spatial downsampling if the processing counters show skipped updates. This interactive demonstration is not a calibrated psychophysical experiment.</p>
     <p><a href="https://elifesciences.org/articles/106122" target="_blank" rel="noopener noreferrer">Population-model paper</a> · <a href="reference/MCDq.m">MATLAB reference</a> · <a href="README_DEVELOPER.md">Implementation notes</a></p>
   </div></details>
   <details class="technical-notes"><summary>Privacy and usage statistics</summary><div>
-    <p>Your webcam images, microphone audio and movie files are processed on your device. They are not uploaded.</p>
+    <p>Your webcam images, microphone audio, movie files and captured tab picture and soundtrack are processed on your device. They are not uploaded for analysis. Loading a YouTube video makes normal requests to YouTube and is subject to its privacy terms.</p>
     <p>On the published site, Cloudflare Web Analytics records page traffic. When enabled, a separate counter records whether this page successfully ran the model, which input modes were used, and whether it completed 30 seconds of active, visible processing. It uses a temporary random page token, not a name or a persistent visitor identifier. No recordings, filenames, model values or device labels are sent.</p>
-    <p>Local previews are excluded. The usage counter does not use cookies or browser storage and does not write IP addresses or browser identifiers to its database. Cloudflare still handles ordinary network metadata to deliver these services.</p>
+    <p>Local previews are excluded. The usage counter does not use cookies or browser storage and does not write IP addresses or browser identifiers to its database. Cloudflare still handles ordinary network metadata to deliver these services. Reloading the page starts a new session; these counts do not identify unique people.</p>
   </div></details>
 </main>
 <noscript><p>This interactive demo requires JavaScript and WebAssembly.</p></noscript>
-<script type="module" src="mcd-live.js?v=chart-launch-13"></script>
+<script type="module" src="mcd-live.js?v=youtube-capture-15"></script>
 </body>
 </html>

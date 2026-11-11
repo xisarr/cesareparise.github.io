@@ -6,7 +6,10 @@ window.getMCDUsageDiagnostics=()=>usage.status();
 import {DEFAULTS,VERSION,MAX_PIXELS,clamp,delaySeconds,geometry,greyPixels16,SceneCutDetector,meanAbsoluteDifference,visualTraceSample,averageVisualChanges,defaultDisplaySettings,FrameHistory,AudioHistory,movieRms,responseStrength} from './signal-utils.js?v=fast-engine-9';
 import {correlationLUT,lagLUTs,gradientCSS,PALETTE_SIZE} from './mcd-palettes.js?v=fast-engine-9';
 import {MovieAudioOutput,DelayedVideoPreview} from './playback-timing.js?v=playback-8';
-const INTERFACE_VERSION='chart-launch-13';
+import {listExampleMovies,isExampleMovieName,exampleMovieLabel,exampleMovieURL} from './example-movies.js?v=example-catalogue-14';
+import {parseYouTubeURL,youtubeSupport,acquireYouTubeTab} from './youtube-input.js?v=youtube-capture-15';
+import {YouTubePlayer} from './youtube-player.js?v=youtube-capture-15';
+const INTERFACE_VERSION='youtube-capture-15';
 import {chooseProcessingFrame} from './frame-scheduler.js?v=fast-engine-9';
 const CUT_SENSITIVITY=50;
 const $=id=>document.getElementById(id);
@@ -69,8 +72,22 @@ function cutsEnabled(){return $('suppressCuts').getAttribute('aria-pressed')==='
 function updateCutButton(){
   $('cutToggleState').textContent=cutsEnabled()?'On':'Off';
 }
-const video=$('sourceVideo');
-const movieAudioOutput=new MovieAudioOutput(video);
+const sourceVideo=$('sourceVideo');
+let video=sourceVideo;
+const movieAudioOutput=new MovieAudioOutput(sourceVideo);
+// A separate, video-only sink cannot enter the local movie's permanent audio
+// output graph. It stays outside the player crop and never plays any sound.
+const tabVideo=document.createElement('video');
+tabVideo.muted=true;tabVideo.volume=0;tabVideo.playsInline=true;
+tabVideo.setAttribute('aria-hidden','true');tabVideo.tabIndex=-1;
+tabVideo.style.cssText='position:fixed;left:0;top:0;width:1px;height:1px;opacity:0;pointer-events:none';
+document.body.append(tabVideo);
+let youtubeCapture=null,youtubeState=-1,youtubeSegmentReady=false,youtubeSegmentSerial=0,youtubeTimeSample=null,youtubeInterrupted=false;
+const youtubePlayer=new YouTubePlayer($('youtubePlayer'),{
+  onState:handleYouTubeState,
+  onError:error=>{if(mode==='youtube'&&(running||starting))fail(error);else if(mode==='youtube')setYouTubeStatus(error.message,true);},
+  onAutoplayBlocked:()=>{if(mode==='youtube')setYouTubeStatus('Tab sharing is ready. Press Play in the YouTube player; your browser blocked automatic playback.');}
+});
 const delayedPreview=new DelayedVideoPreview($('playbackCanvas'));
 let movieTail=null;
 const processCanvas=document.createElement('canvas');
@@ -84,14 +101,12 @@ const frameHistory=new FrameHistory(1.2),audioHistory=new AudioHistory(3);
 const TRACE_SECONDS=10,TRACE_CAPACITY=2400,LIVE_LOOKBACK=.05;
 let g=geometry(640,360),worker=null,requestId=0,pending=new Map(),modelReady=false;
 let phase='idle',running=false,starting=false,session=0,epoch=0,busy=false;
-let frameCallback=null,raf=null,stream=null,audioContext=null,audioSource=null,audioNode=null,audioAnalyser=null,muteNode=null;
+let frameCallback=null,frameCallbackIsTimer=false,raf=null,stream=null,audioContext=null,audioSource=null,audioNode=null,audioAnalyser=null,muteNode=null;
 let analyserBuffer=null,audioTrack=null,lastAudioPacket=0,lastFallback=0,audioClockOffset=0;
 let mode='live',movie=null,movieLoading=false,fileGeneration=0;
-let chartDownloadController=null;
-// The example is served with this static site; local user movies are never uploaded.
-const SYNCHRONY_CHART_URL=new URL('./examples/av_synchrony_chart.mp4',import.meta.url);
-function cancelChartDownload(){
-  if(chartDownloadController){chartDownloadController.abort();chartDownloadController=null;}
+let exampleDownloadController=null;
+function cancelExampleDownload(){
+  if(exampleDownloadController){exampleDownloadController.abort();exampleDownloadController=null;}
 }
 let sourceFirstT=null,lastMediaT=null,loopCount=0,lastAnchor=null,sessionStart=0;
 let samplePeriod=1/30,actualVideoLag=0,audioCoverage=1,lastRms=0,sourceDimensions='';
@@ -101,7 +116,7 @@ let lastTracePaint=0,lastInfoPaint=0,lastStateSteps=0,resetCount=0;
 let parameterTimer=null,geometryTimer=null,configurationSerial=0;
 let metrics;
 let lastProcessedCutSerial=null,goodDownsample=8;
-const displaySettings={live:defaultDisplaySettings('live'),movie:defaultDisplaySettings('movie')};
+const displaySettings={live:defaultDisplaySettings('live'),movie:defaultDisplaySettings('movie'),youtube:defaultDisplaySettings('movie')};
 function rememberDisplaySettings(){
   displaySettings[mode]={corrScale:$('scaleCorr').value,lagScale:$('scaleLag').value,
     corrGain:+$('gainCorr').value,lagGain:+$('gainLag').value};
@@ -166,9 +181,14 @@ function num(v){return Number(v.toFixed(3)).toString();}
 function setStatus(text,kind='idle'){$('status').textContent=text;$('status').dataset.kind=kind;}
 function runButton(){
   $('loadSynchronyChart').disabled=!modelReady||movieLoading||starting;
-  const b=$('toggleRun');b.disabled=!(starting||running)&&(!modelReady||movieLoading||(mode==='movie'&&!movie));
+  $('exampleMovie').disabled=!modelReady||movieLoading||starting;
+  const support=mode==='youtube'?youtubeSupport():null;
+  $('loadYouTube').disabled=!modelReady||movieLoading||starting||running||!!(support&&!support.supported);
+  $('youtubeURL').disabled=starting||running;
+  const b=$('toggleRun');b.disabled=!(starting||running)&&(!modelReady||movieLoading||(mode==='movie'&&!movie)||(mode==='youtube'&&(!support.supported||!$('youtubeURL').value.trim())));
+  b.hidden=mode==='youtube'&&!starting&&!running;
   b.dataset.running=String(running);b.setAttribute('aria-pressed',String(running));
-  b.textContent=starting?'Cancel start':running?'Stop demo':mode==='movie'?'Start movie':'Start live demo';
+  b.textContent=starting?'Cancel start':running?'Stop demo':mode==='movie'?'Start movie':mode==='youtube'?'Share tab & start':'Start live demo';
 }
 function callCore(type,data={},transfer=[]){
   const id=++requestId;
@@ -208,9 +228,10 @@ async function initialiseCore(newG){
 function requestedGeometry(){return geometry(video.videoWidth||640,video.videoHeight||360,+$('downsample').value);}
 function updateGeometryLabels(){
   updateDownsamplingValue();
-  $('sourceSize').textContent=`${g.vw} × ${g.vh} · full frame`;
+  const area=mode==='youtube'?'player region':'full frame';
+  $('sourceSize').textContent=`${g.vw} × ${g.vh} · ${area}`;
   $('resolution').textContent=`${g.w} × ${g.h}`;
-  $('geometryReadout').textContent=`${g.vw} × ${g.vh} source → ${g.w} × ${g.h} processing pixels. Full frame.`;
+  $('geometryReadout').textContent=`${g.vw} × ${g.vh} source → ${g.w} × ${g.h} processing pixels. ${mode==='youtube'?'Player region only.':'Full frame.'}`;
   $('resolutionWarning').hidden=g.w*g.h<=100000;
   $('resolutionWarning').textContent=g.w*g.h>100000?'High resolution may slow processing: use 1/2 or lower if frames are skipped.':'';
 }
@@ -222,7 +243,9 @@ function updateControls(){
   const d=+$('avDelay').value;
   $('readDelay').textContent=`${d>0?'+':''}${d} ms`;
   const target=mode==='movie'?'playback and model':'model inputs';
+  $('delayLabel').textContent=mode==='youtube'?'YouTube model-input delay':'Imposed audiovisual delay';
   $('delayExplanation').textContent=d<0?`Audio delayed ${-d} ms in ${target}: vision leads.`:d>0?`Video delayed ${d} ms in ${target}: audio leads.`:`No added audiovisual delay in ${target}.`;
+  if(mode==='youtube')$('delayExplanation').textContent+=' YouTube playback timing is unchanged.';
   for(const [id,out,scaleId] of [['gainCorr','gainCorrValue','scaleCorr'],['gainLag','gainLagValue','scaleLag']]){
     const db=+$(id).value,gain=10**(db/20);
     $(out).textContent=$(scaleId).value==='db'?`${db>0?'+':''}${db} dB`:`${gain<.001?gain.toExponential(2):Number(gain.toPrecision(4)).toLocaleString('en-GB',{maximumFractionDigits:6})}×`;
@@ -307,11 +330,64 @@ function addTraces(values,t,suppressedCut=false,sourceT=t,previousDifferenceT=so
   if(performance.now()-lastTracePaint>65){drawTraces();lastTracePaint=performance.now();}
 }
 function formatTime(t){if(!Number.isFinite(t))return '—';return `${Math.floor(t/60)}:${Math.floor(t%60).toString().padStart(2,'0')}`;}
+function setYouTubeStatus(message,error=false){
+  $('youtubeStatus').textContent=message;$('youtubeStatus').dataset.kind=error?'error':'idle';
+}
+function youtubeProcessingStatus(){
+  if(youtubeState===1)return 'YouTube tab processing';
+  if(youtubeState===3)return 'YouTube buffering — analysis waiting';
+  if(youtubeState===0)return 'YouTube ended — choose Play or seek in the player';
+  return 'YouTube paused — press Play in the player';
+}
+function youtubeCaptureIssue(){
+  if(youtubeCapture?.videoTrack.muted)return 'Captured video is interrupted. Keep the YouTube player visible in this tab.';
+  if(audioTrack?.muted)return 'Shared tab audio is interrupted. Analysis is waiting for the captured soundtrack.';
+  if(audioContext?.state!=='running')return 'Tab-audio processing is suspended. Stop and share the tab again.';
+  return '';
+}
+function handleYouTubeState(state,previous){
+  youtubeState=state;youtubeTimeSample=null;
+  if(mode!=='youtube'||!running)return;
+  // Pause/buffering/seeking starts a fresh segment. Browser capture uses its
+  // own clock; the embed's approximate playhead is not a model timestamp.
+  if(state!==previous)void resetYouTubeSegment();
+  setStatus(youtubeProcessingStatus(),state===1?'live':'idle');
+}
+async function resetYouTubeSegment(){
+  if(mode!=='youtube'||!running)return;
+  const token=session,serial=++youtubeSegmentSerial;
+  youtubeSegmentReady=false;usage.breakActivity();epoch++;busy=false;
+  frameHistory.clear();audioHistory.clear();lastAnchor=null;sourceFirstT=null;lastProcessedCutSerial=null;
+  cutDetector.reset();cutEvents=[];lastCutDetail=null;clearMaps();clearTraces();
+  try{
+    await callCore('reset');
+    if(token!==session||serial!==youtubeSegmentSerial)return;
+    lastStateSteps=0;resetCount++;youtubeSegmentReady=true;
+  }catch(error){if(token===session)fail(error);}
+}
+function monitorYouTubePlayback(){
+  if(mode!=='youtube'||!running||youtubeState!==1)return;
+  const now=performance.now()/1000;
+  if(youtubeTimeSample&&now-youtubeTimeSample.wall<.25)return;
+  const time=youtubePlayer.time();if(time===null)return;
+  const rate=youtubePlayer.rate(),previous=youtubeTimeSample;
+  youtubeTimeSample={time,wall:now,rate};
+  // Also catch seeks that do not emit a buffering/pause event. This detects
+  // discontinuities only; no sample timing is inferred from the player API.
+  if(previous&&previous.rate===rate&&Math.abs((time-previous.time)-(now-previous.wall)*rate)>.75)void resetYouTubeSegment();
+}
 function paintAudioStatus(rms){
   const db=20*Math.log10(Math.max(rms,1e-9)),pct=clamp((db+85)/85)*100;
   $('audioBar').style.width=`${pct}%`;$('audioMeter').setAttribute('aria-valuenow',pct.toFixed(1));
   let message,warning=false;
   if(mode==='movie')message=`Embedded audio → mono · RMS ${rms.toFixed(4)}`;
+  else if(mode==='youtube'){
+    if(audioTrack?.muted){message='Shared tab audio is interrupted. Check the YouTube player and tab sharing.';warning=true;}
+    else if(audioContext?.state!=='running'){message='Tab-audio processing is suspended. Stop and share the tab again.';warning=true;}
+    else if(youtubeState!==1)message='Tab audio selected · analysis waits for YouTube playback.';
+    else if(rms<.00003){message='Little or no tab audio. Check the player volume and that the tab is not muted.';warning=true;}
+    else message=`Tab soundtrack → mono · ${db.toFixed(1)} dBFS · no captured-audio playback`;
+  }
   else if(audioTrack?.readyState==='ended'){message='Microphone track ended. Stop and start again.';warning=true;}
   else if(audioTrack?.muted){message='Microphone reports a muted/interrupted track. Check the selected input.';warning=true;}
   else if(audioContext?.state!=='running'){message=`Audio engine ${audioContext?.state||'off'}. Stop and restart.`;warning=true;}
@@ -327,18 +403,24 @@ function updatePerformance(force=false){
   const comp=avg(metrics.compute),turn=avg(metrics.turnaround),skipPct=100*metrics.skipped/Math.max(1,metrics.processed+metrics.skipped);
   let q=null;try{q=video.getVideoPlaybackQuality?.();}catch(_e){}
   const dropped=q&&q.totalVideoFrames>0?q.droppedVideoFrames:'unavailable';
-  $('fpsReadout').textContent=`Input ${cameraFps.toFixed(1)} fps · MCD ${modelFps.toFixed(1)} fps`;
+  $('fpsReadout').textContent=`${mode==='youtube'?'Input samples':'Input'} ${cameraFps.toFixed(1)} ${mode==='youtube'?'Hz':'fps'} · MCD ${modelFps.toFixed(1)} fps`;
   $('computeReadout').textContent=`${comp.toFixed(1)} ms/frame`;
   $('skipReadout').textContent=`Skipped ${metrics.skipped} · Cuts ${metrics.suppressedCuts}`;
   $('performance').dataset.warning=String(metrics.skipped>0||comp>samplePeriod*1000);
   $('performanceDetail').textContent=`Captured callbacks: ${metrics.captured}. Processed: ${metrics.processed}. Skipped: ${metrics.skipped} (${skipPct.toFixed(1)}%). Initial buffer frames: ${metrics.warmup}. Missed presented-frame callbacks: ${metrics.callbackGaps}. Browser-reported drops: ${dropped}. Mean worker round trip: ${turn.toFixed(1)} ms. Recent source interval: ${(samplePeriod*1000).toFixed(1)} ms. Frame-quantised visual delay: ${actualVideoLag.toFixed(1)} ms. Audio packet coverage: ${(audioCoverage*100).toFixed(0)}%. Movie loops: ${loopCount}. Detected editing/loop cuts: ${metrics.detectedCuts}. Cut transitions suppressed: ${metrics.suppressedCuts}. ${engineName}. Model updates since last reset: ${lastStateSteps}. Queue: ${(queueBacklog*1000).toFixed(0)} ms. Rendering: ${avg(metrics.render).toFixed(1)} ms/map pair. Overload resynchronisations: ${metrics.resyncs} (both pathways re-primed; missing segment shown as a gap). Hardware/driver losses cannot be inferred from these counters.`;
+  if(mode==='youtube')$('performanceDetail').textContent=$('performanceDetail').textContent
+    .replace(`Captured callbacks: ${metrics.captured}.`,`Captured samples: ${metrics.captured}. A nominal 30 Hz timer reads the latest decoded player crop; successive samples may repeat a video frame.`)
+    .replace(`Missed presented-frame callbacks: ${metrics.callbackGaps}.`,'Native presented-frame callback counts are unavailable in YouTube sampling mode.')
+    +' YouTube playback time is used only to detect seeks, not to timestamp model inputs. Capture latency is not calibrated.';
   updateMovieTransport();
-  if(mode==='movie'&&movie)$('moviePosition').textContent=`${formatTime(video.currentTime)} / ${formatTime(movie.duration)} · loop ${loopCount+1}`;
-  else $('moviePosition').textContent='';
   updateControls();
 }
 function captureFrame(now,meta={}){
   frameCallback=null;if(!running||seekActive||moviePaused)return;
+  if(mode==='youtube'){
+    if(!youtubeCapture?.isValid()){fail(new Error('Tab sharing changed or ended. Share this tab again with audio.'));return;}
+    if(youtubeState!==1||!youtubeSegmentReady||youtubeCaptureIssue()){scheduleFrame();return;}
+  }
   if(video.seeking){scheduleFrame();return;}
   if(video.readyState<2||!video.videoWidth){scheduleFrame();return;}
   if(`${video.videoWidth}x${video.videoHeight}`!==sourceDimensions){
@@ -366,17 +448,17 @@ function captureFrame(now,meta={}){
     const data=greyPixels16(processContext.getImageData(0,0,g.w,g.h).data);
     const loopEdge=!!(mode==='movie'&&previous&&loopRolled);
     let detection=null;
-    if(mode==='movie'){
+    if(mode==='movie'||mode==='youtube'){
       cutContext.drawImage(video,0,0,cutCanvas.width,cutCanvas.height);
       detection=cutDetector.inspect(greyPixels16(cutContext.getImageData(0,0,cutCanvas.width,cutCanvas.height).data),{sensitivity:CUT_SENSITIVITY,forced:loopEdge});
     }
     const cutFound=!!(loopEdge||detection?.cut);
     if(cutFound){
       metrics.detectedCuts++;
-      const event={t,start:(previous?.t??t)-samplePeriod*.5,end:t+samplePeriod*1.5,kind:loopEdge?'loop':'edit',mediaTime:lastMediaT,...detection};
+      const event={t,start:(previous?.t??t)-samplePeriod*.5,end:t+samplePeriod*1.5,kind:loopEdge?'loop':'edit',mediaTime:mode==='youtube'?t:lastMediaT,...detection};
       cutEvents.push(event);lastCutDetail=event;
       if(cutsEnabled())maskEarlierVisualSamples(event);
-      $('cutStatus').textContent=`Detected ${metrics.detectedCuts} · last ${event.kind} at ${formatMovieTime(lastMediaT)} · suppressed ${metrics.suppressedCuts}`;
+      $('cutStatus').textContent=`Detected ${metrics.detectedCuts} · last ${event.kind} at ${formatMovieTime(event.mediaTime)} · suppressed ${metrics.suppressedCuts}`;
     }
     while(cutEvents.length&&cutEvents[0].end<t-TRACE_SECONDS-2)cutEvents.shift();
     const cutSerial=(previous?.cutSerial??0)+(cutFound?1:0);
@@ -393,11 +475,18 @@ function captureFrame(now,meta={}){
 }
 function scheduleFrame(){
   if(!running||moviePaused||seekActive||movieTail||frameCallback!==null)return;
-  if(video.requestVideoFrameCallback)frameCallback=video.requestVideoFrameCallback(captureFrame);
-  else frameCallback=setTimeout(()=>captureFrame(performance.now(),{mediaTime:video.currentTime}),1000/30);
+  // The YouTube capture sink is invisible: compositor-driven frame callbacks
+  // are not guaranteed there. Sample its latest decoded crop on a timer.
+  // Existing camera/movie frame scheduling is unchanged.
+  frameCallbackIsTimer=mode==='youtube'||!video.requestVideoFrameCallback;
+  if(!frameCallbackIsTimer)frameCallback=video.requestVideoFrameCallback(captureFrame);
+  else {
+    const token=session;
+    frameCallback=setTimeout(()=>{if(token===session)captureFrame(performance.now(),{mediaTime:video.currentTime});},1000/30);
+  }
 }
 function checkFallback(){
-  if(!audioAnalyser||!analyserBuffer||!running||mode!=='live')return;
+  if(!audioAnalyser||!analyserBuffer||!running||mode==='movie')return;
   const now=performance.now();
   if(now-lastAudioPacket<350||now-lastFallback<20)return;
   audioAnalyser.getFloatTimeDomainData(analyserBuffer);
@@ -408,8 +497,9 @@ function checkFallback(){
 }
 function pump(){
   if(!running||moviePaused||seekActive||video.seeking||!modelReady||busy)return;
+  if(mode==='youtube'&&(youtubeState!==1||!youtubeSegmentReady||!youtubeCapture?.isValid()||youtubeCaptureIssue()))return;
   const latest=frameHistory.latest();if(!latest)return;
-  const eligible=mode==='live'?frameHistory.at(performance.now()/1000-sessionStart-LIVE_LOOKBACK):latest;
+  const eligible=mode!=='movie'?frameHistory.at(performance.now()/1000-sessionStart-LIVE_LOOKBACK):latest;
   const selected=movieTail?.anchor?{anchor:movieTail.anchor,resync:false,backlog:0}:chooseProcessingFrame(frameHistory.items,eligible,lastAnchor,samplePeriod);
   if(!selected)return;
   const {anchor}=selected,resync=selected.resync;queueBacklog=selected.backlog;
@@ -433,7 +523,7 @@ function pump(){
   if(!lastAnchor){if(!metrics.processed)metrics.warmup=Math.max(0,anchor.id-1);}
   else if(!movieTail)metrics.skipped+=Math.max(0,anchor.id-lastAnchor.id-1);
   lastAnchor={id:anchor.id,t:anchor.t};actualVideoLag=(anchor.t-visual.t)*1000;lastRms=a;
-  const suppressCut=mode==='movie'&&cutsEnabled();
+  const suppressCut=mode!=='live'&&cutsEnabled();
   const cut=!!(suppressCut&&lastProcessedCutSerial!==null&&visual.cutSerial!==lastProcessedCutSerial);
   const data=new Float32Array(visual.data.length);
   for(let i=0;i<data.length;i++)data[i]=visual.data[i]/65535;
@@ -460,11 +550,25 @@ function pump(){
     if(lastCutDetail)$('cutStatus').textContent=`Detected ${metrics.detectedCuts} · suppressed ${metrics.suppressedCuts} · last ${lastCutDetail.kind} at ${formatMovieTime(lastCutDetail.mediaTime)}`;
     // Keep model work independent of display refresh; rendering is batched in animationTick.
     queueMicrotask(pump);
-    setStatus(moviePaused?'Movie paused':movieTail?'Finishing delayed playback…':mode==='movie'?'Movie processing':'Live processing',moviePaused?'idle':'live');updatePerformance();
+    setStatus(moviePaused?'Movie paused':movieTail?'Finishing delayed playback…':mode==='movie'?'Movie processing':mode==='youtube'?youtubeProcessingStatus():'Live processing',moviePaused?'idle':'live');updatePerformance();
   }).catch(e=>{if(ticket!==epoch||runSession!==session)return;busy=false;fail(e);});
 }
 function animationTick(){
   if(!running||moviePaused||seekActive)return;
+  if(mode==='youtube'){
+    if(!youtubeCapture?.isValid()){fail(new Error('Tab sharing changed or ended. Share this tab again with audio.'));return;}
+    const issue=youtubeCaptureIssue();
+    if(issue){
+      if(!youtubeInterrupted){youtubeInterrupted=true;void resetYouTubeSegment();}
+      setStatus('YouTube capture interrupted','warning');setYouTubeStatus(issue,true);
+      $('audioBar').style.width='0%';$('audioMeter').setAttribute('aria-valuenow','0');
+      $('audioStatus').textContent=issue;$('audioStatus').dataset.warning='true';
+    }else {
+      if(youtubeInterrupted){youtubeInterrupted=false;void resetYouTubeSegment();setYouTubeStatus('Capture resumed. Analysis starts a new segment.');}
+      monitorYouTubePlayback();
+      if(youtubeState!==1){setStatus(youtubeProcessingStatus());paintAudioStatus(0);}
+    }
+  }
   if(movieTail){
     const elapsed=Math.min(movieTail.seconds,performance.now()/1000-movieTail.started);
     const t=movieTail.sourceEnd+elapsed;
@@ -491,6 +595,7 @@ async function refreshDevices(){
 }
 function freezePreview(){
   if(mapsDirty)paintMaps();
+  if(mode==='youtube')return; // never overlay captured pixels on the player
   if(video.readyState<2||!video.videoWidth)return;
   const c=$('stillCanvas');c.width=video.videoWidth;c.height=video.videoHeight;
   try{c.getContext('2d').drawImage(mode==='movie'&&!$('playbackCanvas').hidden?$('playbackCanvas'):video,0,0,c.width,c.height);c.hidden=false;}catch(_e){}
@@ -504,22 +609,46 @@ function releaseLive(){
 function stop(message=true){
   usage.breakActivity();
   session++;epoch++;seekSerial++;seekActive=false;seekResume=false;moviePaused=false;clearTimeout(seekCommitTimer);running=false;starting=false;phase='idle';busy=false;
-  if(frameCallback!==null){if(video.cancelVideoFrameCallback)video.cancelVideoFrameCallback(frameCallback);else clearTimeout(frameCallback);frameCallback=null;}
+  if(frameCallback!==null){if(frameCallbackIsTimer)clearTimeout(frameCallback);else video.cancelVideoFrameCallback(frameCallback);frameCallback=null;}
   if(raf!==null){cancelAnimationFrame(raf);raf=null;}
   freezePreview();video.pause();movieAudioOutput.pause({flush:true});delayedPreview.clear();movieTail=null;
-  if(mode==='live'){releaseLive();video.srcObject=null;}
+  if(mode==='youtube'){
+    youtubeSegmentSerial++;youtubeSegmentReady=false;youtubeTimeSample=null;youtubeInterrupted=false;
+    youtubeCapture?.release();youtubeCapture=null;
+    youtubePlayer.pause();
+    setYouTubeStatus('Sharing stopped. Share this tab with audio to start a new run.');
+  }
+  if(mode!=='movie'){releaseLive();video.srcObject=null;}
   $('audioBar').style.width='0%';$('audioMeter').setAttribute('aria-valuenow','0');
-  $('audioStatus').textContent=mode==='live'?'Camera and microphone off.':'Movie stopped. Start resumes from the selected position.';
+  $('audioStatus').textContent=mode==='live'?'Camera and microphone off.':mode==='youtube'?'Tab capture off. No microphone is used.':'Movie stopped. Start resumes from the selected position.';
   $('audioStatus').dataset.warning='false';runButton();drawTraces();
   updateMovieTransport();if(message)setStatus('Stopped');
 }
-function fail(error){stop(false);setStatus(error?.message||String(error),'error');console.error(error);}
+function fail(error){stop(false);const message=error?.message||String(error);setStatus(message,'error');if(mode==='youtube')setYouTubeStatus(message,true);console.error(error);}
 async function resetForStart(){
   usage.breakActivity();
   epoch++;frameHistory.clear();delayedPreview.clear();audioHistory.clear();movieTail=null;lastAnchor=null;lastProcessedCutSerial=null;sourceFirstT=null;lastMediaT=null;loopCount=0;
   samplePeriod=1/30;actualVideoLag=0;audioCoverage=1;lastRms=0;lastAudioPacket=0;lastFallback=0;
   lastStateSteps=0;cutDetector.reset();cutEvents=[];lastCutDetail=null;clearTraces();clearMaps();metrics=freshMetrics();
   await callCore('reset');resetCount++;
+}
+async function connectTabAudio(token){
+  // The soundtrack is taken only from the selected capture's audio track.
+  // Neither this branch nor its analyser fallback requests a microphone.
+  audioClockOffset=performance.now()/1000-audioContext.currentTime-sessionStart;
+  audioSource=audioContext.createMediaStreamSource(new MediaStream([audioTrack]));
+  muteNode=audioContext.createGain();muteNode.gain.value=0;muteNode.connect(audioContext.destination);
+  audioAnalyser=audioContext.createAnalyser();audioAnalyser.fftSize=2048;
+  audioAnalyser.channelCount=1;audioAnalyser.channelCountMode='explicit';
+  analyserBuffer=new Float32Array(audioAnalyser.fftSize);
+  audioSource.connect(audioAnalyser);audioAnalyser.connect(muteNode);
+  try{
+    await audioContext.audioWorklet.addModule(`./audio-worklet.js?v=${VERSION}`);if(token!==session)return;
+    audioNode=new AudioWorkletNode(audioContext,'mcd-mic-level',{numberOfInputs:1,numberOfOutputs:1,outputChannelCount:[1]});
+    audioNode.port.onmessage=({data:m})=>{if(token!==session)return;lastAudioPacket=performance.now();audioHistory.push(m.start+audioClockOffset,m.end+audioClockOffset,m.rms,m.peak);};
+    audioNode.onprocessorerror=()=>{lastAudioPacket=0;console.warn('Tab audio worklet unavailable; using the same tab stream analyser.');};
+    audioSource.connect(audioNode);audioNode.connect(muteNode);
+  }catch(error){if(token!==session)return;console.warn('Using tab-stream analyser fallback',error);}
 }
 async function start(){
   if(running||starting||!modelReady||movieLoading)return;
@@ -552,6 +681,33 @@ async function start(){
         audioSource.connect(audioNode);audioNode.connect(muteNode);
       }catch(e){if(token!==session)return;console.warn('Using analyser audio fallback',e);}
       await refreshDevices();if(token!==session)return;
+    }else if(mode==='youtube'){
+      const descriptor=parseYouTubeURL($('youtubeURL').value);
+      const support=youtubeSupport();if(!support.supported)throw new Error(support.message);
+      $('sourceHint').hidden=true;$('youtubePlayerRegion').hidden=false;
+      // Display the embed and request sharing in the original click/Enter
+      // gesture. Do not await the external YouTube script before permission.
+      const playerReady=youtubePlayer.load(descriptor);
+      playerReady.catch(error=>{if(token===session&&mode==='youtube')fail(error);});
+      setStatus('Choose this tab and share tab audio…');
+      setYouTubeStatus('Choose this tab in the browser dialog and enable “Share tab audio”.');
+      const request=acquireYouTubeTab($('youtubePlayerRegion'),{
+        isCurrent:()=>token===session&&mode==='youtube',
+        onEnded:message=>{if(token===session)fail(new Error(message));}
+      });
+      request.catch(()=>{});
+      audioContext=new AudioContext({latencyHint:'interactive'});
+      const resume=audioContext.resume();resume.catch(()=>{});
+      const acquired=await request;
+      if(token!==session){acquired.release();return;}
+      youtubeCapture=acquired;stream=acquired.stream;audioTrack=acquired.audioTrack;
+      await resume;if(token!==session)return;
+      if(audioContext.state!=='running')throw new Error('Tab-audio processing could not start. Stop and share the tab again.');
+      video=tabVideo;video.srcObject=new MediaStream([acquired.videoTrack]);video.muted=true;video.volume=0;
+      await video.play();if(token!==session)return;
+      await connectTabAudio(token);if(token!==session)return;
+      await playerReady;if(token!==session)return;
+      youtubeState=youtubePlayer.state;youtubeTimeSample=null;youtubeInterrupted=false;
     }else {
       if(video.srcObject!==null)video.srcObject=null;
       if(video.src!==movie.url)video.src=movie.url;
@@ -569,7 +725,12 @@ async function start(){
     // same session clock, so no movie timestamp assumptions leak into live mode.
     $('stillCanvas').hidden=true;setMirroring();
     starting=false;running=true;moviePaused=false;phase='running';metrics.startWall=performance.now()/1000;updateMovieTransport();
-    $('sourceHint').hidden=true;runButton();setStatus(mode==='movie'?'Movie processing':'Live processing','live');
+    if(mode==='youtube'){
+      youtubeSegmentReady=true;
+      setYouTubeStatus('Sharing this tab’s audio and player region. Use the YouTube player to play, pause or seek.');
+      youtubePlayer.play();
+    }
+    $('sourceHint').hidden=true;runButton();setStatus(mode==='movie'?'Movie processing':mode==='youtube'?youtubeProcessingStatus():'Live processing','live');
     scheduleFrame();raf=requestAnimationFrame(animationTick);
   }catch(e){if(token===session)fail(e);}
 }
@@ -596,10 +757,10 @@ async function extractMovieEnvelope(file){
     w.postMessage({id:1,channels,sampleRate:rate},channels);
   });
 }
-async function loadMovie(file,{builtInChart=false}={}){
+async function loadMovie(file,{builtInChart=false,exampleFilename=null}={}){
   if(!file)return;
-  cancelChartDownload();
-  const fileId=++fileGeneration;stop(false);movieLoading=true;runButton();setStatus('Preparing local movie…');
+  cancelExampleDownload();
+  const fileId=++fileGeneration;stop(false);movieLoading=true;runButton();setStatus(exampleFilename?'Preparing example movie…':'Preparing local movie…');
   let url;
   try{
     if(file.size>250*1024*1024)throw new Error('Please choose a short movie smaller than 250 MB for this browser demonstration.');
@@ -609,64 +770,104 @@ async function loadMovie(file,{builtInChart=false}={}){
     if(!video.videoWidth||!Number.isFinite(video.duration)||video.duration<=0)throw new Error('A finite video with an embedded soundtrack is required.');
     const duration=video.duration;
     const envelope=await extractMovieEnvelope(file);if(fileId!==fileGeneration){URL.revokeObjectURL(url);return;}
-    movie={url,name:file.name,envelope,duration,builtInChart};
-    if(builtInChart){
-      // These transitions ARE the stimulus, not editing cuts. Preserve them.
-      $('suppressCuts').setAttribute('aria-pressed','false');updateCutButton();
+    movie={url,name:file.name,envelope,duration,builtInChart,exampleFilename};
+    if(exampleFilename){
+      // Flash transitions in the synchrony chart are deliberate stimuli.
+      // Naturalistic example movies use ordinary cut suppression.
+      $('suppressCuts').setAttribute('aria-pressed',String(!builtInChart));updateCutButton();
       $('loopMovie').checked=true;video.loop=true;
     }
-    $('movieInfo').textContent=`${file.name} · ${formatTime(duration)} · ${envelope.channels} audio channel${envelope.channels===1?'':'s'} → mono · processed locally`;
-    if(builtInChart)$('movieInfo').textContent='Audiovisual synchrony chart · 20 s · 60 fps · mono audio · cut suppression off';
+    $('movieInfo').textContent=`${file.name} · ${formatTime(duration)} · ${envelope.channels} ch → mono · local processing`;
+    if(builtInChart)$('movieInfo').textContent=`Audiovisual synchrony chart · ${formatTime(duration)} · mono audio · cut suppression off`;
     if(Math.abs(envelope.duration-duration)>.15)$('movieInfo').textContent+=' · audio/video durations differ; missing soundtrack intervals are treated as silence';
     await initialiseCore(requestedGeometry());if(fileId!==fileGeneration)return;
     $('stillCanvas').hidden=true;$('sourceHint').hidden=true;setMirroring();
     movieLoading=false;runButton();updateMovieTransport();setStatus('Movie ready');
-    $('audioStatus').innerHTML = envelope.peak > 0? 'Mono soundtrack decoded. <span class="ready-to-start">Press Start movie.</span>': 'The decoded soundtrack is silent.';
+    $('audioStatus').innerHTML=envelope.peak>0?'Mono soundtrack decoded. <span class="ready-to-start" style="color:#16803d;font-weight:600">Press Start movie.</span>':'The decoded soundtrack is silent.';
     $('audioStatus').dataset.warning=String(envelope.peak===0);
   }catch(e){if(fileId!==fileGeneration)return;movieLoading=false;if(url)URL.revokeObjectURL(url);movie=null;runButton();fail(e);}
 }
 async function switchMode(){
-  cancelChartDownload();
+  cancelExampleDownload();
   rememberDisplaySettings();
   stop(false);fileGeneration++;movieLoading=false;mode=$('inputMode').value;
+  youtubePlayer.unload();youtubeState=-1;video=mode==='youtube'?tabVideo:sourceVideo;
   restoreDisplaySettings();updateControls();
-  $('liveControls').hidden=mode!=='live';$('movieControls').hidden=mode!=='movie';$('mirrorLabel').hidden=mode!=='live';$('movieCutControls').hidden=mode!=='movie';updateMovieTransport();
+  $('liveControls').hidden=mode!=='live';$('movieControls').hidden=mode!=='movie';$('mirrorLabel').hidden=mode!=='live';$('movieCutControls').hidden=mode==='live';updateMovieTransport();
+  $('movieInfo').hidden=mode!=='movie';$('youtubeControls').hidden=mode!=='youtube';$('youtubePlaybackNote').hidden=mode!=='youtube';
+  $('youtubePlayerRegion').hidden=mode!=='youtube';$('sourceStage').classList.toggle('youtube-mode',mode==='youtube');
   video.srcObject=null;
   if(mode==='movie'&&movie){video.src=movie.url;video.load();video.muted=true;}
   else {video.removeAttribute('src');video.load();}
-  $('sourceHint').hidden=mode==='movie'&&!!movie;$('sourceHint').textContent=mode==='movie'?'Choose a movie with embedded audio':'Press Start live demo';
+  $('sourceHint').hidden=mode==='youtube'||(mode==='movie'&&!!movie);$('sourceHint').textContent=mode==='movie'?'Choose a movie with embedded audio':'Press Start live demo';
   $('stillCanvas').hidden=true;setMirroring();clearMaps();clearTraces();
-  $('audioStatus').textContent=mode==='live'?'The live microphone is not played through the speakers.':'Choose a local movie; embedded audio is mixed to mono for the model.';
+  $('audioStatus').textContent=mode==='live'?'The live microphone is not played through the speakers.':mode==='youtube'?'The shared tab’s soundtrack is the model input. No microphone or captured-audio playback.':'Choose a local movie; embedded audio is mixed to mono for the model.';
   runButton();setStatus(mode==='movie'&&movie?'Movie ready':'Model ready');
+  if(mode==='youtube'){
+    const support=youtubeSupport();
+    setYouTubeStatus(support.supported?'Paste a YouTube URL, then choose Load & share tab.':support.message,!support.supported);
+    if(!support.supported)setStatus('YouTube analysis is not supported in this browser','warning');
+  }
 }
-async function loadSynchronyChart(){
+async function populateExampleMovies(){
+  const picker=$('exampleMovie');
+  const previous=picker.value;
+  const requested=new URLSearchParams(window.location.search).get('example');
+  try{
+    const names=await listExampleMovies();
+    // An incoming deep link can still work if the public API is unavailable.
+    if(isExampleMovieName(requested)&&!names.includes(requested))names.push(requested);
+    picker.replaceChildren(new Option('Select an example…',''));
+    for(const filename of names){picker.add(new Option(exampleMovieLabel(filename),filename));}
+    if(previous&&names.includes(previous))picker.value=previous;
+    else if(requested&&names.includes(requested))picker.value=requested;
+  }catch(error){
+    console.warn('Could not list the example movies',error);
+    picker.replaceChildren(new Option('Examples unavailable — reload to retry',''));
+  }
+  picker.disabled=!modelReady||movieLoading||starting;
+}
+
+// A direct link from the research page selects the original movie but NEVER
+// starts playback automatically. The visitor must press Start movie.
+async function loadExampleMovie(filename){
+  if(!isExampleMovieName(filename)){
+    setStatus('Invalid example-movie filename.','error');return;
+  }
   if(movieLoading||starting||!modelReady)return;
   if(mode!=='movie'){
     $('inputMode').value='movie';
     await switchMode();
   }
-  stop(false);cancelChartDownload();
+  stop(false);cancelExampleDownload();
   const generation=++fileGeneration;
-  const controller=new AbortController();chartDownloadController=controller;
+  const controller=new AbortController();exampleDownloadController=controller;
   movieLoading=true;runButton();updateMovieTransport();
-  setStatus('Loading synchrony chart…');
+  setStatus(`Loading ${exampleMovieLabel(filename)}…`);
   try{
-    const response=await fetch(SYNCHRONY_CHART_URL,{signal:controller.signal,credentials:'same-origin'});
-    if(!response.ok)throw new Error(`Synchrony chart unavailable (HTTP ${response.status}). Check that examples/av_synchrony_chart.mp4 was copied with the demo.`);
+    const response=await fetch(exampleMovieURL(filename),{signal:controller.signal,credentials:'same-origin'});
+    if(!response.ok)throw new Error(`Could not download ${filename} (HTTP ${response.status}). Check mcd-live/examples/.`);
+    const size=Number(response.headers.get('content-length'));
+    if(Number.isFinite(size)&&size>250*1024*1024)throw new Error('This movie is larger than the 250 MB demonstration limit.');
     const blob=await response.blob();
     if(generation!==fileGeneration||controller.signal.aborted)return;
-    if(!blob.size)throw new Error('The synchrony chart file is empty. Copy the supplied MP4 into mcd-live/examples/.');
-    chartDownloadController=null;
+    if(!blob.size)throw new Error(`The example movie ${filename} is empty.`);
+    if(blob.size>250*1024*1024)throw new Error('This movie is larger than the 250 MB demonstration limit.');
+    exampleDownloadController=null;
     $('movieFile').value='';
-    await loadMovie(new File([blob],'av_synchrony_chart.mp4',{type:'video/mp4'}),{builtInChart:true});
+    $('exampleMovie').value=filename;
+    await loadMovie(new File([blob],filename,{type:blob.type||'video/mp4'}),{
+      exampleFilename:filename,builtInChart:filename.toLowerCase()==='av_synchrony_chart.mp4'
+    });
   }catch(error){
     if(generation!==fileGeneration||controller.signal.aborted)return;
     movieLoading=false;runButton();updateMovieTransport();
-    setStatus(error?.message||'Could not load the synchrony chart.','error');
+    setStatus(error?.message||'Could not load the example movie.','error');
   }finally{
-    if(chartDownloadController===controller)chartDownloadController=null;
+    if(exampleDownloadController===controller)exampleDownloadController=null;
   }
 }
+function loadSynchronyChart(){return loadExampleMovie('av_synchrony_chart.mp4');}
 
 function scheduleTuningChange(){
   usage.breakActivity();
@@ -731,7 +932,7 @@ function updateMovieTransport(){
   $('pauseMovie').textContent=moviePaused?'Resume':'Pause';
 }
 function cancelScheduling(){
-  if(frameCallback!==null){if(video.cancelVideoFrameCallback)video.cancelVideoFrameCallback(frameCallback);else clearTimeout(frameCallback);frameCallback=null;}
+  if(frameCallback!==null){if(frameCallbackIsTimer)clearTimeout(frameCallback);else video.cancelVideoFrameCallback(frameCallback);frameCallback=null;}
   if(raf!==null){cancelAnimationFrame(raf);raf=null;}
 }
 async function pauseOrResumeMovie(){
@@ -807,8 +1008,17 @@ video.addEventListener('timeupdate',()=>{if(mode==='movie')updateMovieTransport(
 video.addEventListener('loadeddata',()=>{if(mode==='movie')updateMovieTransport();});
 
 $('toggleRun').addEventListener('click',()=>{if(running||starting)stop();else start();});
+$('loadYouTube').addEventListener('click',()=>{if(mode==='youtube')void start();});
+$('youtubeURL').addEventListener('input',runButton);
+$('youtubeURL').addEventListener('keydown',event=>{
+  if(event.key==='Enter'&&mode==='youtube'&&!$('loadYouTube').disabled){event.preventDefault();void start();}
+});
 $('inputMode').addEventListener('change',switchMode);
-$('movieFile').addEventListener('change',e=>loadMovie(e.target.files?.[0]));
+$('movieFile').addEventListener('change',e=>{
+  $('exampleMovie').value='';
+  loadMovie(e.target.files?.[0]);
+});
+$('exampleMovie').addEventListener('change',e=>{if(e.target.value)void loadExampleMovie(e.target.value);});
 $('loadSynchronyChart').addEventListener('click',loadSynchronyChart);
 $('loopMovie').addEventListener('change',()=>{video.loop=$('loopMovie').checked;});
 $('hearMovie').addEventListener('change',()=>movieAudioOutput.setAudible($('hearMovie').checked));
@@ -820,7 +1030,7 @@ video.addEventListener('ended',()=>{
     lastUpdate:-Infinity,anchor:null};
   setStatus('Finishing delayed playback…','live');updateMovieTransport();
 });
-for(const id of ['videoDevice','audioDevice'])$(id).addEventListener('change',async()=>{if(running||starting){stop(false);await start();}});
+for(const id of ['videoDevice','audioDevice'])$(id).addEventListener('change',async()=>{if(mode==='live'&&(running||starting)){stop(false);await start();}});
 for(const id of ['tauV','tauA','tauLate']){
   const range=$(id),number=$(id+'Number');
   range.addEventListener('input',()=>{number.value=range.value;scheduleTuningChange();});
@@ -856,8 +1066,12 @@ $('mirror').addEventListener('change',setMirroring);
 for(const id of ['scaleCorr','scaleLag','gainCorr','gainLag'])$(id).addEventListener('input',()=>{rememberDisplaySettings();updateControls();paintMaps();drawTraces();});
 
 window.addEventListener('resize',drawTraces);
-window.addEventListener('pagehide',()=>{cancelChartDownload();stop(false);});
+window.addEventListener('pagehide',()=>{cancelExampleDownload();stop(false);});
 navigator.mediaDevices?.addEventListener?.('devicechange',refreshDevices);
-window.getMCDDiagnostics=()=>({version:INTERFACE_VERSION,engine:engineName,resyncs:metrics.resyncs,queueBacklog,meanComputeMs:metrics.compute.length?metrics.compute.reduce((a,b)=>a+b,0)/metrics.compute.length:0,meanRenderMs:metrics.render.length?metrics.render.reduce((a,b)=>a+b,0)/metrics.render.length:0,playback:{mode,automatic:mode==='movie',audio:movieAudioOutput.status(),video:delayedPreview.status(),draining:!!movieTail},phase,running,starting,mode,moviePaused,seekActive,sourceKind:mode==='live'?'live':movie?.builtInChart?'synchrony-chart':'local-movie',position:video.currentTime,duration:movie?.duration||0,modelReady,busy,geometry:{...g},display:{corr:{palette:'violet',scale:$('scaleCorr').value,gainDb:+$('gainCorr').value},lag:{palette:'blue-orange',scale:$('scaleLag').value,gainDb:+$('gainLag').value}},tuning:tuning(),temporalPreset:activeTemporalPreset(),delay:+$('avDelay').value,loopCount,steps:lastStateSteps,resetCount,detectedCuts:metrics.detectedCuts,suppressedCuts:metrics.suppressedCuts,cutSuppression:cutsEnabled(),cutSensitivity:CUT_SENSITIVITY,lastCut:lastCutDetail?{...lastCutDetail}:null,cutWindows:cutEvents.map(e=>({start:e.start,end:e.end,t:e.t,kind:e.kind})),captured:metrics.captured,processed:metrics.processed,skipped:metrics.skipped,rms:lastRms,audioCoverage,actualVideoLag,lastTrace:traceData[traceData.length-1]||null,tracePoints:traceData.length,visualTraceGaps:traceData.filter(p=>!Number.isFinite(p.v[0])).length,visualTraceSamples:traceData.filter(p=>Number.isFinite(p.v[0])&&p.v[0]>0).length,movieChannels:movie?.envelope.channels||null,visualTracePeak:tracePeaks[0],recentVisualTrace:traceData.map(p=>({t:p.t,sourceT:p.sourceT,previousDifferenceT:p.previousDifferenceT,value:Number.isFinite(p.v[0])?p.v[0]:null}))});
+window.getMCDDiagnostics=()=>({version:INTERFACE_VERSION,youtube:{supported:youtubeSupport().supported,cropped:!!youtubeCapture?.cropped,audio:!!audioTrack&&mode==='youtube',currentTabVerified:!!youtubeCapture?.currentTabVerified,valid:!!youtubeCapture?.isValid(),playerState:youtubeState,playerReady:youtubePlayer.ready,capturedAudioReplayed:false,modelDelayOnly:true},engine:engineName,resyncs:metrics.resyncs,queueBacklog,meanComputeMs:metrics.compute.length?metrics.compute.reduce((a,b)=>a+b,0)/metrics.compute.length:0,meanRenderMs:metrics.render.length?metrics.render.reduce((a,b)=>a+b,0)/metrics.render.length:0,playback:{mode,automatic:mode==='movie',delayScope:mode==='movie'?'playback-and-model':'model-inputs-only',audio:movieAudioOutput.status(),video:delayedPreview.status(),draining:!!movieTail},phase,running,starting,mode,moviePaused,seekActive,sourceKind:mode==='live'?'live':mode==='youtube'?'youtube-tab':movie?.builtInChart?'synchrony-chart':movie?.exampleFilename?'example-movie':'local-movie',position:mode==='youtube'?youtubePlayer.time():video.currentTime,duration:mode==='movie'?(movie?.duration||0):0,modelReady,busy,geometry:{...g},display:{corr:{palette:'violet',scale:$('scaleCorr').value,gainDb:+$('gainCorr').value},lag:{palette:'blue-orange',scale:$('scaleLag').value,gainDb:+$('gainLag').value}},tuning:tuning(),temporalPreset:activeTemporalPreset(),delay:+$('avDelay').value,loopCount,steps:lastStateSteps,resetCount,detectedCuts:metrics.detectedCuts,suppressedCuts:metrics.suppressedCuts,cutSuppression:cutsEnabled(),cutSensitivity:CUT_SENSITIVITY,lastCut:lastCutDetail?{...lastCutDetail}:null,cutWindows:cutEvents.map(e=>({start:e.start,end:e.end,t:e.t,kind:e.kind})),captured:metrics.captured,processed:metrics.processed,skipped:metrics.skipped,rms:lastRms,audioCoverage,actualVideoLag,lastTrace:traceData[traceData.length-1]||null,tracePoints:traceData.length,visualTraceGaps:traceData.filter(p=>!Number.isFinite(p.v[0])).length,visualTraceSamples:traceData.filter(p=>Number.isFinite(p.v[0])&&p.v[0]>0).length,movieChannels:movie?.envelope.channels||null,visualTracePeak:tracePeaks[0],recentVisualTrace:traceData.map(p=>({t:p.t,sourceT:p.sourceT,previousDifferenceT:p.previousDifferenceT,value:Number.isFinite(p.v[0])?p.v[0]:null}))});
 makeWorker();$('movieCutControls').hidden=true;restoreDisplaySettings();updateControls();updatePalettes();setMirroring();refreshDevices();
-initialiseCore(requestedGeometry()).catch(fail);
+void populateExampleMovies();
+initialiseCore(requestedGeometry()).then(()=>{
+  const requested=new URLSearchParams(window.location.search).get('example');
+  if(isExampleMovieName(requested))void loadExampleMovie(requested);
+}).catch(fail);

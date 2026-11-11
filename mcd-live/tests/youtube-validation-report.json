@@ -1,0 +1,153 @@
+{
+  "date": "2026-11-11",
+  "build": "youtube-capture-15",
+  "javascript_syntax": "PASS",
+  "python_test_syntax": "PASS",
+  "html_unique_ids": "PASS",
+  "capture_helper_tests": {
+    "status": "PASS",
+    "runtime": "Node; capture APIs replaced with test doubles",
+    "native_capture_tested": false,
+    "checks": {
+      "watch_short_share_embed_live_and_bare_host_links": "PASS",
+      "timestamps_and_tracking_parameter_isolation": "PASS",
+      "invalid_hosts_protocols_credentials_and_video_ids_rejected": "PASS",
+      "support_requires_secure_network_context_capture_handle_and_region_capture": "PASS",
+      "unsupported_context_fails_before_requesting_any_media": "PASS",
+      "current_tab_audio_and_crop_are_verified_before_success": "PASS",
+      "window_screen_other_tab_and_origin_rejected": "PASS",
+      "missing_audio_video_or_required_track_apis_release_all_tracks": "PASS",
+      "crop_target_and_crop_failure_stop_capture_instead_of_using_whole_tab": "PASS",
+      "permission_denial_is_clear_and_never_requests_microphone": "PASS",
+      "cancel_during_permission_wait_releases_late_capture": "PASS",
+      "cancel_during_crop_wait_releases_late_capture": "PASS",
+      "share_end_audio_end_and_changed_tab_stop_the_entire_stream_once": "PASS",
+      "capture_validity_detects_mutated_identity_or_disabled_audio_between_events": "PASS"
+    }
+  },
+  "application_integration_tests": {
+    "status": "PASS",
+    "runtime": "Real application modules and native Node worker/WASM; DOM, canvas pixels, media decoding, audio devices, capture and YouTube API are test doubles",
+    "browser_tested": false,
+    "native_capture_tested": false,
+    "checks": {
+      "real_html_initialisation_and_native_wasm_worker": "PASS",
+      "youtube_tab_audio_and_cropped_video_process_without_microphone_or_feedback": "PASS",
+      "youtube_positive_negative_and_zero_model_delay_preserve_player_timing": "PASS",
+      "presets_and_display_controls_preserve_existing_state_contract": "PASS",
+      "player_pause_resume_and_seek_reset_analysis_segments": "PASS",
+      "muted_video_audio_and_suspended_audio_context_pause_then_reprime_analysis": "PASS",
+      "shared_soundtrack_end_stops_and_releases_capture": "PASS",
+      "local_movie_worker_delay_pause_and_seek_paths_preserved": "PASS",
+      "movie_youtube_live_transitions_preserve_routing_and_per_mode_gains": "PASS",
+      "failed_capture_paths_never_fall_back_to_microphone_or_whole_page": "PASS",
+      "cancelled_pending_permission_releases_late_stream": "PASS",
+      "unsupported_browser_message_and_disabled_capture": "PASS"
+    },
+    "unhandled_rejections": []
+  },
+  "audio_worklet_test": {
+    "status": "PASS",
+    "timestamped_5ms_packets": true,
+    "mono_mean_before_RMS": true,
+    "silent_speaker_output": true
+  },
+  "browser_execution": {
+    "status": "BLOCKED",
+    "browser_tests_run": false,
+    "attempted_runtime": "Python Playwright with /usr/bin/chromium, headless",
+    "attempts": [
+      {
+        "configuration": "standard headless --no-sandbox",
+        "outcome": "Aborted before any page could open."
+      },
+      {
+        "configuration": "headless --no-sandbox --single-process --no-zygote",
+        "outcome": "Same failure before any page could open."
+      }
+    ],
+    "reason": "Chromium FATAL process_singleton_posix.cc:297: socket() failed: Operation not permitted (1). Environment also reported ptrace: Operation not permitted.",
+    "physical_devices_tested": false,
+    "native_tab_capture_tested": false,
+    "native_region_capture_tested": false,
+    "real_youtube_playback_tested": false
+  },
+  "separate_preview_browser": {
+    "status": "BLOCKED",
+    "reason": "Could not connect to the local preview server (ERR_CONNECTION_REFUSED). No page rendered."
+  },
+  "preservation": {
+    "status": "PASS",
+    "modified_original_files": [
+      "mcd-live/index.html",
+      "mcd-live/mcd-live.css",
+      "mcd-live/mcd-live.js"
+    ],
+    "unchanged_original_file_count": 98,
+    "missing_original_files": [],
+    "protected_files": {
+      "index.html": {
+        "unchanged": true,
+        "sha256": "c521d5878efca022dccaeec13fd08aa0d1c6196a2a1f34ee6b1b3b5c51f7eee1"
+      },
+      "mcd-live/audio-worklet.js": {
+        "unchanged": true,
+        "sha256": "089ca9d4f312e7395dee86622a28f4b9e88499f79f69acb062685fc955dcdea4"
+      },
+      "mcd-live/example-movies.js": {
+        "unchanged": true,
+        "sha256": "5742241374c06cec4d8bbd785f361dd321fd6f6014cebc22bdf84d328177d473"
+      },
+      "mcd-live/examples/movies.json": {
+        "unchanged": true,
+        "sha256": "c73aece0054d50ea7f11bd56b2215994c74ef2dd29d2e37babf5947cd0fd955c"
+      },
+      "mcd-live/frame-scheduler.js": {
+        "unchanged": true,
+        "sha256": "57c73a9ccbcc70ddb51e92aaf0c0b4b64385b37bf03bacf2d935e8ca96ad76f1"
+      },
+      "mcd-live/mcd-palettes.js": {
+        "unchanged": true,
+        "sha256": "66e2b6531d956bd414501772e4dee4ce83d222b59fe8c837a9c949a424f3e4e9"
+      },
+      "mcd-live/mcd-scalar.wasm": {
+        "unchanged": true,
+        "sha256": "3b1632bcc32d85cdd42e8cb8aab8910448db47c8debc7943359e8895cc30ea7e"
+      },
+      "mcd-live/mcd-worker.js": {
+        "unchanged": true,
+        "sha256": "bf8b518a5205f9fdc7f87d28467952d97ae2020b3a8c5ceb07151247a76115c4"
+      },
+      "mcd-live/mcd.wasm": {
+        "unchanged": true,
+        "sha256": "1a97449aa80da3d835b396b9a4525226fab6ee9f6414f6abbd9d01bf869e040d"
+      },
+      "mcd-live/playback-timing.js": {
+        "unchanged": true,
+        "sha256": "71786e78501a670d8468db1a25f309ab11d92c49432d9309c314e6745b6bd12d"
+      },
+      "mcd-live/signal-utils.js": {
+        "unchanged": true,
+        "sha256": "b309bfe197048bfdb4c3d48d75643987ba90b85b96391e8b4022e4f540092fa6"
+      },
+      "mcd-live/src/mcd.c": {
+        "unchanged": true,
+        "sha256": "5bda4b9b8f868930a9a9924cc10020fb2c7c41a86b9d621145ab6d489ad78495"
+      },
+      "mcd-live/usage-analytics.js": {
+        "unchanged": true,
+        "sha256": "ad3360dd0995289da2c2e229f5ccc9ebd4a335528f559e26cde42f53301d1f29"
+      },
+      "mcd-live/usage-config.js": {
+        "unchanged": true,
+        "sha256": "40795f74d081321822ad0eac3e0e1a1e2a8549305cf1c023a752f43d527f700a"
+      }
+    }
+  },
+  "limitations": [
+    "Browser DOM/pixels/decoding/capture and YouTube API are test doubles in Node integration tests.",
+    "No real browser visual layout or end-to-end native YouTube/tab-audio/cropping test succeeded in this environment.",
+    "The provided example catalogue has no corresponding MP4 files in mcd-live/examples.",
+    "Browser tests are supplied for reproduction; native tab capture requires a separate manual test."
+  ]
+}

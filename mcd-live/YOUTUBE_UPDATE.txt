@@ -1,0 +1,182 @@
+MCD YouTube input and movie-toolbar update
+Build: youtube-capture-15
+Prepared: 11 November 2026
+
+INSTALLATION
+
+This ZIP contains an update for the supplied website, not a standalone demo.
+Extract it into the existing repository root so that its mcd-live directory
+merges with your existing mcd-live directory. Replace the matching files and
+retain all other files and subdirectories. In particular, keep the existing
+WASM files, workers, utilities, assets and example movies.
+
+The production files in this update are:
+  mcd-live/index.html
+  mcd-live/mcd-live.css
+  mcd-live/mcd-live.js
+  mcd-live/youtube-input.js       (new)
+  mcd-live/youtube-player.js      (new)
+
+The remaining files are this note, test scripts and a validation report.
+There is no root-level index.html in this ZIP. The main website, compiled
+engine, MATLAB/C source and Cloudflare-related files are unchanged.
+
+Open the demo from your hosted HTTPS site or a localhost web server. Reload
+the page after updating it; the displayed build should be youtube-capture-15.
+
+USING YOUTUBE
+
+1. Select "YouTube (tab audio)" as the input source.
+2. Paste a YouTube URL and press "Load & share tab" (or Enter).
+3. In the browser's sharing prompt, select this MCD tab and enable
+   "Share tab audio". The browser always requires this permission step.
+4. Playback is requested once the player and capture are ready. If the
+   browser blocks automatic playback, press Play in the embedded player.
+
+Use the embedded player to play, pause and seek. Keep it visible in the tab.
+Stop demo stops capture and pauses the player. Starting again requires a new
+sharing permission. Changing input source releases capture and unloads the
+YouTube iframe. No microphone permission is requested for YouTube.
+
+The input accepts normal watch URLs, youtu.be links, Shorts, live-video and
+embed URLs. Common t/start timestamps are retained. Arbitrary websites,
+playlist-only URLs, pasted iframe markup and malformed video IDs are rejected.
+
+CAPTURE AND BROWSER SUPPORT
+
+This implementation requires native current-tab identity verification, tab
+audio and player-region cropping. It checks capabilities rather than trusting
+the browser's name. A current desktop Chrome or Edge is the intended target,
+but actual permission and media support are checked again after selection.
+
+The browser chooser prefers the current tab. After permission, a random
+same-origin Capture Handle verifies that the selected video really belongs
+to this page. A live audio track is required. Native Region Capture must
+successfully crop the video to the iframe-only player wrapper before any
+pixels reach MCD. Other tabs, windows, screens, absent audio and failed crops
+produce explicit errors and release all acquired tracks. There is no
+microphone or whole-page fallback. Unsupported browsers receive a message.
+
+The crop follows the player element when the layout changes. MCD controls
+and output maps are outside this region. It is a capture of the rendered
+player: YouTube controls, subtitles, adverts and other overlays inside the
+player rectangle can appear in the input. Audio includes all sound from
+the shared tab; this is not extraction of the original YouTube media file.
+
+The original YouTube player remains the audible output. A separate muted,
+video-only element receives the cropped capture. The captured audio track
+feeds the existing mono/RMS worklet and a same-stream analyser fallback.
+The worklet outputs silence and its output graph has a fixed zero-gain
+connection; captured audio is not replayed through the speakers.
+
+The app waits while the player is paused, buffering or ended. Playback-state
+changes and detected large seeks clear sensory histories and start a new
+analysis segment. Interrupted/muted capture or a suspended audio context
+pauses analysis with a message; recovery re-primes the model. Ending sharing
+or changing the shared tab stops the session.
+
+YouTube and its iframe API make normal network requests to YouTube. The
+captured pictures, soundtrack and model outputs are processed locally and
+are not uploaded by this demonstration. The existing Cloudflare configuration
+and analytics code are unchanged. Its custom usage counter remains limited
+to its existing live/movie modes; YouTube is not relabelled as either one.
+
+TIMING
+
+In YouTube mode, "YouTube model-input delay" changes only the captured signals
+entering MCD. Negative values delay the auditory input; positive values delay
+the visual input. It does not retime the picture or soundtrack in the YouTube
+player. Browser capture latency is not calibrated.
+
+The invisible capture-video element is sampled by a nominal 30 Hz timer.
+Successive samples can repeat the latest decoded frame. Diagnostics call
+these samples, not original YouTube frames. Model intervals use the capture
+session's wall clock. The YouTube playhead is used only for discontinuity
+detection, never as an exact audiovisual acquisition timestamp.
+
+Local/example-movie playback retains its existing behaviour: negative delay
+delays the heard soundtrack, positive delay buffers the visible picture, and
+the same relative delay enters the model. Live camera/microphone timing and
+frame scheduling are retained. No compiled code was rebuilt or modified.
+
+MOVIE TOOLBAR
+
+- Example movies and Choose a local movie use aligned labels and controls.
+- Shortened movie information is at the upper-right of the toolbar.
+- Checkbox labels are "Loop" and "Play audio".
+- The audio-level row remains; its duplicate time readout is removed.
+- The movie seek bar retains the single current/total time display.
+
+Temporal presets, display gains/scales, palettes, downsampling, seeking,
+cut suppression and local-movie playback-delay code are retained. YouTube
+also exposes the existing cut-suppression control for the captured picture.
+
+VALIDATION COMPLETED
+
+See tests/youtube-validation-report.json for the exact results and hashes.
+
+1. JavaScript syntax and Python test-script syntax checks passed.
+2. Fourteen capture-helper test groups passed in Node with explicit capture
+   API substitutes: URL forms/timestamps, capability checks, synchronous
+   permission initiation, identity/audio/crop verification, rejected shares,
+   cancellation and track cleanup.
+3. Twelve application integration test groups passed using the actual app
+   modules, native Node workers and shipped WASM. DOM, video pixels, codecs,
+   audio devices, capture and the YouTube API were simulated. These tests
+   cover start/stop, audio routing, input-only YouTube delays, presets/gains,
+   pause/seek, interruption/recovery, local-movie delay/seek paths, source
+   switching, error handling and unsupported-browser messages. No unhandled
+   promise rejections were observed.
+4. The existing audio-worklet test passed: mono mixing occurs before RMS,
+   packets carry 5 ms timestamps and the output channels contain silence.
+5. Byte comparisons confirm that original files outside the three changed
+   interface files are unchanged, including the root index.html, WASM,
+   compiled-model worker, C source, timing utilities and Cloudflare files.
+
+NOT VERIFIED IN A REAL BROWSER
+
+Chromium could not start in this execution environment: the operating system
+rejected its socket creation before any page opened. A separate preview
+browser could not connect to the local preview server. Consequently, no
+claim is made that the native browser regression suite, visual layout,
+physical webcam/microphone, actual YouTube embed, permission chooser,
+native tab audio or native Region Capture passed an end-to-end test here.
+Actual audio/visual capture synchronisation and crop behaviour on scroll,
+resize, zoom, display scaling and operating-system changes remain manual
+browser checks. Restrictions on particular YouTube videos can prevent
+embedding; the app reports standard player errors where the API supplies them.
+
+The supplied mcd-live/examples directory contains movies.json, but not the
+listed av_synchrony_chart.mp4 or Ventriloquist_Movie.mp4 files. The existing
+catalogue and loader are unchanged. Preserve those media files on your site.
+The supplied browser test serves deterministic fixtures for those two URLs;
+it does not establish playback of your original example movies.
+
+REPRODUCING THE CHECKS
+
+From the mcd-live directory, with Node installed:
+  node tests/test_youtube_input.mjs /tmp/mcd-youtube-qa
+  node tests/test_youtube_app.mjs /tmp/mcd-youtube-qa
+
+For the native-browser regression script, install Python Playwright, Chromium
+and FFmpeg in your test environment, then run:
+  python3 tests/test_youtube_browser.py --output /tmp/mcd-youtube-qa
+
+The browser script exercises real decoding, Web Audio, canvas and WASM, but
+deliberately substitutes the capture chooser, Region Capture and YouTube API
+for repeatable assertions. A separate manual run with a real YouTube link is
+still required to establish those native features.
+
+Suggested manual check: share this tab with audio; confirm only the player
+appears in the maps; change the model-input delay and confirm the embedded
+player's playback timing is unchanged; pause/seek; scroll/resize; stop sharing;
+then try a local movie and the live camera mode. Also reject a share, omit
+tab audio and try an unsupported browser to verify the visible messages.
+
+PRIMARY API REFERENCES
+
+https://developer.chrome.com/docs/web-platform/region-capture
+https://developer.chrome.com/docs/web-platform/capture-handle
+https://developer.chrome.com/docs/web-platform/screen-sharing-controls
+https://developers.google.com/youtube/iframe_api_reference
+https://web.dev/articles/requestvideoframecallback-rvfc
