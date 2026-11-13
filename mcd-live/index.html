@@ -14,7 +14,7 @@
 
   <section class="source-toolbar" aria-label="Input source and playback">
     <div class="source-main">
-      <div class="input-choice"><label for="inputMode">Input source</label><select id="inputMode"><option value="live">Live camera + microphone</option><option value="movie">Movie with embedded audio</option><option value="youtube">YouTube (tab audio)</option></select></div>
+      <div class="input-choice"><label for="inputMode">Input source</label><select id="inputMode"><option value="live">Live camera + microphone</option><option value="movie">Movie with embedded audio</option><option value="youtube">YouTube </option></select></div>
       <button id="loadSynchronyChart" type="button" disabled title="Load the 20-second audiovisual synchrony chart; then press Start movie.">Try synchrony chart</button>
       <button id="toggleRun" class="primary" type="button" disabled aria-pressed="false">Start live demo</button>
       <span id="status" class="status" role="status" aria-live="polite">Loading model…</span>
@@ -116,7 +116,7 @@
         </div>
         <div class="map-gain-field">
           <div class="label-row"><label for="gainCorr">Display gain</label><output id="gainCorrValue" for="gainCorr">0 dB</output></div>
-          <input id="gainCorr" type="range" min="-60" max="40" step="1" value="0" aria-label="Correlation display gain">
+          <input id="gainCorr" type="range" min="-60" max="60" step="1" value="0" aria-label="Correlation display gain">
         </div>
       </div>
     </article>
@@ -131,7 +131,7 @@
         </div>
         <div class="map-gain-field">
           <div class="label-row"><label for="gainLag">Display gain</label><output id="gainLagValue" for="gainLag">-40 dB</output></div>
-          <input id="gainLag" type="range" min="-60" max="20" step="1" value="-40" aria-label="Lag display gain">
+          <input id="gainLag" type="range" min="-60" max="40" step="1" value="-40" aria-label="Lag display gain">
         </div>
       </div>
     </article>
